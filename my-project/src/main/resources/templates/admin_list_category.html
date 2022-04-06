@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang quản lý danh mục sản phầm</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Tên loại sản phẩm</th>
+            <th>Ảnh</th>
+        </tr>
+
+        <th:block th:each="item : ${list_category}" th:remove="tag">
+            <tr>
+                <td th:text="${item.id}">...</td>
+                <td>[[${item.name}]]</td>
+                <td>
+                    <img th:src="@{${item.apiGetImage}}" alt="Image Category" width="100px">
+                </td>
+            </tr>
+        </th:block>
+    </table>
+</body>
+</html>
