@@ -72,7 +72,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
         http
                 .authorizeRequests()
                     .antMatchers("/login", "/home", "/generate-otp" , "/verify-otp"
-                            , "/check-username-exist", "/check-email-exist", "/favicon.ico", "/register"
+                            , "/check-username-exist", "/check-email-exist", "/check-cellphone-exist"
+                            , "/favicon.ico", "/register", "/get-menu"
+                            , "/blog-detail", "/blog", "/faq", "/search", "/term-and-condition"
                             , "/assets/**", "/assets2/**")
                         .permitAll() // cho phép tất cả người dùng truy cập các api /basic
                     .antMatchers("/user/**").hasAnyAuthority(RoleEnum.ROLE_USER.toString()) // cho phép người dùng có role là user truy cập các api /user
@@ -89,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
         http.addFilterBefore(filterConfig, UsernamePasswordAuthenticationFilter.class);
     }
 
-    // thuộc tính createdBy và ModifiedBy sẽ lấy giá trị từ đây
+    //
     @Override
     public Optional<String> getCurrentAuditor() {
         try {

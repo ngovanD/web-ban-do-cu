@@ -2,6 +2,8 @@ package haui.cntt.myproject.presentation.response;
 
 import lombok.*;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,4 +20,17 @@ public class CategoryResponse {
     private String apiGetImage;
 
     private CategoryResponse categoryParent;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CategoryResponse that = (CategoryResponse) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

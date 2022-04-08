@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService{
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Override
     @Transactional
     public void createAdmin(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -39,7 +38,6 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
     }
 
-    @Override
     @Transactional
     public void createUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -49,20 +47,44 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
     }
 
-    @Override
     public boolean existsByUsername(String username){
         return userRepository.existsByUsername(username);
     }
 
-    @Override
-    public boolean existsByEmail(String email) {
+    public boolean existsByEmail(String email, long userId) throws Throwable{
+        if(userId > 0)
+        {
+            User foundUser = userRepository.findById(userId).orElseThrow(
+                    () ->{throw new BadRequestException("User không tồn tại !!!");}
+            );
+
+            if(email.equals(foundUser.getEmail())){
+                return false;
+            }
+            else{
+                return userRepository.existsByEmail(email);
+            }
+        }
         return userRepository.existsByEmail(email);
     }
 
-    public boolean existsByCellphone(String cellphone) {
+    public boolean existsByCellphone(String cellphone, long userId) throws Throwable{
+        if(userId > 0)
+        {
+            User foundUser = userRepository.findById(userId).orElseThrow(
+                    () ->{throw new BadRequestException("User không tồn tại !!!");}
+            );
+
+            if(cellphone.equals(foundUser.getCellphone())){
+                return false;
+            }
+            else{
+                return userRepository.existsByCellphone(cellphone);
+            }
+        }
         return userRepository.existsByCellphone(cellphone);
     }
-    @Override
+
     public User getCurrentUser() throws Throwable{
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(username).orElseThrow(
@@ -88,14 +110,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public void editUser(User user) throws Throwable{
+    public void editUser(User user, boolean resetPassword) throws Throwable{
         User foundUser = userRepository.findById(user.getId()).orElseThrow(
                 ()->{throw new BadRequestException("User không tồn tại !!!");}
         );
 
+        if(resetPassword)
+        {
+            foundUser.setPassword(passwordEncoder.encode(foundUser.getUsername()));
+        }
+
         foundUser.setFullName(user.getFullName());
         foundUser.setCellphone(user.getCellphone());
         foundUser.setEmail(user.getEmail());
+        foundUser.setHiddenFlag(user.getHiddenFlag());
 
         userRepository.save(foundUser);
     }
@@ -113,6 +141,19 @@ public class UserServiceImpl implements UserService{
 
         userRepository.save(foundUser);
 
-        return newFileName+ typeOfFile;
+        return newFileName + typeOfFile;
+    }
+
+    @Transactional
+    public void changeInfo(User convertToUser) throws Throwable{
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User foundUser = userRepository.findByUsername(username).orElseThrow(
+                ()->{throw new BadRequestException("Không tìm thấy user !!!");}
+        );
+
+        foundUser.setFullName(convertToUser.getFullName());
+        foundUser.setEmail(convertToUser.getEmail());
+
+        userRepository.save(foundUser);
     }
 }

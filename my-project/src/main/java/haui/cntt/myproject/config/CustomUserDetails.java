@@ -49,6 +49,10 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
+        if(user.getHiddenFlag())
+        {
+            return false;
+        }
         return true;
     }
 

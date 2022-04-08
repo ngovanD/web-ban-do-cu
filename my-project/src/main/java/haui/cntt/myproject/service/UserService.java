@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-    void createAdmin(User user);
-    void createUser(User user);
-    boolean existsByUsername(String username);
-    boolean existsByEmail(String email);
-    User getCurrentUser() throws Throwable;
+//    void createAdmin(User user);
+//    void createUser(User user);
+//    boolean existsByUsername(String username);
+//    boolean existsByEmail(String email, boolean except);
+//    User getCurrentUser() throws Throwable;
 }

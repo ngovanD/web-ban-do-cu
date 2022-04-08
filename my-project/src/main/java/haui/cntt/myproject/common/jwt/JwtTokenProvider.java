@@ -47,19 +47,19 @@ public class JwtTokenProvider {
         return decodedJWT;
     }
 
-    private boolean isTokenExpired(DecodedJWT decodedJWT) {
-        return decodedJWT.getExpiresAt().after(new Date());
-    }
-
-    // Lấy thông tin user từ jwt
-    public String getUserNameFromJwtToken(String token) {
-
-        DecodedJWT decodedJWT = decodedJWT(token);
-        if (decodedJWT != null && isTokenExpired(decodedJWT)) {
-            return decodedJWT.getSubject();
-        }
-        return null;
-    }
+//    private boolean isTokenExpired(DecodedJWT decodedJWT) {
+//        return decodedJWT.getExpiresAt().after(new Date());
+//    }
+//
+//    // Lấy thông tin user từ jwt
+//    public String getUserNameFromJwtToken(String token) {
+//
+//        DecodedJWT decodedJWT = decodedJWT(token);
+//        if (decodedJWT != null && isTokenExpired(decodedJWT)) {
+//            return decodedJWT.getSubject();
+//        }
+//        return null;
+//    }
 
     public boolean validateJwtToken(String token) {
         try {

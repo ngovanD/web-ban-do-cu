@@ -1,8 +1,10 @@
 package haui.cntt.myproject;
 
 import haui.cntt.myproject.common.enum_.RoleEnum;
+import haui.cntt.myproject.persistance.entity.Category;
 import haui.cntt.myproject.persistance.entity.Role;
 import haui.cntt.myproject.persistance.entity.User;
+import haui.cntt.myproject.service.Impl.CategoryServiceImpl;
 import haui.cntt.myproject.service.Impl.RoleServiceImpl;
 import haui.cntt.myproject.service.Impl.UserServiceImpl;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +20,7 @@ public class MyProjectApplication {
 	}
 
 	@Bean
-	CommandLineRunner run(RoleServiceImpl roleService, UserServiceImpl userService) {
+	CommandLineRunner run(RoleServiceImpl roleService, UserServiceImpl userService, CategoryServiceImpl categoryService) {
 		return args -> {
 			try {
 				roleService.create(Role.builder().name(RoleEnum.ROLE_ADMIN).build());
@@ -31,12 +33,28 @@ public class MyProjectApplication {
 						.password("123")
 						.fullName("Ngô Văn Đang")
 						.build());
-				userService.createUser(User.builder()
-						.username("dang")
-						.password("123")
-						.build());
+				for(int i =0; i< 30; i++)
+				{
+					userService.createUser(User.builder()
+							.username("dang"+i)
+							.password("123")
+							.build());
+				}
 			} catch (Exception ignored) {
 			}
+
+//			try {
+//				categoryService.createTest(Category.builder()
+//						.name("Đồ điện tử")
+//						.build());
+//				categoryService.createTest(Category.builder()
+//						.name("Xe cộ")
+//						.build());
+//				categoryService.createTest(Category.builder()
+//						.name("Quần áo")
+//						.build());
+//			} catch (Exception ignored) {
+//			}
 		};
 	}
 }

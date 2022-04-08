@@ -12,11 +12,13 @@ public class UserMapper {
     public static User convertToUser(UserRequest userRequest)
     {
         return User.builder()
+                .id(userRequest.getId())
                 .username(userRequest.getUsername())
                 .password(userRequest.getPassword())
                 .email(userRequest.getEmail())
                 .cellphone(userRequest.getCellphone())
                 .fullName(userRequest.getFullName())
+                .hiddenFlag(userRequest.isStatus())
                 .build();
     }
 

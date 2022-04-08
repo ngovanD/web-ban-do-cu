@@ -1,9 +1,12 @@
 package haui.cntt.myproject.presentation.controller.basic;
 
 import haui.cntt.myproject.common.otp.RandomOtpUtil;
+import haui.cntt.myproject.presentation.mapper.CategoryMapper;
 import haui.cntt.myproject.presentation.mapper.UserMapper;
 import haui.cntt.myproject.presentation.request.OtpRequest;
 import haui.cntt.myproject.presentation.request.UserRequest;
+import haui.cntt.myproject.presentation.response.CategoryResponse;
+import haui.cntt.myproject.service.Impl.CategoryServiceImpl;
 import haui.cntt.myproject.service.Impl.OtpService;
 import haui.cntt.myproject.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +14,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class BasicController {
@@ -24,6 +29,13 @@ public class BasicController {
     private OtpService otpService;
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private CategoryServiceImpl categoryService;
+
+    @GetMapping("/home")
+    public String home(Model model){
+        return "index";
+    }
 
     @GetMapping("/generate-otp")
     public String generateOtp(@ModelAttribute(value = "cellphone", binding = false) String cellphone
@@ -89,8 +101,9 @@ public class BasicController {
     }
 
     @PostMapping("/check-email-exist")
-    public ResponseEntity checkEmailExist(@RequestBody UserRequest userRequest){
-        if(userService.existsByEmail(userRequest.getEmail()))
+    public ResponseEntity checkEmailExist(@RequestBody UserRequest userRequest
+                                        , @RequestParam(value="id", required = false, defaultValue = "0") long userId) throws Throwable {
+        if(userService.existsByEmail(userRequest.getEmail(), userId))
         {
             return ResponseEntity.badRequest().body("Email đã tồn tại !!");
         }
@@ -101,8 +114,9 @@ public class BasicController {
     }
 
     @PostMapping("/check-cellphone-exist")
-    public ResponseEntity checkCellphoneExist(@RequestBody UserRequest userRequest){
-        if(userService.existsByCellphone(userRequest.getCellphone()))
+    public ResponseEntity checkCellphoneExist(@RequestBody UserRequest userRequest
+                                            , @RequestParam(value="id", required = false, defaultValue = "0") long userId) throws Throwable {
+        if(userService.existsByCellphone(userRequest.getCellphone(), userId))
         {
             return ResponseEntity.badRequest().body("Số điện thoại đã tồn tại !!");
         }
@@ -112,8 +126,44 @@ public class BasicController {
         }
     }
 
-    @GetMapping("/home")
-    public String home(Model model){
-        return "index";
+    @GetMapping("/get-menu")
+    public String getMenu(Model model)
+    {
+        HashMap<CategoryResponse, List<CategoryResponse>> menuResponse = new HashMap<>();
+
+        categoryService.getTreeCategory().forEach((k, v)->
+                menuResponse.put(
+                        CategoryMapper.convertToCategoryResponse(k)
+                        , v.stream().map(CategoryMapper::convertToCategoryResponse).collect(Collectors.toList())
+                )
+        );
+        model.addAttribute("menuResponse", menuResponse);
+        return "fragment_menu";
+    }
+
+
+    @GetMapping("/blog-detail")
+    public String blogDetail(Model model){
+        return "blog_detail";
+    }
+
+    @GetMapping("/blog")
+    public String blog(Model model){
+        return "blog";
+    }
+
+    @GetMapping("/faq")
+    public String faq(Model model){
+        return "faq";
+    }
+
+    @GetMapping("/search")
+    public String search(Model model){
+        return "search";
+    }
+
+    @GetMapping("/term-and-condition")
+    public String termAndCondition(Model model){
+        return "term_and_condition";
     }
 }

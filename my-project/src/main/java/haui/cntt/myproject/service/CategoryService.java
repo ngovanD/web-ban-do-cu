@@ -7,10 +7,10 @@ import java.util.List;
 
 @Service
 public interface CategoryService {
-    List<Category> getListCategoryHasNotParent();
-    List<Category> getListCategoryChild(long parentId);
-    Category getDetail(long id) throws Throwable;
-    Category create(Category category, String fileName);
-    void edit(long id, Category infoCategory) throws Throwable;
-    void delete(long id) throws Throwable;
+//    List<Category> getListCategoryHasNotParent();
+//    List<Category> getListCategoryChild(long parentId);
+//    Category getDetail(long id) throws Throwable;
+//    Category create(Category category, String fileName);
+//    void edit(long id, Category infoCategory) throws Throwable;
+//    void delete(long id) throws Throwable;
 }

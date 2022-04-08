@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -17,24 +18,20 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    @Override
     public List<Category> getListCategoryHasNotParent() {
         return categoryRepository.getListCategoryHasNotParent();
     }
 
-    @Override
     public List<Category> getListCategoryChild(long parentId) {
         return categoryRepository.findByCategoryParentId(parentId);
     }
 
-    @Override
     public Category getDetail(long id) throws Throwable{
         return categoryRepository.findById(id).orElseThrow(
                 ()->{throw new BadRequestException("loại sản phẩm không tồn tại!!!");}
         );
     }
 
-    @Override
     @Transactional
     public Category create(Category category, String originalFilename) {
 
@@ -49,7 +46,17 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
-    @Override
+    @Transactional
+    public Category createTest(Category category) {
+
+        if(category.getCategoryParent() != null)
+        {
+            Category categoryParent = categoryRepository.findById(category.getCategoryParent().getId()).orElse(null);
+            category.setCategoryParent(categoryParent);
+        }
+        return categoryRepository.save(category);
+    }
+
     @Transactional
     public void edit(long id, Category infoCategory) throws Throwable{
         Category foundCategory = categoryRepository.findById(id).orElseThrow(
@@ -66,12 +73,25 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(foundCategory);
     }
 
-    @Override
     @Transactional
     public void delete(long id) throws Throwable{
         Category foundCategory = categoryRepository.findById(id).orElseThrow(
                 ()->{throw new BadRequestException("Loại sản phẩm không tồn tại!!!");}
         );
         categoryRepository.delete(foundCategory);
+    }
+
+    public HashMap<Category, List<Category>> getTreeCategory()
+    {
+        List<Category> categoryList = getListCategoryHasNotParent();
+
+        HashMap<Category, List<Category>> treeCategory = new HashMap<>();
+
+        for(Category item : categoryList)
+        {
+            treeCategory.put(item, getListCategoryChild(item.getId()));
+        }
+
+        return treeCategory;
     }
 }

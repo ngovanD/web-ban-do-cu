@@ -58,9 +58,8 @@ public class UserAdminController {
     @PostMapping("/edit/{id}")
     public String edit(Model model, @PathVariable(value = "id") long userId
                                   , @ModelAttribute(value = "userRequest") UserRequest userRequest) throws Throwable {
-        userRequest.setId(userId);
-        userService.editUser(UserMapper.convertToUser(userRequest));
-        return "admin_user_detail";
+        userService.editUser(UserMapper.convertToUser(userRequest), userRequest.isResetPassword());
+        return "redirect:/admin/user/view/" + userId;
     }
 
     @PostMapping("/edit/avatar/{id}")

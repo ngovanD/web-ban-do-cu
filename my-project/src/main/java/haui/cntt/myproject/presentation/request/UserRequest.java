@@ -21,7 +21,7 @@ public class UserRequest {
 
     private String password;
 
-    private String status;
+    private boolean status;// 0: bình thường 1: tạm khóa
 
     private boolean resetPassword;
 }

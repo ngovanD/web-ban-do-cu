@@ -15,4 +15,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
 
     Boolean existsByCellphone(String cellphone);
+
+//    @Query(value = "select case when count(*) > 0 then 'true' else 'false' end result " +
+//            "from user u " +
+//            "where u.username = :username and hidden_flag = 1 ", nativeQuery = true)
+//    boolean checkLocked(String username);
 }

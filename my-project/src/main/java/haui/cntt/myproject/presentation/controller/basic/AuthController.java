@@ -4,8 +4,10 @@ import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.jwt.JwtTokenProvider;
 import haui.cntt.myproject.config.UserDetailServiceConfig;
 import haui.cntt.myproject.presentation.request.LoginRequest;
+import haui.cntt.myproject.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,8 @@ public class AuthController {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserServiceImpl userService;
 
     @GetMapping("/login")
     public String login(Model model){
@@ -35,10 +39,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public String home(Model model , @ModelAttribute LoginRequest loginRequest
-            , HttpServletRequest request, HttpServletResponse response) throws IOException {
+                     , HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             final UserDetails userDetails = userDetailServiceConfig.loadUserByUsername(loginRequest.getUsername());
             authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+
             String accessToken = jwtTokenProvider.generateAccessToken(userDetails, request);
 
             Cookie cookie = new Cookie("accessToken", accessToken);
@@ -46,6 +51,11 @@ public class AuthController {
 
         }catch (Exception e)
         {
+            if(e instanceof LockedException)
+            {
+                model.addAttribute("statusLogin", "Tài khoản của bạn đã bị khóa !!!");
+                return "login";
+            }
             model.addAttribute("statusLogin", "Kiểm tra lại tài khoản và mật khẩu !!!");
             return "login";
         }
@@ -57,6 +67,10 @@ public class AuthController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (Exception e) {
+            if(e instanceof LockedException)
+            {
+                throw new LockedException("Tài khoản của bạn đã bị khóa.");
+            }
             throw new BadRequestException("Incorrect password.");
         }
     }

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface RoleService {
-    void create(Role role);
+//    void create(Role role);
 }
