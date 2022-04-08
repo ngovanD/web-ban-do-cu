@@ -197,7 +197,7 @@
         <script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
         <!--    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>-->
         <script>
-            function firstLoad() {
+            $(document).ready(function () {
                 document.getElementById("main-sidebar_").style.height = document.body.offsetHeight + "px";
 
                 $.ajax({
@@ -211,7 +211,7 @@
                         }
                     }
                 })
-            };
+            });
 
             function deleteMethod(e) {
                 if (confirm('Bạn chắc chắn muốn xóa?')) {
@@ -221,9 +221,10 @@
                         url: url,
                         contentType: "application/json; charset=utf-8",
                         async: false,
-                        success: function (data) {
-                            location.reload();
-                        }
+                    }).done(function(data){
+                        location.reload();
+                    }).fail(function(){
+                        toastr.error("Có lỗi xảy ra, không thể xóa lúc này. Xin vui lòng thử lại sau !");
                     })
                 }
             }
@@ -246,8 +247,7 @@
         <script th:src="@{\assets2\js\scripts.js}"></script>
 
         <script>
-            function firstLoad() {
-
+            $(document).ready(function () {
                 $.ajax({
                     method: "GET",
                     url: "http://localhost:8080/get-menu",
@@ -269,7 +269,7 @@
                         }
                     }
                 })
-            };
+            });
         </script>
     </div>
     //header user
@@ -620,7 +620,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a class="nav-link">
                                 <i class="nav-icon fa-solid fa-list-ul"></i>
                                 <p>
                                     Quản lý loại sản phẩm
@@ -629,13 +629,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="../../index.html" class="nav-link">
+                                    <a th:href="@{/admin/category/create}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Tạo mới</p>
+                                        <p>Tạo mới danh mục</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../../index2.html" class="nav-link">
+                                    <a th:href="@{/admin/category/get-all}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Danh sách danh mục</p>
                                     </a>

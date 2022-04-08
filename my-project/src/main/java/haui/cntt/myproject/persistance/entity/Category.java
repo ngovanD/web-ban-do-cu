@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -36,6 +37,10 @@ public class Category extends BaseEntity {
         super.onPrePersist();
         slug = new Slugify().slugify(VNCharacterUtil.removeAccent(name));
     }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "category_properties", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "property_id"))
+    private Collection<Property> properties;
 
 //    @OneToMany(targetEntity = ProductCategoryEntity.class, mappedBy = "category")
 //    private Collection<ProductCategoryEntity> productCategories;

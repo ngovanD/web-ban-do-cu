@@ -1,26 +1,177 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Trang quản lý danh mục sản phầm</title>
-</head>
-<body>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Tên loại sản phẩm</th>
-            <th>Ảnh</th>
-        </tr>
+    <div th:replace="fragment::head-custom"></div>
+    <style>
 
-        <th:block th:each="item : ${list_category}" th:remove="tag">
-            <tr>
-                <td th:text="${item.id}">...</td>
-                <td>[[${item.name}]]</td>
-                <td>
-                    <img th:src="@{${item.apiGetImage}}" alt="Image Category" width="100px">
-                </td>
-            </tr>
-        </th:block>
-    </table>
+        tr.shown_,
+        tr.hidden_ {
+            background-color: #eee;
+            /* display: table-row; */
+        }
+
+        tr.hidden_ {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="min-height: 1599.06px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Fixed Navbar Layout</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Layout</a></li>
+                            <li class="breadcrumb-item active">Fixed Navbar Layout</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- ./card-header -->
+                            <div class="card-body p-0">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th width="25%">Tên loại sản phẩm</th>
+                                            <th width="25%">Số lượng</th>
+                                            <th width="25%">Đã bán</th>
+                                            <th width="25%"></th>
+                                        </tr>
+                                        <th:block th:each="category : ${treeCategory}">
+                                            <tr>
+                                                <td style="padding-left: 0px;">
+                                                    <i class="expandable-table-caret fas fa-caret-right fa-fw"
+                                                        th:id="'btn_' + ${category.key.id}" aria-expanded="false"
+                                                        onclick="toggle(this.id);" style="cursor: pointer;"></i>
+                                                    <a th:text="${category.key.name}"></a>
+                                                </td>
+                                                <td>
+                                                    219
+                                                </td>
+                                                <td>
+                                                    219
+                                                </td>
+                                                <td class="project-actions text-right">
+                                                    <a class="btn btn-primary btn-sm" th:href="@{'/admin/category/view/' + ${category.key.id}}">
+                                                        <i class="fas fa-folder">
+                                                        </i>
+                                                        Xem chi tiết
+                                                    </a>
+                                                    <a class="btn btn-info btn-sm" th:href="@{'/admin/category/edit/' + ${category.key.id}}">
+                                                        <i class="fas fa-pencil-alt">
+                                                        </i>
+                                                        Sửa
+                                                    </a>
+                                                    <a class="btn btn-danger btn-sm"
+                                                        th:data-href="@{'/admin/category/delete/' + ${category.key.id}}"
+                                                        onclick="deleteMethod(this)">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        Xóa
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <th:block th:each="child : ${category.value}">
+                                                <tr th:class="hidden_ + ' r-btn_' + ${category.key.id}">
+                                                    <td>
+                                                        <a th:text="${child.name}"></a>
+                                                    </td>
+                                                    <td>
+                                                        219-1
+                                                    </td>
+                                                    <td>
+                                                        219-1
+                                                    </td>
+                                                    <td class="project-actions text-right">
+                                                        <a class="btn btn-primary btn-sm" th:href="@{'/admin/category/view/' + ${child.id}}">
+                                                            <i class="fas fa-folder">
+                                                            </i>
+                                                            Xem chi tiết
+                                                        </a>
+                                                        <a class="btn btn-info btn-sm" th:href="@{'/admin/category/edit/' + ${child.id}}">
+                                                            <i class="fas fa-pencil-alt">
+                                                            </i>
+                                                            Sửa
+                                                        </a>
+                                                        <a class="btn btn-danger btn-sm"
+                                                            th:data-href="@{'/admin/category/delete/' + ${child.id}}"
+                                                            onclick="deleteMethod(this)">
+                                                            <i class="fas fa-trash">
+                                                            </i>
+                                                            Xóa
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </th:block>
+                                        </th:block>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+
+    <div th:replace="fragment::footer-admin"></div>
+
+    <div th:replace="fragment::script-custom"></div>
+
+    <script>
+        function toggle(btnID) {
+            // Feed the list of ids as a selector
+            var className = "r-" + btnID;
+            var theRows = document.getElementsByClassName(className);
+            // Get the button that triggered this
+            var theButton = document.getElementById(btnID);
+            // If the button is not expanded...
+            if (theButton.getAttribute("aria-expanded") == "false") {
+                theButton.style.transform = "rotate(90deg)";
+                // Loop through the rows and show them
+                for (var i = 0; i < theRows.length; i++) {
+                    theRows[i].classList.add("shown_");
+                    theRows[i].classList.remove("hidden_");
+                }
+                // Now set the button to expanded
+                theButton.setAttribute("aria-expanded", "true");
+                // Otherwise button is not expanded...
+            } else {
+                theButton.style.transform = "rotate(0deg)";
+                // Loop through the rows and hide them
+                for (var i = 0; i < theRows.length; i++) {
+                    theRows[i].classList.add("hidden_");
+                    theRows[i].classList.remove("shown_");
+                }
+                // Now set the button to collapsed
+                theButton.setAttribute("aria-expanded", "false");
+            }
+        }
+    </script>
+
 </body>
+
 </html>
