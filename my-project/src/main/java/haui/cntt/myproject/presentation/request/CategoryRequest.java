@@ -12,7 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryRequest {
+
+    private long id;
+
     private String name;
+
+    private String slug;
 
     private long categoryParentId;
 

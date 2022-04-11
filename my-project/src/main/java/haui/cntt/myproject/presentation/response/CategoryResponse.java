@@ -2,6 +2,7 @@ package haui.cntt.myproject.presentation.response;
 
 import lombok.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -18,6 +19,8 @@ public class CategoryResponse {
     private String slug;
 
     private String apiGetImage;
+
+    private List<PropertyResponse> propertyResponseList;
 
     private CategoryResponse categoryParent;
 

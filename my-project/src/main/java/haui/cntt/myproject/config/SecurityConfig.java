@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Optional;
+import java.util.Properties;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +37,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
 
     @Value("${domain}")
     private String DOMAIN;
+
+    @Value("${spring.mail.username}")
+    private String EMAIL_NAME;
+
+    @Value("${spring.mail.password}")
+    private String EMAIL_PASSWORD;
 
     // mã hóa thay cho MD5 spring security cung cấp (BCryptPasswordEncoder)
     @Bean
@@ -73,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
                 .authorizeRequests()
                     .antMatchers("/login", "/home", "/generate-otp" , "/verify-otp"
                             , "/check-username-exist", "/check-email-exist", "/check-cellphone-exist"
-                            , "/favicon.ico", "/register", "/get-menu"
+                            , "/favicon.ico", "/register", "/get-menu", "/forget-password", "/send-new_password-by-email"
                             , "/blog-detail", "/blog", "/faq", "/search", "/term-and-condition"
                             , "/assets/**", "/assets2/**")
                         .permitAll() // cho phép tất cả người dùng truy cập các api /basic
@@ -99,5 +108,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
         } catch (Exception ignored) {
             return Optional.of("anonymousUser");
         }
+    }
+
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+
+        mailSender.setUsername(EMAIL_NAME);
+        mailSender.setPassword(EMAIL_PASSWORD);
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.debug", "true");
+
+        return mailSender;
     }
 }

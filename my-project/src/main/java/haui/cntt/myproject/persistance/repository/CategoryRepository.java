@@ -13,4 +13,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> getListCategoryHasNotParent();
 
     List<Category> findByCategoryParentId(long category_parent_id);
+
+    Category findByName(String nameCategoryParent);
 }

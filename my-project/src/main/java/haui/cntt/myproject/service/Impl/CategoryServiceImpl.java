@@ -3,6 +3,7 @@ package haui.cntt.myproject.service.Impl;
 import com.github.slugify.Slugify;
 import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
+import haui.cntt.myproject.common.text.VNCharacterUtil;
 import haui.cntt.myproject.persistance.entity.Category;
 import haui.cntt.myproject.persistance.entity.Property;
 import haui.cntt.myproject.persistance.repository.CategoryRepository;
@@ -45,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-        String newFileName = new Slugify().slugify(category.getName() + LocalDateTime.now());
+        String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + LocalDateTime.now());
         category.setImage(newFileName + typeOfFile);
 
         Category categoryParent = categoryRepository.findById(category.getCategoryParent().getId()).orElse(null);
@@ -63,30 +64,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Transactional
-    public Category createTest(Category category) {
+    public Category edit(Category category, String originalFilename) throws Throwable{
+        Category foundCategory = categoryRepository.findById(category.getId()).orElseThrow(
+                ()->{throw new BadRequestException("Loại sản phẩm không tồn tại!!!");}
+        );
 
-        if(category.getCategoryParent() != null)
+        foundCategory.setName(category.getName());
+
+        if(originalFilename != null)
         {
-            Category categoryParent = categoryRepository.findById(category.getCategoryParent().getId()).orElse(null);
-            category.setCategoryParent(categoryParent);
+            String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+            String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + LocalDateTime.now());
+            category.setImage(newFileName + typeOfFile);
         }
-        return categoryRepository.save(category);
-    }
 
-    @Transactional
-    public void edit(long id, Category infoCategory) throws Throwable{
-        Category foundCategory = categoryRepository.findById(id).orElseThrow(
-                ()->{throw new BadRequestException("Loại sản phẩm không tồn tại!!!");}
-        );
-        foundCategory.setName(infoCategory.getName());
-        foundCategory.setImage(infoCategory.getImage());
-
-        Category foundCategoryParent = categoryRepository.findById(infoCategory.getCategoryParent().getId()).orElseThrow(
-                ()->{throw new BadRequestException("Loại sản phẩm không tồn tại!!!");}
-        );
-        foundCategory.setCategoryParent(foundCategoryParent);
-
-        categoryRepository.save(foundCategory);
+        return categoryRepository.save(foundCategory);
     }
 
     @Transactional
@@ -95,9 +88,14 @@ public class CategoryServiceImpl implements CategoryService {
                 ()->{throw new BadRequestException("Loại sản phẩm không tồn tại!!!");}
         );
         List<Category> listChild = getListCategoryChild(id);
+        for(Category i : listChild)
+        {
+            delete(i.getId());
+        }
+
         String uploadDir= UPLOAD_DIR_CATEGORY + id;
 
-        FileUploadUtil.deleteFile(uploadDir, foundCategory.getImage());
+        FileUploadUtil.deleteDir(uploadDir);
 
         categoryRepository.deleteAll(listChild);
         categoryRepository.delete(foundCategory);
@@ -115,5 +113,28 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         return treeCategory;
+    }
+
+    // chạy khởi tạo loại sản phẩm
+    public void createTest(Category category) {
+        categoryRepository.save(category);
+    }
+
+    public void createTest2(Category category, String nameCategoryParent, List<String> properties) {
+
+        List<Property> propertyList = new ArrayList<>();
+        if(properties != null)
+        {
+            for(String item : properties)
+            {
+                Property property = propertyRepository.findByName(item);
+                propertyList.add(property);
+            }
+        }
+
+        Category categoryParent = categoryRepository.findByName(nameCategoryParent);
+        category.setCategoryParent(categoryParent);
+        category.setProperties(propertyList);
+        categoryRepository.save(category);
     }
 }

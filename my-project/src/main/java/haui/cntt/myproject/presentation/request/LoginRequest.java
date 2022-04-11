@@ -1,15 +1,21 @@
 package haui.cntt.myproject.presentation.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequest {
+    @Getter(AccessLevel.NONE)
     private String username;
     private String password;
+
+    public String getUsername() {
+        if(username != null)
+        {
+            return username.toLowerCase();
+        }
+        return null;
+    }
 }

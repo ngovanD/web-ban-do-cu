@@ -1,6 +1,5 @@
 package haui.cntt.myproject.service.Impl;
 
-import com.sun.xml.internal.stream.Entity;
 import haui.cntt.myproject.persistance.entity.Property;
 import haui.cntt.myproject.persistance.repository.PropertyRepository;
 import org.springframework.beans.factory.annotation.Autowired;

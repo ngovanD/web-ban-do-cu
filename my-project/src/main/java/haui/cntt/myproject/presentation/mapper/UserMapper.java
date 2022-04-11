@@ -13,9 +13,9 @@ public class UserMapper {
     {
         return User.builder()
                 .id(userRequest.getId())
-                .username(userRequest.getUsername())
+                .username(userRequest.getUsername().toLowerCase())
                 .password(userRequest.getPassword())
-                .email(userRequest.getEmail())
+                .email(userRequest.getEmail().toLowerCase())
                 .cellphone(userRequest.getCellphone())
                 .fullName(userRequest.getFullName())
                 .hiddenFlag(userRequest.isStatus())

@@ -10,4 +10,5 @@ import lombok.*;
 public class PropertyRequest {
     private long id;
     private String name;
+    private String note;
 }

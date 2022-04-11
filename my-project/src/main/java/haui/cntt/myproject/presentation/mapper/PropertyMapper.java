@@ -12,12 +12,15 @@ public class PropertyMapper {
         return PropertyResponse.builder()
                 .id(property.getId())
                 .name(property.getName())
+                .note(property.getNote())
                 .build();
     }
 
     public static Property convertToProperty(PropertyRequest propertyRequest) {
         return Property.builder()
+                .id(propertyRequest.getId())
                 .name(propertyRequest.getName())
+                .note(propertyRequest.getNote())
                 .build();
     }
 }

@@ -41,21 +41,36 @@
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary btn-block">Xác thực OTP</button>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12 text-md-right">
+                            <a th:href="@{/login}" class="text-center">Về trang đăng nhập <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </div>
                 </form>
             </div>
             <!-- /.login-card-body -->
         </div>
     </div>
 
-    <div th:replace="fragment::script-custom"></div>
+    <!-- <div th:replace="fragment::script-custom"></div> -->
+    <!-- jquery-validation -->
+    <script th:src="@{/assets/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
 
     <script>
+        var origin = window.location.origin;
         $(document).ready(function () {
             $.validator.addMethod("checkInvalid", function (value, element) {
                 return this.optional(element) || /((09|03|07|08|05)+([0-9]{8})\b)/g.test(value);
             });
+
             $.validator.addMethod("checkInvalidOtp", function (value, element) {
                 return this.optional(element) || /(([0-9]{4})\b)/g.test(value);
+            });
+
+            $.validator.addMethod("checkCellphoneExists", function (value, element) {
+                var result = checkCellphone();
+                return result;
             });
         });
 
@@ -65,6 +80,7 @@
                     cellphone: {
                         required: true,
                         checkInvalid: true,
+                        checkCellphoneExists: true,
                     },
                     otp: {
                         required: true,
@@ -75,6 +91,7 @@
                     cellphone: {
                         required: "Hãy nhập số điện thoại !",
                         checkInvalid: "Số điện thoại không hợp lệ !",
+                        checkCellphoneExists: "Số điện thoại đã được đăng ký với một tài khoản khác !",
                     },
                     otp: {
                         required: "Hãy nhập OTP !",
@@ -95,6 +112,33 @@
             });
         });
 
+        function checkCellphone() {
+
+            var cellphone = document.getElementById("cellphone").value;
+            var data = { "cellphone": cellphone };
+
+            var check = false;
+
+            var url = origin + "/check-cellphone-exist";
+
+            $.ajax({
+                method: "POST",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                async: false
+            })
+                .done(function (data) {
+                    check = true;
+                })
+                .fail(function () {
+                    toastr.warning("Không thể sử dụng số điện thoại này.");
+                    check = false;
+                })
+
+            return check;
+        };
+
         function sendOtp() {
             if ($('#cellphone').valid()) {
                 var cellphone = document.getElementById("cellphone").value;
@@ -102,13 +146,13 @@
 
                 $.ajax({
                     method: "POST",
-                    url: "http://localhost:8080/generate-otp",
+                    url: origin+ "/generate-otp",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(data),
                 })
                     .done(function (data) {
                         toastr.success(data);
-                        document.getElementById('checkSendOtpSuccess').innerHTML = "0";
+                        // document.getElementById('checkSendOtpSuccess').innerHTML = "0";
                     })
                     .fail(function () {
                         toastr.error("Không thể gửi OTP lúc này..., vui lòng thử lại sau !!! ");

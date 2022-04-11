@@ -23,19 +23,23 @@ public class UserAdminController {
 
     @GetMapping("/get-all")
     public String getAllUser(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page
-                                        , @RequestParam(value = "size", required = false, defaultValue = "10") int size){
+                                        , @RequestParam(value = "size", required = false, defaultValue = "10") int size
+                                        , @RequestParam(value = "search", required = false, defaultValue = "") String keyword){
 
-        Page<UserResponse> userResponsePage = userService.getAllUser(page-1, size)
+        Page<UserResponse> userResponsePage = userService.getAllUser(page-1, size, keyword)
                 .map(UserMapper::convertToUserResponse);
         model.addAttribute("list_user", userResponsePage.getContent());
         model.addAttribute("current_page", page);
         model.addAttribute("total_page", userResponsePage.getTotalPages());
-
+        model.addAttribute("keyword", keyword);
         return "admin_list_user";
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(Model model, @PathVariable(value = "id") long userId){
+
+        String uploadDir = UPLOAD_DIR_USER + userId;
+        FileUploadUtil.deleteDir(uploadDir);
         userService.deleteUser(userId);
         return ResponseEntity.ok().body("Đã xóa user có id: " + userId);
     }

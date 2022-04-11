@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -17,6 +17,16 @@ import javax.persistence.Entity;
 @SuperBuilder
 @Entity
 public class Property extends BaseEntity {
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
+
+    @Column(name = "note")
+    private String note;
+
+    @ManyToMany
+    @JoinTable(name = "category_properties", joinColumns = @JoinColumn(name = "property_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Collection<Category> categories;
+
+    @OneToMany(mappedBy = "property")
+    private Collection<ProductProperty> productProperties;
 }

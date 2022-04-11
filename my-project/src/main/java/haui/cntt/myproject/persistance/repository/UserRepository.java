@@ -1,7 +1,11 @@
 package haui.cntt.myproject.persistance.repository;
 
 import haui.cntt.myproject.persistance.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,11 +14,28 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByEmail(String email);
+
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
 
     Boolean existsByCellphone(String cellphone);
+
+    @Query(value =  "select * " +
+                    "from user " +
+                    "where user.id not in (select user_roles.user_id " +
+                                            "from user_roles inner join role on role.id = user_roles.role_id " +
+                                            "where role.name = 'ROLE_ADMIN')", nativeQuery = true)
+    Page<User> findAllUser(Pageable pageable);
+
+    @Query(value =  "select * " +
+            "from user " +
+            "where concat_ws('', username, lower(full_name), cellphone, email) like %:keyword% " +
+            "and user.id not in (select user_roles.user_id " +
+                                "from user_roles inner join role on role.id = user_roles.role_id " +
+                                "where role.name = 'ROLE_ADMIN')", nativeQuery = true)
+    Page<User> findAllUserAndSearch(Pageable pageable, @Param(value = "keyword") String keyword);
 
 //    @Query(value = "select case when count(*) > 0 then 'true' else 'false' end result " +
 //            "from user u " +

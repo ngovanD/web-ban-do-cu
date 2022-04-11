@@ -17,9 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -52,12 +54,10 @@ public class UserServiceImpl implements UserService{
     }
 
     public boolean existsByEmail(String email, long userId) throws Throwable{
-        if(userId > 0)
-        {
+        if(userId > 0) {
             User foundUser = userRepository.findById(userId).orElseThrow(
                     () ->{throw new BadRequestException("User không tồn tại !!!");}
             );
-
             if(email.equals(foundUser.getEmail())){
                 return false;
             }
@@ -69,12 +69,10 @@ public class UserServiceImpl implements UserService{
     }
 
     public boolean existsByCellphone(String cellphone, long userId) throws Throwable{
-        if(userId > 0)
-        {
+        if(userId > 0){
             User foundUser = userRepository.findById(userId).orElseThrow(
                     () ->{throw new BadRequestException("User không tồn tại !!!");}
             );
-
             if(cellphone.equals(foundUser.getCellphone())){
                 return false;
             }
@@ -92,10 +90,15 @@ public class UserServiceImpl implements UserService{
         );
     }
 
-    public Page<User> getAllUser(int page, int size) {
-
+    public Page<User> getAllUser(int page, int size, String keyword) {
+        String keywordFormat = keyword.trim().toLowerCase();
         Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAll(pageable);
+        if(keywordFormat.equals("")){
+            return userRepository.findAllUser(pageable);
+        }
+        else{
+            return userRepository.findAllUserAndSearch(pageable, keywordFormat);
+        }
     }
 
     @Transactional
@@ -114,17 +117,13 @@ public class UserServiceImpl implements UserService{
         User foundUser = userRepository.findById(user.getId()).orElseThrow(
                 ()->{throw new BadRequestException("User không tồn tại !!!");}
         );
-
-        if(resetPassword)
-        {
+        if(resetPassword){
             foundUser.setPassword(passwordEncoder.encode(foundUser.getUsername()));
         }
-
         foundUser.setFullName(user.getFullName());
         foundUser.setCellphone(user.getCellphone());
         foundUser.setEmail(user.getEmail());
         foundUser.setHiddenFlag(user.getHiddenFlag());
-
         userRepository.save(foundUser);
     }
 
@@ -133,14 +132,10 @@ public class UserServiceImpl implements UserService{
         User foundUser = userRepository.findById(userId).orElseThrow(
                 ()->{throw new BadRequestException("User không tồn tại !!!");}
         );
-
         String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
-
         String newFileName = new Slugify().slugify(foundUser.getUsername() + LocalDateTime.now());
         foundUser.setAvatar(newFileName + typeOfFile);
-
         userRepository.save(foundUser);
-
         return newFileName + typeOfFile;
     }
 
@@ -150,10 +145,41 @@ public class UserServiceImpl implements UserService{
         User foundUser = userRepository.findByUsername(username).orElseThrow(
                 ()->{throw new BadRequestException("Không tìm thấy user !!!");}
         );
-
         foundUser.setFullName(convertToUser.getFullName());
         foundUser.setEmail(convertToUser.getEmail());
-
         userRepository.save(foundUser);
+    }
+
+    @Transactional
+    public void changPassword(String password) throws Throwable{
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User foundUser = userRepository.findByUsername(username).orElseThrow(
+                ()->{throw new BadRequestException("User không tồn tại !!!");}
+        );
+        String newPassword = passwordEncoder.encode(password);
+        foundUser.setPassword(newPassword);
+        userRepository.save(foundUser);
+    }
+
+    @Transactional
+    public String changPasswordForUserForgetPassword(String email) throws Throwable{
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String newPassword = random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        System.out.println(newPassword);
+        User foundUser = userRepository.findByEmail(email).orElseThrow(
+                ()->{throw new BadRequestException("Không có user nào đang sử dụng email này !!!");}
+        );
+        foundUser.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(foundUser);
+
+        return newPassword;
     }
 }

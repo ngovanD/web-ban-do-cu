@@ -52,10 +52,10 @@
                                             th:action="@{'/admin/user/edit/' + ${userResponse.id}}"
                                             th:object="${userRequest}" method="post">
                                             <div class="form-group row">
-                                                <label for="inputName" class="col-sm-2 col-form-label">Tên đăng
+                                                <label for="username" class="col-sm-2 col-form-label">Tên đăng
                                                     nhập</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="inputName"
+                                                    <input type="text" class="form-control" id="username"
                                                         placeholder="Tên đăng nhập" th:value="${userResponse.username}"
                                                         disabled>
                                                 </div>
@@ -134,6 +134,8 @@
     <div th:replace="fragment::script-custom"></div>
 
     <script th:inline="javascript">
+        var origin = window.location.origin;
+
         /*<![CDATA[*/
         var userId = /*[[${ userResponse.id }]]*/ '0';
         /*]]>*/
@@ -205,7 +207,7 @@
             var data = { "email": email };
 
             var check = false;
-            var url = "http://localhost:8080/check-email-exist?id=" + userId
+            var url = origin + "/check-email-exist?id=" + userId
 
             $.ajax({
                 method: "POST",
@@ -232,7 +234,7 @@
 
             var check = false;
 
-            var url = "http://localhost:8080/check-cellphone-exist?id=" + userId
+            var url = origin + "/check-cellphone-exist?id=" + userId
 
             $.ajax({
                 method: "POST",
@@ -258,7 +260,7 @@
 
             $.ajax({
                 method: 'POST',
-                url: "http://localhost:8080/admin/user/edit/avatar/" + userId,
+                url: origin + "0/admin/user/edit/avatar/" + userId,
                 data: data,
                 contentType: false,
                 processData: false,

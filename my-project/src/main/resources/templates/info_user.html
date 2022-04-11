@@ -86,10 +86,17 @@
                             disabled>
                         </div>
                       </div>
-                      <div class="mb-3">
+                      <div class="form-group row">
                         <label class="col-sm-2 col-form-label"></label>
-                        <a onclick="changeInfo()" class="btn btn-primary" style="width:15%">Lưu</a>
+                        <div class="col-sm-10">
+                          <a onclick="changeInfo()" class="btn btn-primary" style="width:15%; border-radius: 0.5rem;">Lưu</a>
+                          <a th:href="@{/user/change-password}" class="btn btn-primary" style="border-radius: 0.5rem;">Đổi mật khẩu</a>
+                        </div>
                       </div>
+                      <!-- <div class="mb-3">
+                        <label class="col-sm-2 col-form-label"></label>
+                        <a th:href="@{/user/change-password}" class="btn btn-primary" style="width:15%">Đổi mật khẩu</a>
+                      </div> -->
                     </form>
                   </div>
                   <!-- /.tab-pane -->
@@ -116,6 +123,8 @@
   <script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
 
   <script th:inline="javascript">
+
+    var origin = window.location.origin;
     /*<![CDATA[*/
     var userId = /*[[${ userResponse.id }]]*/ '0';
     /*]]>*/
@@ -167,7 +176,7 @@
       var data = { "email": email };
 
       var check = false;
-      var url = "http://localhost:8080/check-email-exist?id=" + userId
+      var url = origin + "/check-email-exist?id=" + userId
 
       $.ajax({
         method: "POST",
@@ -196,7 +205,7 @@
       if ($('#formInfo').valid()) {
         $.ajax({
           method: "POST",
-          url: "http://localhost:8080/user/edit",
+          url: origin + "/user/edit",
           contentType: "application/json; charset=utf-8",
           data: JSON.stringify(data),
         })
@@ -215,7 +224,7 @@
 
       $.ajax({
         method: 'POST',
-        url: "http://localhost:8080/user/edit/avatar/" + userId,
+        url: origin + "/user/edit/avatar/" + userId,
         data: data,
         contentType: false,
         processData: false,

@@ -7,6 +7,7 @@ import haui.cntt.myproject.presentation.request.OtpRequest;
 import haui.cntt.myproject.presentation.request.UserRequest;
 import haui.cntt.myproject.presentation.response.CategoryResponse;
 import haui.cntt.myproject.service.Impl.CategoryServiceImpl;
+import haui.cntt.myproject.service.Impl.EmailServiceImpl;
 import haui.cntt.myproject.service.Impl.OtpService;
 import haui.cntt.myproject.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -31,6 +31,8 @@ public class BasicController {
     private UserServiceImpl userService;
     @Autowired
     private CategoryServiceImpl categoryService;
+    @Autowired
+    private EmailServiceImpl emailService;
 
     @GetMapping("/home")
     public String home(Model model){
@@ -141,6 +143,20 @@ public class BasicController {
         return "fragment_menu";
     }
 
+    @GetMapping("/forget-password")
+    public String getPageForgetPassword(){
+        return "form_forget_password";
+    }
+
+    @PostMapping("/send-new_password-by-email")
+    public ResponseEntity forgetPassword(@RequestBody HashMap<String, String> map) throws Throwable {
+
+        String email = map.get("email");
+        String newPassword = userService.changPasswordForUserForgetPassword(email);
+
+        emailService.send(email, "Lấy lại mật khẩu - Chợ cũ", "Mật khẩu mới của bạn là: " + newPassword);
+        return ResponseEntity.ok().body("Đổi mật khẩu và gửi mail thành công !!!");
+    }
 
     @GetMapping("/blog-detail")
     public String blogDetail(Model model){

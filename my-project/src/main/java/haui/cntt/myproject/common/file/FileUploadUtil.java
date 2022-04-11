@@ -4,6 +4,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +35,20 @@ public class FileUploadUtil {
         Path uploadPath = Paths.get(uploadDir);
         Path filePath = uploadPath.resolve(fileName);
         Files.deleteIfExists(filePath);
+    }
+
+    public static void deleteDir(String uploadDir) {
+        File index = new File(uploadDir);
+        String[] entries = index.list();
+        if(entries != null)
+        {
+            for(String s: entries){
+                File currentFile = new File(index.getPath(),s);
+                currentFile.delete();
+            }
+        }
+
+        index.delete();
     }
 
     public static byte[] readFileContent(String pathOrFileName) {

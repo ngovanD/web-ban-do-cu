@@ -48,8 +48,8 @@ public class CategoryAdminController {
     }
 
     @PostMapping("/create")
-    public String create(CategoryRequest categoryRequest,
-                                 @RequestParam("image") MultipartFile multipartFile) throws IOException {
+    public String create(CategoryRequest categoryRequest
+                       , @RequestParam("image") MultipartFile multipartFile) throws IOException {
 
         CategoryResponse categoryResponse =  CategoryMapper.convertToCategoryResponse(
                 categoryService.create(CategoryMapper.convertToCategory(categoryRequest), multipartFile.getOriginalFilename())
@@ -64,14 +64,52 @@ public class CategoryAdminController {
         return "redirect:/admin/category/get-all";
     }
 
-    @GetMapping("/get-detail")
-    String getDetail(){
-        return "index";
+    @GetMapping("/view/{id}")
+    public String getDetail(Model model, @PathVariable(value = "id") long categoryId) throws Throwable {
+
+        CategoryResponse categoryResponse = CategoryMapper.convertToCategoryResponse( categoryService.getDetail(categoryId));
+
+        model.addAttribute("categoryResponse", categoryResponse);
+        return "admin_category_detail";
     }
 
-    @PutMapping("/get-all")
-    String edit(){
-        return "index";
+    @GetMapping("/edit/{id}")
+    public String getPageEdit(Model model, @PathVariable(value = "id") long categoryId) throws Throwable {
+        CategoryResponse categoryResponse = CategoryMapper.convertToCategoryResponse( categoryService.getDetail(categoryId));
+
+        model.addAttribute("categoryResponse", categoryResponse);
+        model.addAttribute("categoryRequest", new CategoryRequest());
+        return "admin_category_edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String edit(Model model, @ModelAttribute CategoryRequest categoryRequest
+                     , @RequestPart(value = "image", required = false) MultipartFile multipartFile) throws Throwable {
+
+        CategoryResponse categoryResponse = new CategoryResponse();
+        if(multipartFile.getOriginalFilename().equals(""))
+        {
+            categoryResponse =  CategoryMapper.convertToCategoryResponse(
+                    categoryService.edit(CategoryMapper.convertToCategory(categoryRequest), null)
+            );
+        }
+        else
+        {
+            String uploadDir = UPLOAD_DIR_CATEGORY+ categoryRequest.getId();
+
+            String fileName = categoryService.getDetail(categoryRequest.getId()).getImage();
+            FileUploadUtil.deleteFile(uploadDir, fileName);
+
+            categoryResponse =  CategoryMapper.convertToCategoryResponse(
+                    categoryService.edit(CategoryMapper.convertToCategory(categoryRequest), multipartFile.getOriginalFilename())
+            );
+
+            String  newFileName = categoryResponse.getApiGetImage().substring(categoryResponse.getApiGetImage().lastIndexOf("/")+1);
+
+            FileUploadUtil.saveFile(uploadDir, newFileName, multipartFile);
+        }
+        model.addAttribute("categoryResponse", categoryResponse);
+        return "admin_category_detail";
     }
 
     @DeleteMapping("/delete/{id}")
@@ -87,6 +125,16 @@ public class CategoryAdminController {
                 .stream()
                 .map(CategoryMapper::convertToCategoryResponse)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok().body(categoryResponseList);
+    }
+
+    @GetMapping("/get-child/{parentId}")
+    public ResponseEntity getChild(@PathVariable(value = "parentId") long parentId){
+        List<CategoryResponse> categoryResponseList = categoryService.getListCategoryChild(parentId)
+                .stream()
+                .map(CategoryMapper::convertToCategoryResponse)
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok().body(categoryResponseList);
     }
 }

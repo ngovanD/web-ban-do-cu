@@ -64,12 +64,12 @@
     </div><!-- /.card -->
 </div>
 
-<div id="varii"></div>
 
-
-
+<div th:replace="fragment::script-custom"></div>
 
 <script>
+  var origin = window.location.origin;
+
     $(document).ready(function () {
 
       $.validator.addMethod("checkSpace", function (value, element) {
@@ -159,7 +159,7 @@
 
       $.ajax({
         method: "POST",
-        url: "http://localhost:8080/check-username-exist",
+        url: origin + "/check-username-exist",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(data),
         async: false
@@ -186,7 +186,7 @@
 
       $.ajax({
         method: "POST",
-        url: "http://localhost:8080/check-email-exist",
+        url: origin + "/check-email-exist",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(data),
         async: false
@@ -204,7 +204,5 @@
       return check;
     }
   </script>
-
-<div th:replace="fragment::script-custom"></div>
 </body>
 </html>

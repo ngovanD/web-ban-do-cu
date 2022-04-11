@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoryMapper {
     private CategoryMapper(){super();}
@@ -16,11 +17,15 @@ public class CategoryMapper {
     public static Category convertToCategory(CategoryRequest categoryRequest)
     {
         List<Property> propertyList = new ArrayList<>();
-        for(Long i : categoryRequest.getPropertyRequestList())
-        {
-            propertyList.add(Property.builder().id(i).build());
+        if(categoryRequest.getPropertyRequestList() != null){
+            for(Long i : categoryRequest.getPropertyRequestList())
+            {
+                propertyList.add(Property.builder().id(i).build());
+            }
         }
+
         return Category.builder()
+                .id(categoryRequest.getId())
                 .name(categoryRequest.getName())
                 .categoryParent(Category.builder().id(categoryRequest.getCategoryParentId()).build())
                 .properties(propertyList)
@@ -34,15 +39,25 @@ public class CategoryMapper {
 
         if(category.getCategoryParent() != null)
         {
-            return new CategoryResponse(
-                    category.getId(), category.getName(), category.getSlug(), apiImage
-                    , convertToCategoryResponse(category.getCategoryParent())
-                    );
+            return CategoryResponse.builder()
+                    .id(category.getId())
+                    .name(category.getName())
+                    .slug(category.getSlug())
+                    .propertyResponseList(
+                            category.getProperties()
+                                    .stream()
+                                    .map(PropertyMapper::convertToPropertyResponse)
+                                    .collect(Collectors.toList()))
+                    .apiGetImage(apiImage)
+                    .categoryParent(convertToCategoryResponse(category.getCategoryParent()))
+                    .build();
         }
 
-        return new CategoryResponse(
-                category.getId(), category.getName(), category.getSlug(), apiImage
-                , null
-        );
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .slug(category.getSlug())
+                .apiGetImage(apiImage)
+                .build();
     }
 }
