@@ -1,0 +1,68 @@
+package haui.cntt.myproject.presentation.mapper;
+
+import haui.cntt.myproject.common.enum_.ProductStatusEnum;
+import haui.cntt.myproject.persistance.entity.Category;
+import haui.cntt.myproject.persistance.entity.ImageProduct;
+import haui.cntt.myproject.persistance.entity.Product;
+import haui.cntt.myproject.presentation.controller.basic.ImageController;
+import haui.cntt.myproject.presentation.request.ProductRequest;
+import haui.cntt.myproject.presentation.response.ProductResponse;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+
+import java.util.stream.Collectors;
+
+public class ProductMapper {
+    private ProductMapper() {
+        super();
+    }
+
+    public static ProductResponse convertToProductResponse(Product product) {
+        String fileName = product.getImageProducts()
+                .stream()
+                .filter(i -> i.isMainImage() == true)
+                .findFirst()
+                .orElse(ImageProduct.builder().fileName("not_found.png").build())
+                .getFileName();
+        String apiImage = MvcUriComponentsBuilder.fromMethodName(ImageController.class, "readDetailFile"
+                , "product", product.getId().toString(), fileName).toUriString();
+
+        String status = product.getStatus().equals(ProductStatusEnum.STOCKING) ? "Đang bán" : "Đã bán";
+
+        return ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .status(status)
+                .view(product.getView())
+                .price(product.getPrice())
+                .currentStatus(product.getCurrentStatus())
+                .description(product.getDescription())
+                .mainImage(apiImage)
+                .propertyResponseList(product.getProductProperties()
+                        .stream()
+                        .map(ProductPropertyMapper::convertToProductPropertyResponse)
+                        .collect(Collectors.toList()))
+                .apiGetImageList(product.getImageProducts()
+                        .stream()
+                        .map(ImageProductMapper::convertToImageProductResponse)
+                        .collect(Collectors.toList()))
+                .addressResponse(AddressMapper.convertToAddressResponse(product.getAddress()))
+                .categoryResponse(CategoryMapper.convertToCategoryResponse(product.getCategory()))
+                .build();
+    }
+
+    public static Product convertToProduct(ProductRequest productRequest) {
+        return Product.builder()
+                .id(productRequest.getId())
+                .name(productRequest.getName())
+                .price(productRequest.getPrice())
+                .currentStatus(productRequest.getCurrentStatus())
+                .description(productRequest.getDescription())
+                .productProperties(productRequest.getProductPropertyRequestList()
+                        .stream()
+                        .map(ProductPropertyMapper::convertToProductProperty)
+                        .collect(Collectors.toList()))
+                .address(AddressMapper.convertToAddress(productRequest.getAddressRequest()))
+                .category(Category.builder().id(productRequest.getCategoryId()).build())
+                .build();
+    }
+}

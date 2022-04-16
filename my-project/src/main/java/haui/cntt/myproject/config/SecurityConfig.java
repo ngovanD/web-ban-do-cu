@@ -83,6 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
                     .antMatchers("/login", "/home", "/generate-otp" , "/verify-otp"
                             , "/check-username-exist", "/check-email-exist", "/check-cellphone-exist"
                             , "/favicon.ico", "/register", "/get-menu", "/forget-password", "/send-new_password-by-email"
+                            , "/product/detail/*"
                             , "/blog-detail", "/blog", "/faq", "/search", "/term-and-condition"
                             , "/assets/**", "/assets2/**")
                         .permitAll() // cho phép tất cả người dùng truy cập các api /basic

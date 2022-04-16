@@ -7,13 +7,14 @@ import haui.cntt.myproject.presentation.response.UserResponse;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 public class UserMapper {
-    private UserMapper(){super();}
+    private UserMapper() {
+        super();
+    }
 
-    public static User convertToUser(UserRequest userRequest)
-    {
+    public static User convertToUser(UserRequest userRequest) {
         return User.builder()
                 .id(userRequest.getId())
-                .username(userRequest.getUsername().toLowerCase())
+                .username(userRequest.getUsername() != null ? userRequest.getUsername().toLowerCase() : null)
                 .password(userRequest.getPassword())
                 .email(userRequest.getEmail().toLowerCase())
                 .cellphone(userRequest.getCellphone())
@@ -22,17 +23,15 @@ public class UserMapper {
                 .build();
     }
 
-    public static UserResponse convertToUserResponse(User user)
-    {
-        String apiGetAvatar = MvcUriComponentsBuilder.fromMethodName(ImageController.class,"readDetailFile"
+    public static UserResponse convertToUserResponse(User user) {
+        String apiGetAvatar = MvcUriComponentsBuilder.fromMethodName(ImageController.class, "readDetailFile"
                 , user.getClass().getSimpleName().toLowerCase(), user.getId().toString(), user.getAvatar()).toUriString();
-        if(user.getAvatar() == null || user.getAvatar().equals("avatar_default.png"))
-        {
-            apiGetAvatar = MvcUriComponentsBuilder.fromMethodName(ImageController.class,"readDetailFile"
+        if (user.getAvatar() == null || user.getAvatar().equals("avatar_default.png")) {
+            apiGetAvatar = MvcUriComponentsBuilder.fromMethodName(ImageController.class, "readDetailFile"
                     , user.getClass().getSimpleName().toLowerCase(), "0", "avatar_default.png").toUriString();
         }
 
-        String status = user.getHiddenFlag() == true ? "Tạm khóa": "Hoạt động bình thường";
+        String status = user.getHiddenFlag() ? "Tạm khóa" : "Hoạt động bình thường";
 
         return UserResponse.builder()
                 .id(user.getId())

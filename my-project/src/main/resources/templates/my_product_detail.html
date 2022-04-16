@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sản phẩm</title>
+    <div th:replace="fragment::head-custom2"></div>
+</head>
+
+<body class="cnt-home">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs">
+        <div class="container">
+            <div class="row single-product">
+                <div class="col-md-12">
+                    <div class="detail-block">
+                        <div class="row  wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">
+                            <div class="col-xs-12 col-sm-6 col-md-5 gallery-holder">
+                                <img class="img-responsive" alt="" th:src="${productResponse.mainImage}" width="200px"
+                                    style="margin-left: 50%;
+                                    transform: translate(-50%, 0);" id="main_image_product">
+                            </div><!-- /.gallery-holder -->
+                            <div class="col-sm-6 col-md-7 product-info-block">
+                                <div class="product-info">
+                                    <h1 class="name">[[${productResponse.name}]]</h1>
+
+                                    <div class="stock-container info-container m-t-10">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <div class="stock-box">
+                                                    <span class="label">Trạng thái :</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="stock-box">
+                                                    <span class="value"
+                                                        id="statusProduct">[[${productResponse.status}]]</span>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.row -->
+                                    </div><!-- /.stock-container -->
+
+                                    <div class="price-container info-container m-t-20">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="price-box">
+                                                    <span class="price">[[${productResponse.price}]]</span>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.row -->
+                                    </div><!-- /.price-container -->
+                                </div><!-- /.product-info -->
+                            </div><!-- /.col-sm-7 -->
+                        </div><!-- /.row -->
+                    </div>
+
+                    <div class="product-tabs inner-bottom-xs  wow fadeInUp animated"
+                        style="visibility: visible; animation-name: fadeInUp;">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
+                                    <li class="active"><a data-toggle="tab" href="#info">Thông tin chi tiết</a></li>
+                                    <li><a data-toggle="tab" href="#images">Ảnh</a></li>
+                                    <li><a data-toggle="tab" href="#setting">Tác vụ</a></li>
+                                </ul><!-- /.nav-tabs #product-tabs -->
+                            </div>
+                            <div class="col-sm-9">
+
+                                <div class="tab-content">
+                                    <div id="info" class="tab-pane in active">
+                                        <div class="product-tab">
+                                            <h2 class="heading-title" style="font-size: 15px;">Thông tin sản phẩm</h2>
+                                            <div class="form-group">
+                                                <label class="info-title">Loại sản phẩm</label>
+                                                <div class="form-control unicase-form-control">
+                                                    <div id="optionCategoryName">
+                                                        [[${productResponse.categoryResponse.name}]]</div>
+                                                </div>
+                                            </div>
+                                            <div id="form-content_">
+                                                <form class="register-form outer-top-xs" role="form"
+                                                    id="formDetailProduct">
+                                                    <th:block
+                                                        th:each="property : ${productResponse.propertyResponseList}">
+                                                        <div class="form-group">
+                                                            <label class="info-title"
+                                                                th:text="${property.propertyName}">Lỗi</label>
+                                                            <input type="text"
+                                                                class="form-control unicase-form-control text-input"
+                                                                th:name="property" th:id="${property.propertyId}"
+                                                                th:value="${property.value}"
+                                                                th:placeholder="${property.note}">
+                                                        </div>
+                                                    </th:block>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Tiêu đề - Tên sản phẩm</label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            required id="name_" th:value="${productResponse.name}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Giá</label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            placeholder="Đơn vị VNĐ" required id="price_"
+                                                            th:value="${productResponse.price}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Tình trạng</label>
+                                                        <select id="currentStatus_"
+                                                            class="form-control unicase-form-control text-input"
+                                                            required>
+                                                            <option hidden value="0">
+                                                                [[${productResponse.currentStatus}]]
+                                                            </option>
+                                                            <option>Mới</option>
+                                                            <option>Đã qua sử dụng (chưa sửa chữa)</option>
+                                                            <option>Đã qua sử dụng (đã sửa chữa)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Thông tin chi tiết</label>
+                                                        <textarea type=""
+                                                            class="form-control unicase-form-control text-input"
+                                                            style="height: 230px;" id="description_"
+                                                            placeholder="
+                                                            - Tình trạng sản phẩm
+                                                            - Thời gian sử dụng
+                                                            - Bảo hành nếu có
+                                                            - Sửa chữa, nâng cấp, phụ kiện đi kèm
+                                                            - Địa chỉ giao nhận, đổi trả">[[${productResponse.description}]]</textarea>
+                                                    </div>
+                                                    <div class="form-group" style="margin-bottom: 50px;">
+                                                        <label class="info-title">Địa chỉ:</label>
+                                                        <div>
+                                                            <div class="col-sm-4">
+                                                                <select id="province" class="form-control"
+                                                                    onchange="loadDistrict()">
+                                                                    <option hidden
+                                                                        th:value="${productResponse.addressResponse.codeProvince}">
+                                                                        [[${productResponse.addressResponse.province}]]
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <select id="district" class="form-control"
+                                                                    onchange="loadCommune()">
+                                                                    <option hidden
+                                                                        th:value="${productResponse.addressResponse.codeDistrict}">
+                                                                        [[${productResponse.addressResponse.district}]]
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <select id="commune" class="form-control">
+                                                                    <option hidden
+                                                                        th:value="${productResponse.addressResponse.codeCommune}">
+                                                                        [[${productResponse.addressResponse.commune}]]
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Địa chỉ cụ thể</label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            required id="detail_"
+                                                            th:value="${productResponse.addressResponse.detail}">
+                                                    </div>
+
+                                                    <a class=" btn-upper btn btn-primary checkout-page-button"
+                                                        onclick="editProduct()">Lưu</a>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.tab-pane -->
+
+                                    <div id="images" class="tab-pane">
+                                        <div class="product-tab">
+                                            <div class="product-add-review">
+                                                <h4 class="title">Hình ảnh sản phẩm</h4>
+                                                <div class="review-table">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Hình ảnh</th>
+                                                                    <th>Trang bìa</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="content-list-image-product">
+                                                                <th:block
+                                                                    th:each="imageProduct : ${productResponse.apiGetImageList}">
+                                                                    <tr th:id="'imageProduct-' + ${imageProduct.id}">
+                                                                        <td class="cell-label">
+                                                                            <img class="img-responsive" alt=""
+                                                                                th:src="${imageProduct.apiGetImage}"
+                                                                                width="100px" style="margin-left: 50%;
+                                                                                transform: translate(-50%, 0);">
+                                                                        </td>
+                                                                        <td th:if="${imageProduct.isMainImage}"><input
+                                                                                type="radio" name="isDefault"
+                                                                                class="radio"
+                                                                                th:value="${imageProduct.id}"
+                                                                                th:data-imageUrl="${imageProduct.apiGetImage}"
+                                                                                checked onclick="changeMainImage(this)">
+                                                                        </td>
+                                                                        <td th:unless="${imageProduct.isMainImage}">
+                                                                            <input type="radio" name="isDefault"
+                                                                                class="radio"
+                                                                                th:value="${imageProduct.id}"
+                                                                                th:data-imageUrl="${imageProduct.apiGetImage}"
+                                                                                onclick="changeMainImage(this)">
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-primary btn-upper"
+                                                                                th:data-id="${imageProduct.id}"
+                                                                                onclick="deleteImage(this)">Xóa</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                </th:block>
+                                                            </tbody>
+                                                        </table><!-- /.table .table-bordered -->
+                                                        <label for="fileImage"
+                                                            class="btn btn-primary btn-upper">Thêm</label>
+                                                        <input id="fileImage" name="image" type="file"
+                                                            accept="image/png, image/jpg, image/jpeg"
+                                                            style="display: none;" onchange="addImage(this)">
+                                                    </div><!-- /.table-responsive -->
+                                                </div><!-- /.review-table -->
+                                            </div><!-- /.product-add-review -->
+                                        </div><!-- /.product-tab -->
+                                    </div><!-- /.tab-pane -->
+                                    <div id="setting" class="tab-pane">
+                                        <div class="product-tag">
+                                            <div class="col-sm-6" style="display: flex; justify-content: center;">
+                                                <a class="btn btn-primary btn-upper" onclick="changeStatus()">Đã bán</a>
+                                            </div>
+                                            <div class="col-sm-6" style="display: flex; justify-content: center;">
+                                                <a class="btn btn-danger btn-upper" onclick="deleteProduct()">Xóa sản
+                                                    phẩm</a>
+                                            </div>
+                                        </div><!-- /.product-tab -->
+                                    </div><!-- /.tab-pane -->
+
+                                </div><!-- /.tab-content -->
+                            </div><!-- /.col -->
+                        </div>
+                    </div><!-- /.product-tabs -->
+                </div><!-- /.col -->
+                <div class="clearfix"></div>
+            </div><!-- /.row -->
+        </div><!-- /.container -->
+    </div>
+    <!-- /#top-banner-and-menu -->
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+    <!-- jquery-validation -->
+    <script th:src="@{/assets/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
+
+
+    <script th:inline="javascript">
+        var origin = window.location.origin;
+
+        /*<![CDATA[*/
+        var productId = /*[[${ productResponse.id }]]*/ '0';
+        /*]]>*/
+
+        $(document).ready(function () {
+            loadAddressResponse();
+        });
+
+        function editProduct() {
+            if (!$('#formDetailProduct').valid()) {
+                toastr.warning("Hãy điền đầy đủ thông tin sản phẩm.");
+                return;
+            }
+
+            var listProperty = document.getElementsByName('property');
+
+            var productPropertyRequestList = [];
+
+            listProperty.forEach(property => {
+                var productPropertyRequest =
+                {
+                    "propertyId": property.getAttribute('id'),
+                    "value": property.value,
+                };
+
+                productPropertyRequestList.push(productPropertyRequest);
+            });
+
+            var name = document.getElementById("name_").value;
+            var price = document.getElementById("price_").value;
+            var currentStatus = document.getElementById("currentStatus_").value;
+            var description = document.getElementById("description_").value;
+
+            var province = $("#province option:selected").text();
+            var codeProvince = $("#province option:selected").val();
+            var district = $("#district option:selected").text();
+            var codeDistrict = $("#district option:selected").val();
+            var commune = $("#commune option:selected").text();
+            var codeCommune = $("#commune option:selected").val();
+            var detail = document.getElementById("detail_").value;
+
+            var addressRequest = {
+                "province": province,
+                "codeProvince": codeProvince,
+                "district": district,
+                "codeDistrict": codeDistrict,
+                "commune": commune,
+                "codeCommune": codeCommune,
+                "detail": detail
+            }
+
+            var data = {
+                "name": name,
+                "price": price,
+                "currentStatus": currentStatus,
+                "description": description,
+                "productPropertyRequestList": productPropertyRequestList,
+                "addressRequest": addressRequest,
+            }
+
+            $.ajax({
+                method: 'POST',
+                url: origin + "/user/product/edit/" + productId,
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+            })
+                .done(function () {
+                    toastr.success("Sửa thành công !");
+                })
+                .fail(function () {
+                    toastr.error("Có lối xảy ra, vui lòng thử lại sau.");
+                });
+        }
+
+        function loadAddressResponse() {
+
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/?depth=1",
+            })
+                .done(function (data) {
+                    var listProvince = document.getElementById("province");
+                    data.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listProvince.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+
+            var codeProvince_ = $('#province')[0].value;
+            var codeDistrict_ = $('#district')[0].value;
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/p/" + codeProvince_ + "?depth=2",
+            })
+                .done(function (data) {
+                    var listDistrict = document.getElementById("district");
+                    data.districts.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listDistrict.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/d/" + codeDistrict_ + "?depth=2",
+            })
+                .done(function (data) {
+                    var listCommune = document.getElementById("commune");
+                    data.wards.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listCommune.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadDistrict() {
+            var listCommune = document.getElementById("commune");
+            $('#commune').empty();
+            listCommune.innerHTML = "<option hidden value='0'>---Chọn xã, phường, trị trấn---</option>";
+            listCommune.value = "0";
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/p/" + $('#province')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listDistrict = document.getElementById("district");
+                    $('#district').empty();
+                    listDistrict.innerHTML = "<option hidden value='0'>---Chọn quận, huyện---</option>";
+                    data.districts.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listDistrict.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadCommune() {
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/d/" + $('#district')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listCommune = document.getElementById("commune");
+                    $('#commune').empty();
+                    listCommune.innerHTML = "<option hidden value='0'>---Chọn xã, phường, trị trấn---</option>";
+                    data.wards.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listCommune.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function changeMainImage(e) {
+            var imageProductId = e.value;
+            $.ajax({
+                method: 'PATCH',
+                url: origin + "/user/product/change-main-image/" + productId + "/" + imageProductId,
+            })
+                .done(function (data) {
+                    var url = e.getAttribute('data-imageUrl');
+                    document.getElementById('main_image_product').setAttribute('src', url);
+                    toastr.success("Đổi ảnh bìa thành công.");
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function deleteImage(e) {
+            var imageProductId = e.getAttribute('data-id');
+
+            $.ajax({
+                method: 'DELETE',
+                url: origin + "/user/product/delete-image/" + imageProductId,
+            })
+                .done(function (data) {
+                    document.getElementById('imageProduct-' + imageProductId).remove();
+                    toastr.success("Xóa thành công.");
+                })
+                .fail(function () {
+                    toastr.error("Không thể xóa ảnh bìa hoặc có lỗi xảy ra.");
+                });
+
+        }
+
+        function addImage(e) {
+            var data = new FormData();
+            data.append('image', $(e)[0].files[0]);
+
+            $.ajax({
+                method: 'POST',
+                url: origin + "/user/product/add-image/" + productId,
+                data: data,
+                contentType: false,
+                processData: false,
+            })
+                .done(function () {
+                    location.reload();
+                })
+                .fail(function () {
+                    toastr.error("Không thẻ upload ảnh, vui lòng thử lại sau.");
+                });
+        }
+
+        function changeStatus() {
+            $.ajax({
+                method: 'PATCH',
+                url: origin + "/user/product/sold-out/" + productId,
+            })
+                .done(function (data) {
+                    document.getElementById('statusProduct').innerText = "Đã bán";
+                    toastr.success("Cập nhật trạng thái thành công.");
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function deleteProduct() {
+            $.ajax({
+                method: 'DELETE',
+                url: origin + "/user/product/delete/" + productId,
+            })
+                .done(function (data) {
+                    toastr.success("Xóa thành công.");
+
+                    location.href = origin + "/user/my-list-product";
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+    </script>
+</body>
+
+</html>

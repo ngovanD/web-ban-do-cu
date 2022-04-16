@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CategoryMapper {
-    private CategoryMapper(){super();}
+    private CategoryMapper() {
+        super();
+    }
 
-    public static Category convertToCategory(CategoryRequest categoryRequest)
-    {
+    public static Category convertToCategory(CategoryRequest categoryRequest) {
         List<Property> propertyList = new ArrayList<>();
-        if(categoryRequest.getPropertyRequestList() != null){
-            for(Long i : categoryRequest.getPropertyRequestList())
-            {
+        if (categoryRequest.getPropertyRequestList() != null) {
+            for (Long i : categoryRequest.getPropertyRequestList()) {
                 propertyList.add(Property.builder().id(i).build());
             }
         }
@@ -32,13 +32,11 @@ public class CategoryMapper {
                 .build();
     }
 
-    public static CategoryResponse convertToCategoryResponse(Category category)
-    {
-        String apiImage = MvcUriComponentsBuilder.fromMethodName(ImageController.class,"readDetailFile"
+    public static CategoryResponse convertToCategoryResponse(Category category) {
+        String apiImage = MvcUriComponentsBuilder.fromMethodName(ImageController.class, "readDetailFile"
                 , category.getClass().getSimpleName().toLowerCase(), category.getId().toString(), category.getImage()).toUriString();
 
-        if(category.getCategoryParent() != null)
-        {
+        if (category.getCategoryParent() != null) {
             return CategoryResponse.builder()
                     .id(category.getId())
                     .name(category.getName())

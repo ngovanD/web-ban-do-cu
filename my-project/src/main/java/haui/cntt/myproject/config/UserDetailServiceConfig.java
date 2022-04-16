@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Objects;
 
 @Service
@@ -29,9 +27,6 @@ public class UserDetailServiceConfig implements UserDetailsService {
         if (Objects.isNull(userEntity)) {
             throw new BadRequestException(username + " not found in database.");
         } else {
-//            Collection<SimpleGrantedAuthority> authorities = userEntity.getRoles().stream().map(roleEntity ->
-//                    new SimpleGrantedAuthority(roleEntity.getName().toString())).collect(Collectors.toList());
-//            return new User(userEntity.getUsername(), userEntity.getPassword(), authorities);
             return new CustomUserDetails(userEntity);
         }
     }

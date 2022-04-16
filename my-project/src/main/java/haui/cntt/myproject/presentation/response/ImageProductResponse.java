@@ -7,9 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PropertyResponse {
+public class ImageProductResponse {
     private long id;
-    private String name;
-    private String note;
-    private String unit;
+    private String apiGetImage;
+    private boolean isMainImage;
 }

@@ -7,9 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PropertyResponse {
-    private long id;
-    private String name;
+public class ProductPropertyResponse {
+    private long propertyId;
+    private String propertyName;
+    private String value;
     private String note;
-    private String unit;
 }

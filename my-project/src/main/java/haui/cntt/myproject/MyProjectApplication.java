@@ -40,6 +40,7 @@ public class MyProjectApplication {
 				userService.createUser(User.builder()
 						.username("dang")
 						.password("123")
+						.fullName("Ngo Van Dang")
 						.build());
 			} catch (Exception ignored) {
 			}
@@ -47,26 +48,26 @@ public class MyProjectApplication {
 			try{
 				propertyService.create(Property.builder().name("Hãng").note("Nhãn hiệu sản phẩm").build());
 				propertyService.create(Property.builder().name("Màu sắc").note("Màu sắc sản phẩm").build());
-				propertyService.create(Property.builder().name("ROM").note("Đơn vị GB").build());
-				propertyService.create(Property.builder().name("RAM").note("Đơn vị GB").build());
+				propertyService.create(Property.builder().name("ROM").note("Đơn vị GB").unit("GB").build());
+				propertyService.create(Property.builder().name("RAM").note("Đơn vị GB").unit("GB").build());
 				propertyService.create(Property.builder().name("Bảo hành").note("Trạng thái bảo hàng của sản phẩm (còn bảo hành, hết bảo hành)").build());
 				propertyService.create(Property.builder().name("CPU").note("Bộ vi xử lý của sản phẩm").build());
-				propertyService.create(Property.builder().name("Kích thước màn hình").note("Đơn vị inch").build());
+				propertyService.create(Property.builder().name("Kích thước màn hình").note("Đơn vị inch").unit("inch").build());
 				propertyService.create(Property.builder().name("Năm đăng ký xe").note("Năm đăng ký xe").build());
 				propertyService.create(Property.builder().name("Loại xe máy").note("Tay ga, số, côn,...").build());
 				propertyService.create(Property.builder().name("Loại xe đạp").note("Xe thể thao, xe phổ thông, xe trẻ em").build());
-				propertyService.create(Property.builder().name("Dung tích xe").note("Đơn vị cc").build());
-				propertyService.create(Property.builder().name("Số KM đã đi").note("Đơn vị Km").build());
+				propertyService.create(Property.builder().name("Dung tích xe").note("Đơn vị cc").unit("cc").build());
+				propertyService.create(Property.builder().name("Số KM đã đi").note("Đơn vị Km").unit("Km").build());
 				propertyService.create(Property.builder().name("Biển số").note("Biển số xe").build());
-				propertyService.create(Property.builder().name("Thể tích").note("Đơn vị lit (L)").build());
+				propertyService.create(Property.builder().name("Thể tích").note("Đơn vị lit (L)").unit("L").build());
 				propertyService.create(Property.builder().name("Chất liệu").note("Nhựa, gỗ, kính,...").build());
-				propertyService.create(Property.builder().name("Công suất").note("Đơn vị W").build());
-				propertyService.create(Property.builder().name("Khối lượng giặt").note("Đơn vị Kg").build());
+				propertyService.create(Property.builder().name("Công suất").note("Đơn vị W").unit("W").build());
+				propertyService.create(Property.builder().name("Khối lượng giặt").note("Đơn vị Kg").unit("Kg").build());
 				propertyService.create(Property.builder().name("Loại cửa máy giặt").note("Cửa trước, cửa trên").build());
 				propertyService.create(Property.builder().name("Chất liệu vải").note("Len, cotton, nhung,...").build());
 				propertyService.create(Property.builder().name("Size").note("").build());
 				propertyService.create(Property.builder().name("Loại dụng cụ nhà bếp").note("Xoong, nồi, bát, đĩa, bếp ga,...").build());
-				propertyService.create(Property.builder().name("Kích thước giường").note("2mx2.2m, 1.8x2m,...").build());
+				propertyService.create(Property.builder().name("Kích thước giường").note("2mx2.2m, 1.8x2m,...").unit("m2").build());
 			}catch (Exception ignored)
 			{
 

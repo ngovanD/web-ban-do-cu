@@ -7,9 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PropertyRequest {
-    private long id;
+public class ProductPropertyRequest {
+    private long propertyId;
     private String name;
     private String note;
-    private String unit;
+    private String value;
 }

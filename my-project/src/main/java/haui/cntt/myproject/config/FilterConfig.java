@@ -40,7 +40,6 @@ public class FilterConfig extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             response.setContentType(APPLICATION_JSON_VALUE);
-            //response.setStatus(UNAUTHORIZED.value());
 
             String token = getJwtFromRequest(request);
 
@@ -61,11 +60,6 @@ public class FilterConfig extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                         filterChain.doFilter(request, response);
                     }
-//                    else {
-//                        response.sendRedirect(
-//                                request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/login"
-//                        );
-//                    }
                 } catch (Exception exception) {
                     response.setStatus(UNAUTHORIZED.value());
                     response.sendRedirect(

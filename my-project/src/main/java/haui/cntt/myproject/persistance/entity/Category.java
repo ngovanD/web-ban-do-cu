@@ -35,10 +35,11 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "category")
     private Collection<Product> products;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "category_properties", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "property_id"))
     private Collection<Property> properties;
 
+    @Override
     @PrePersist
     public void onPrePersist(){
         super.onPrePersist();
@@ -47,7 +48,6 @@ public class Category extends BaseEntity {
 
     @PreUpdate
     public void onPreUpdate(){
-
         slug = new Slugify().slugify(VNCharacterUtil.removeAccent(name));
     }
 }

@@ -42,18 +42,28 @@ public class Product extends BaseEntity {
     @Column(name = "view")
     private int view;
 
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private Address address;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Collection<ImageProduct> imageProducts;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Collection<ProductProperty> productProperties;
+
+    @PrePersist
+    public void onPrePersist(){
+        super.onPrePersist();
+        slug = new Slugify().slugify(VNCharacterUtil.removeAccent(name) + this.getId());
+    }
 
     @PreUpdate
     public void onPreUpdate(){

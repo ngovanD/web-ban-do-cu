@@ -3,8 +3,10 @@ package haui.cntt.myproject.service.Impl;
 import com.github.slugify.Slugify;
 import haui.cntt.myproject.common.enum_.RoleEnum;
 import haui.cntt.myproject.common.exception.BadRequestException;
+import haui.cntt.myproject.persistance.entity.Product;
 import haui.cntt.myproject.persistance.entity.Role;
 import haui.cntt.myproject.persistance.entity.User;
+import haui.cntt.myproject.persistance.repository.ProductRepository;
 import haui.cntt.myproject.persistance.repository.RoleRepository;
 import haui.cntt.myproject.persistance.repository.UserRepository;
 import haui.cntt.myproject.service.UserService;
@@ -17,20 +19,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+//    @Autowired
+//    ProductRepository productRepository;
 
     @Transactional
     public void createAdmin(User user) {
@@ -41,7 +46,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public void createUser(User user){
+    public void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepository.findByName(RoleEnum.ROLE_USER).orElse(null);
         user.setRoles(Collections.singleton(role));
@@ -49,54 +54,57 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
     }
 
-    public boolean existsByUsername(String username){
+    public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    public boolean existsByEmail(String email, long userId) throws Throwable{
-        if(userId > 0) {
+    public boolean existsByEmail(String email, long userId) throws Throwable {
+        if (userId > 0) {
             User foundUser = userRepository.findById(userId).orElseThrow(
-                    () ->{throw new BadRequestException("User không tồn tại !!!");}
+                    () -> {
+                        throw new BadRequestException("User không tồn tại !!!");
+                    }
             );
-            if(email.equals(foundUser.getEmail())){
+            if (email.equals(foundUser.getEmail())) {
                 return false;
-            }
-            else{
+            } else {
                 return userRepository.existsByEmail(email);
             }
         }
         return userRepository.existsByEmail(email);
     }
 
-    public boolean existsByCellphone(String cellphone, long userId) throws Throwable{
-        if(userId > 0){
+    public boolean existsByCellphone(String cellphone, long userId) throws Throwable {
+        if (userId > 0) {
             User foundUser = userRepository.findById(userId).orElseThrow(
-                    () ->{throw new BadRequestException("User không tồn tại !!!");}
+                    () -> {
+                        throw new BadRequestException("User không tồn tại !!!");
+                    }
             );
-            if(cellphone.equals(foundUser.getCellphone())){
+            if (cellphone.equals(foundUser.getCellphone())) {
                 return false;
-            }
-            else{
+            } else {
                 return userRepository.existsByCellphone(cellphone);
             }
         }
         return userRepository.existsByCellphone(cellphone);
     }
 
-    public User getCurrentUser() throws Throwable{
+    public User getCurrentUser() throws Throwable {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(username).orElseThrow(
-                () ->{throw new BadRequestException("User không tồn tại !!!");}
+                () -> {
+                    throw new BadRequestException("User không tồn tại !!!");
+                }
         );
     }
 
     public Page<User> getAllUser(int page, int size, String keyword) {
         String keywordFormat = keyword.trim().toLowerCase();
         Pageable pageable = PageRequest.of(page, size);
-        if(keywordFormat.equals("")){
+        if (keywordFormat.equals("")) {
             return userRepository.findAllUser(pageable);
-        }
-        else{
+        } else {
             return userRepository.findAllUserAndSearch(pageable, keywordFormat);
         }
     }
@@ -106,18 +114,22 @@ public class UserServiceImpl implements UserService{
         userRepository.deleteById(userId);
     }
 
-    public User getUserById(long userId) throws Throwable{
+    public User getUserById(long userId) throws Throwable {
         return userRepository.findById(userId).orElseThrow(
-                ()->{throw new BadRequestException("User không tồn tại !!!");}
+                () -> {
+                    throw new BadRequestException("User không tồn tại !!!");
+                }
         );
     }
 
     @Transactional
-    public void editUser(User user, boolean resetPassword) throws Throwable{
+    public void editUser(User user, boolean resetPassword) throws Throwable {
         User foundUser = userRepository.findById(user.getId()).orElseThrow(
-                ()->{throw new BadRequestException("User không tồn tại !!!");}
+                () -> {
+                    throw new BadRequestException("User không tồn tại !!!");
+                }
         );
-        if(resetPassword){
+        if (resetPassword) {
             foundUser.setPassword(passwordEncoder.encode(foundUser.getUsername()));
         }
         foundUser.setFullName(user.getFullName());
@@ -128,9 +140,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public String updateAvatar(long userId, String originalFilename) throws Throwable{
+    public String updateAvatar(long userId, String originalFilename) throws Throwable {
         User foundUser = userRepository.findById(userId).orElseThrow(
-                ()->{throw new BadRequestException("User không tồn tại !!!");}
+                () -> {
+                    throw new BadRequestException("User không tồn tại !!!");
+                }
         );
         String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
         String newFileName = new Slugify().slugify(foundUser.getUsername() + LocalDateTime.now());
@@ -140,10 +154,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public void changeInfo(User convertToUser) throws Throwable{
+    public void changeInfo(User convertToUser) throws Throwable {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User foundUser = userRepository.findByUsername(username).orElseThrow(
-                ()->{throw new BadRequestException("Không tìm thấy user !!!");}
+                () -> {
+                    throw new BadRequestException("Không tìm thấy user !!!");
+                }
         );
         foundUser.setFullName(convertToUser.getFullName());
         foundUser.setEmail(convertToUser.getEmail());
@@ -151,10 +167,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public void changPassword(String password) throws Throwable{
+    public void changPassword(String password) throws Throwable {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User foundUser = userRepository.findByUsername(username).orElseThrow(
-                ()->{throw new BadRequestException("User không tồn tại !!!");}
+                () -> {
+                    throw new BadRequestException("User không tồn tại !!!");
+                }
         );
         String newPassword = passwordEncoder.encode(password);
         foundUser.setPassword(newPassword);
@@ -162,7 +180,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public String changPasswordForUserForgetPassword(String email) throws Throwable{
+    public String changPasswordForUserForgetPassword(String email) throws Throwable {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 10;
@@ -175,11 +193,22 @@ public class UserServiceImpl implements UserService{
                 .toString();
         System.out.println(newPassword);
         User foundUser = userRepository.findByEmail(email).orElseThrow(
-                ()->{throw new BadRequestException("Không có user nào đang sử dụng email này !!!");}
+                () -> {
+                    throw new BadRequestException("Không có user nào đang sử dụng email này !!!");
+                }
         );
         foundUser.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(foundUser);
 
         return newPassword;
+    }
+
+    public List<Product> getMyListProduct() throws Throwable{
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User foundUser = userRepository.findByUsername(username).orElseThrow(
+                ()->{throw  new BadRequestException("User không tồn tại !!!");}
+        );
+
+        return foundUser.getProducts().stream().collect(Collectors.toList());
     }
 }

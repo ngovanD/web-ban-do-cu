@@ -2,6 +2,7 @@ package haui.cntt.myproject.common.otp;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+import haui.cntt.myproject.common.exception.SmsSendException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -26,11 +27,11 @@ public class SmsSender {
                             new com.twilio.type.PhoneNumber("TWILIO_HOST_PHONE"),
                             "Your verification code: " + otp)
                     .create();
-            System.out.println(message.getSid());
+            log.info(message.getSid());
         }
         catch (Exception e)
         {
-            throw new RuntimeException(e.getMessage());
+            throw new SmsSendException(e.getMessage());
         }
     }
 }

@@ -8,7 +8,9 @@ import haui.cntt.myproject.persistance.entity.Category;
 import haui.cntt.myproject.persistance.entity.Property;
 import haui.cntt.myproject.persistance.repository.CategoryRepository;
 import haui.cntt.myproject.persistance.repository.PropertyRepository;
+import haui.cntt.myproject.presentation.response.PropertyResponse;
 import haui.cntt.myproject.service.CategoryService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -25,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     PropertyRepository propertyRepository;
 
-    String UPLOAD_DIR_CATEGORY = "src/main/resources/static/category/";
+    static final String UPLOAD_DIR_CATEGORY = "src/main/resources/static/category/";
 
     public List<Category> getListCategoryHasNotParent() {
         return categoryRepository.getListCategoryHasNotParent();
@@ -35,9 +39,11 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByCategoryParentId(parentId);
     }
 
-    public Category getDetail(long id) throws Throwable{
+    public Category getDetail(long id) throws Throwable {
         return categoryRepository.findById(id).orElseThrow(
-                ()->{throw new BadRequestException("loại sản phẩm không tồn tại!!!");}
+                () -> {
+                    throw new BadRequestException("loại sản phẩm không tồn tại!!!");
+                }
         );
     }
 
@@ -53,8 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCategoryParent(categoryParent);
 
         List<Property> propertyList = new ArrayList<>();
-        for(Property item : category.getProperties())
-        {
+        for (Property item : category.getProperties()) {
             Property foundProperty = propertyRepository.findById(item.getId()).orElse(null);
             propertyList.add(foundProperty);
         }
@@ -64,15 +69,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Transactional
-    public Category edit(Category category, String originalFilename) throws Throwable{
+    public Category edit(Category category, String originalFilename) throws Throwable {
         Category foundCategory = categoryRepository.findById(category.getId()).orElseThrow(
-                ()->{throw new BadRequestException("Loại sản phẩm không tồn tại!!!");}
+                () -> {
+                    throw new BadRequestException("Loại sản phẩm không tồn tại!!!");
+                }
         );
 
         foundCategory.setName(category.getName());
 
-        if(originalFilename != null)
-        {
+        if (originalFilename != null) {
             String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
 
             String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + LocalDateTime.now());
@@ -83,17 +89,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Transactional
-    public void delete(long id) throws Throwable{
+    public void delete(long id) throws Throwable {
         Category foundCategory = categoryRepository.findById(id).orElseThrow(
-                ()->{throw new BadRequestException("Loại sản phẩm không tồn tại!!!");}
+                () -> {
+                    throw new BadRequestException("Loại sản phẩm không tồn tại!!!");
+                }
         );
         List<Category> listChild = getListCategoryChild(id);
-        for(Category i : listChild)
-        {
+        for (Category i : listChild) {
             delete(i.getId());
         }
 
-        String uploadDir= UPLOAD_DIR_CATEGORY + id;
+        String uploadDir = UPLOAD_DIR_CATEGORY + id;
 
         FileUploadUtil.deleteDir(uploadDir);
 
@@ -101,14 +108,12 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(foundCategory);
     }
 
-    public HashMap<Category, List<Category>> getTreeCategory()
-    {
+    public Map<Category, List<Category>> getTreeCategory() {
         List<Category> categoryList = getListCategoryHasNotParent();
 
         HashMap<Category, List<Category>> treeCategory = new HashMap<>();
 
-        for(Category item : categoryList)
-        {
+        for (Category item : categoryList) {
             treeCategory.put(item, getListCategoryChild(item.getId()));
         }
 
@@ -123,10 +128,8 @@ public class CategoryServiceImpl implements CategoryService {
     public void createTest2(Category category, String nameCategoryParent, List<String> properties) {
 
         List<Property> propertyList = new ArrayList<>();
-        if(properties != null)
-        {
-            for(String item : properties)
-            {
+        if (properties != null) {
+            for (String item : properties) {
                 Property property = propertyRepository.findByName(item);
                 propertyList.add(property);
             }
@@ -136,5 +139,11 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCategoryParent(categoryParent);
         category.setProperties(propertyList);
         categoryRepository.save(category);
+    }
+
+    public List<Property> getListProperty(long categoryId) throws Throwable{
+        return categoryRepository.findById(categoryId).orElseThrow(() -> {
+            throw new BadRequestException("Loại sản phẩm không tồn tại !!!");
+        }).getProperties().stream().collect(Collectors.toList());
     }
 }

@@ -21,27 +21,32 @@ public class PropertyController {
     PropertyServiceImpl propertyService;
 
     @PostMapping("/create")
-    public ResponseEntity create(@RequestBody PropertyRequest propertyRequest){
+    public ResponseEntity<String> create(@RequestBody PropertyRequest propertyRequest) {
         propertyService.create(PropertyMapper.convertToProperty(propertyRequest));
         return ResponseEntity.ok().body("Tạo thuộc tính loại sản phẩm thành công !!!");
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity getAll(){
-        List<PropertyResponse> propertyResponseList =  propertyService.getAll().stream().map(PropertyMapper::convertToPropertyResponse).collect(Collectors.toList());
+    public ResponseEntity<List<PropertyResponse>> getAll() {
+        List<PropertyResponse> propertyResponseList = propertyService.getAll()
+                .stream()
+                .map(PropertyMapper::convertToPropertyResponse)
+                .collect(Collectors.toList());
         return ResponseEntity.ok().body(propertyResponseList);
     }
 
     @GetMapping("/get-all-property")
-    public String getAll_Page(Model model){
-        List<PropertyResponse> propertyResponseList =  propertyService.getAll().stream().map(PropertyMapper::convertToPropertyResponse).collect(Collectors.toList());
+    public String getAllProperty(Model model) {
+        List<PropertyResponse> propertyResponseList = propertyService.getAll()
+                .stream()
+                .map(PropertyMapper::convertToPropertyResponse)
+                .collect(Collectors.toList());
         model.addAttribute("propertyResponseList", propertyResponseList);
         return "admin_list_property";
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable(value="id") long propertyId)
-    {
+    public ResponseEntity<String> delete(@PathVariable(value = "id") long propertyId) {
         propertyService.delete(propertyId);
         return ResponseEntity.ok().body("Xóa thuộc tính loại sản phẩm thành công !!!");
     }

@@ -23,7 +23,7 @@ public class ImageProduct extends BaseEntity {
     private String fileName;
 
     @Column(name = "is_main_image")
-    private boolean is_main_image;
+    private boolean isMainImage;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

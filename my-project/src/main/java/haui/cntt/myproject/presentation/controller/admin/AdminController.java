@@ -21,7 +21,7 @@ public class AdminController {
     }
 
     @GetMapping("/get-info/get-name")
-    public ResponseEntity getName() throws Throwable {
+    public ResponseEntity<String> getName() throws Throwable {
         return ResponseEntity.ok().body(userService.getCurrentUser().getFullName());
     }
 }

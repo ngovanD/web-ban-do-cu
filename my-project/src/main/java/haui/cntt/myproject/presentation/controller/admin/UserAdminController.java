@@ -13,20 +13,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Controller
 @RequestMapping("/admin/user")
 public class UserAdminController {
     @Autowired
     UserServiceImpl userService;
 
-    String UPLOAD_DIR_USER = "src/main/resources/static/user/";
+    static final String UPLOAD_DIR_USER = "src/main/resources/static/user/";
 
     @GetMapping("/get-all")
     public String getAllUser(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page
-                                        , @RequestParam(value = "size", required = false, defaultValue = "10") int size
-                                        , @RequestParam(value = "search", required = false, defaultValue = "") String keyword){
-
-        Page<UserResponse> userResponsePage = userService.getAllUser(page-1, size, keyword)
+            , @RequestParam(value = "size", required = false, defaultValue = "10") int size
+            , @RequestParam(value = "search", required = false, defaultValue = "") String keyword) {
+        Page<UserResponse> userResponsePage = userService.getAllUser(page - 1, size, keyword)
                 .map(UserMapper::convertToUserResponse);
         model.addAttribute("list_user", userResponsePage.getContent());
         model.addAttribute("current_page", page);
@@ -36,8 +37,7 @@ public class UserAdminController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(Model model, @PathVariable(value = "id") long userId){
-
+    public ResponseEntity<String> delete(Model model, @PathVariable(value = "id") long userId) throws IOException {
         String uploadDir = UPLOAD_DIR_USER + userId;
         FileUploadUtil.deleteDir(uploadDir);
         userService.deleteUser(userId);
@@ -61,25 +61,20 @@ public class UserAdminController {
 
     @PostMapping("/edit/{id}")
     public String edit(Model model, @PathVariable(value = "id") long userId
-                                  , @ModelAttribute(value = "userRequest") UserRequest userRequest) throws Throwable {
+            , @ModelAttribute(value = "userRequest") UserRequest userRequest) throws Throwable {
         userService.editUser(UserMapper.convertToUser(userRequest), userRequest.isResetPassword());
         return "redirect:/admin/user/view/" + userId;
     }
 
     @PostMapping("/edit/avatar/{id}")
-    public ResponseEntity editAvatar(@PathVariable(value = "id") long userId
-                           , @RequestPart(value = "image") MultipartFile multipartFile) throws Throwable {
-
+    public ResponseEntity<String> editAvatar(@PathVariable(value = "id") long userId
+            , @RequestPart(value = "image") MultipartFile multipartFile) throws Throwable {
         String uploadDir = UPLOAD_DIR_USER + userId;
         String fileName = userService.getUserById(userId).getAvatar();
         FileUploadUtil.deleteFile(uploadDir, fileName);
-
         String newFileName = userService.updateAvatar(userId, multipartFile.getOriginalFilename());
-
         FileUploadUtil.saveFile(uploadDir, newFileName, multipartFile);
-
         UserResponse userResponse = UserMapper.convertToUserResponse(userService.getUserById(userId));
-
         return ResponseEntity.ok().body(userResponse.getApiGetAvatar());
     }
 }

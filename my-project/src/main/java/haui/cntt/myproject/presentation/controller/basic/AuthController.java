@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Controller
 public class AuthController {
@@ -32,45 +31,36 @@ public class AuthController {
     private UserServiceImpl userService;
 
     @GetMapping("/login")
-    public String login(Model model){
+    public String login(Model model) {
         model.addAttribute("loginRequest", new LoginRequest());
         return "login";
     }
 
     @PostMapping("/login")
-    public String home(Model model , @ModelAttribute LoginRequest loginRequest
-                     , HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String home(Model model, @ModelAttribute LoginRequest loginRequest
+            , HttpServletRequest request, HttpServletResponse response){
         try {
             final UserDetails userDetails = userDetailServiceConfig.loadUserByUsername(loginRequest.getUsername());
             authenticate(loginRequest.getUsername(), loginRequest.getPassword());
-
             String accessToken = jwtTokenProvider.generateAccessToken(userDetails, request);
-
             Cookie cookie = new Cookie("accessToken", accessToken);
             response.addCookie(cookie);
-
-        }catch (Exception e)
-        {
-            if(e instanceof LockedException)
-            {
-                model.addAttribute("statusLogin", "Tài khoản của bạn đã bị khóa !!!");
-                return "login";
-            }
+        } catch (LockedException e) {
+            model.addAttribute("statusLogin", "Tài khoản của bạn đã bị khóa !!!");
+            return "login";
+        } catch (Exception e) {
             model.addAttribute("statusLogin", "Kiểm tra lại tài khoản và mật khẩu !!!");
             return "login";
         }
-
         return "redirect:/home";
     }
 
     private void authenticate(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (LockedException e) {
+            throw new LockedException("Tài khoản của bạn đã bị khóa.");
         } catch (Exception e) {
-            if(e instanceof LockedException)
-            {
-                throw new LockedException("Tài khoản của bạn đã bị khóa.");
-            }
             throw new BadRequestException("Incorrect password.");
         }
     }

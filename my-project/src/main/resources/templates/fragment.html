@@ -254,21 +254,12 @@
             $(document).ready(function () {
                 $.ajax({
                     method: "GET",
-                    url: origin + "/get-menu",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        document.getElementById("menu_").innerHTML = data;
-                    }
-                })
-
-                $.ajax({
-                    method: "GET",
                     url: origin + "/user/get-full-name",
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         if (data.length <= 50) {
-                            document.getElementById("fullName").href = "#";
-                            document.getElementById("fullName").innerHTML = "<i class='icon fa fa-user'></i>" + data;
+                            document.getElementById("fullName_").href = "#";
+                            document.getElementById("fullName_").innerHTML = "<i class='icon fa fa-user'></i>" + data;
                             document.getElementById("dropdown_").className = "dropdown_";
                         }
                     }
@@ -288,7 +279,7 @@
                                 <li><a th:href="@{/home}"><i class="icon fa fa-home"></i>Trang chủ</a></li>
                                 <li><a th:href="@{/user/wish-list}"><i class="icon fa fa-heart"></i>Danh sách yêu
                                         thích</a></li>
-                                <li><a th:href="@{/user/}"><i class="icon fa fa-list"></i>Quản lý tin</a></li>
+                                <li><a th:href="@{/user/my-list-product}"><i class="icon fa fa-list"></i>Quản lý tin</a></li>
                                 <li class="dropdown_">
                                     <a href="#"><i class="icon fa-solid fa-circle-info"></i>Về chúng tôi</a>
                                     <div class="dropdown-content_" style="margin-top: 10px;">
@@ -304,7 +295,7 @@
                                     </div>
                                 </li>
                                 <li id="dropdown_">
-                                    <a th:href="@{/login}" id="fullName">
+                                    <a th:href="@{/login}" id="fullName_">
                                         <i class="icon fa-solid fa-arrow-right-to-bracket"></i>
                                         Đăng nhập
                                     </a>
@@ -370,7 +361,7 @@
                             <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
 
                             <div class="dropdown dropdown-cart">
-                                <a href="#" class="lnk-cart" data-toggle="dropdown">
+                                <a th:href="@{/user/product/create-product}" class="lnk-cart" >
                                     <div class="items-cart-inner">
                                         <div class="basket"> <i class="fa fa-pencil"></i> </div>
                                         <div class="total-price-basket"> <span class="lbl">Đăng tin</span></div>

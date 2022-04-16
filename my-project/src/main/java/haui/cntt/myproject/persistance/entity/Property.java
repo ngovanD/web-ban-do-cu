@@ -23,6 +23,9 @@ public class Property extends BaseEntity {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "unit")
+    private String unit;
+
     @ManyToMany
     @JoinTable(name = "category_properties", joinColumns = @JoinColumn(name = "property_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Collection<Category> categories;

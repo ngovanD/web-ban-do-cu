@@ -169,6 +169,10 @@
                 <input type="text" class="form-control" placeholder="Tên thuộc tính" id="nameProperty_">
             </div>
             <div class="form-group card-body" style="margin-bottom: 0px">
+                <label>Đơn vị</label>
+                <input type="text" class="form-control" placeholder="Có thể bỏ trống" id="unit_">
+            </div>
+            <div class="form-group card-body" style="margin-bottom: 0px">
                 <label>Ghi chú</label>
                 <input type="text" class="form-control" placeholder="Có thể bỏ trống" id="note_">
             </div>
@@ -232,9 +236,11 @@
 
         function createProperty() {
             var name = document.getElementById("nameProperty_").value;
+            var unit = document.getElementById("unit_").value;
             var note = document.getElementById("note_").value;
             var data = {
                 "name": name,
+                "unit": unit,
                 "note": note
             }
 

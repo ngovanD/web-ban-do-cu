@@ -61,16 +61,16 @@ public class JwtTokenProvider {
 //        return null;
 //    }
 
-    public boolean validateJwtToken(String token) {
-        try {
-            DecodedJWT decodedJWT = decodedJWT(token);
-            return true;
-        } catch (TokenExpiredException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-        } catch (JWTDecodeException e) {
-            log.error("JWT cannot decode: {}", e.getMessage());
-        }
-
-        return false;
-    }
+//    public boolean validateJwtToken(String token) {
+//        try {
+//            DecodedJWT decodedJWT = decodedJWT(token);
+//            return true;
+//        } catch (TokenExpiredException e) {
+//            log.error("JWT token is expired: {}", e.getMessage());
+//        } catch (JWTDecodeException e) {
+//            log.error("JWT cannot decode: {}", e.getMessage());
+//        }
+//
+//        return false;
+//    }
 }

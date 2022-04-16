@@ -19,11 +19,20 @@ public class Address extends BaseEntity {
     @Column(name = "province")
     private String province;
 
+    @Column(name = "code_province")
+    private int codeProvince;
+
     @Column(name = "district")
     private String district;
 
+    @Column(name = "code_district")
+    private int codeDistrict;
+
     @Column(name = "commune")
     private String commune;
+
+    @Column(name = "code_commune")
+    private int codeCommune;
 
     @Column(name = "detail")
     private String detail;

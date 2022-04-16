@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class ImageController {
     //get image's url
     @GetMapping("/{folder}/{id}/image/{fileName:.+}")
-    public ResponseEntity<byte[]> readDetailFile(@PathVariable String folder, @PathVariable String id, @PathVariable String fileName) {
+    public ResponseEntity<byte[]> readDetailFile(@PathVariable String folder, @PathVariable String id
+            , @PathVariable String fileName) {
         log.info("Mapped readDetailFile method GET");
         try {
             byte[] bytes = FileUploadUtil.readFileContent(folder + "/" + id + "/" + fileName);
@@ -21,7 +22,7 @@ public class ImageController {
                     .ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(bytes);
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             return ResponseEntity.noContent().build();
         }
     }

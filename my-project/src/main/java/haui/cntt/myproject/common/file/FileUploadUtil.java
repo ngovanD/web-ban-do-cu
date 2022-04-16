@@ -1,5 +1,6 @@
 package haui.cntt.myproject.common.file;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,21 +9,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 
+@Slf4j
 public class FileUploadUtil {
+    private FileUploadUtil(){super();}
 
     public static void saveFile(String uploadDir, String fileName,
                                 MultipartFile multipartFile) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
-
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
-
         try (InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -43,37 +41,33 @@ public class FileUploadUtil {
         if(entries != null)
         {
             for(String s: entries){
-                File currentFile = new File(index.getPath(),s);
+                File currentFile = new File(index.getPath(), s);
+                //Files.delete(currentFile.toPath());
                 currentFile.delete();
             }
         }
-
+        //Files.delete(index.toPath());
         index.delete();
     }
 
-    public static byte[] readFileContent(String pathOrFileName) {
-        try {
-            Path storageFolder = Paths.get("src/main/resources/static");
-            Path file = storageFolder.resolve(pathOrFileName);
-            UrlResource resource = new UrlResource(file.toUri());
-            System.out.printf(resource.toString());
-            if (resource.exists() || resource.isReadable()) {
-                try(InputStream image = resource.getInputStream())
-                {
-                    return StreamUtils.copyToByteArray(image);
-                }
-                catch (FileNotFoundException e) {
-                    throw new RuntimeException("File Not Found.");
-                } catch (IOException e) {
-                    throw new RuntimeException("An I/O Error Occurred");
-                }
+    public static byte[] readFileContent(String pathOrFileName) throws IOException {
+        Path storageFolder = Paths.get("src/main/resources/static");
+        Path file = storageFolder.resolve(pathOrFileName);
+        UrlResource resource = new UrlResource(file.toUri());
+        log.info(resource.toString());
+        if (resource.exists() || resource.isReadable()) {
+            try(InputStream image = resource.getInputStream())
+            {
+                return StreamUtils.copyToByteArray(image);
             }
-            else {
-                throw new RuntimeException("Could not read file: " + pathOrFileName);
+            catch (FileNotFoundException e) {
+                throw new FileNotFoundException("File Not Found.");
+            } catch (IOException e) {
+                throw new IOException("An I/O Error Occurred");
             }
         }
-        catch (IOException exception) {
-            throw new RuntimeException("Could not read file: " + pathOrFileName, exception);
+        else {
+            throw new IOException("Could not read file: " + pathOrFileName);
         }
     }
 }
