@@ -1,12 +1,10 @@
 package haui.cntt.myproject.presentation.controller.basic;
 
 import haui.cntt.myproject.common.otp.RandomOtpUtil;
-import haui.cntt.myproject.presentation.mapper.CategoryMapper;
-import haui.cntt.myproject.presentation.mapper.ProductMapper;
-import haui.cntt.myproject.presentation.mapper.SlideMapper;
-import haui.cntt.myproject.presentation.mapper.UserMapper;
+import haui.cntt.myproject.presentation.mapper.*;
 import haui.cntt.myproject.presentation.request.OtpRequest;
 import haui.cntt.myproject.presentation.request.UserRequest;
+import haui.cntt.myproject.presentation.response.BlogResponse;
 import haui.cntt.myproject.presentation.response.CategoryResponse;
 import haui.cntt.myproject.presentation.response.ProductResponse;
 import haui.cntt.myproject.presentation.response.SlideResponse;
@@ -39,6 +37,8 @@ public class BasicController {
     private ProductServiceImpl productService;
     @Autowired
     private SlideServiceImpl slideService;
+    @Autowired
+    private BlogServiceImpl blogService;
 
     @GetMapping("/home")
     public String home(Model model) {
@@ -74,6 +74,12 @@ public class BasicController {
                 .map(SlideMapper::convertToSlideResponse)
                 .collect(Collectors.toList());
         model.addAttribute("slideResponseList", slideResponseList);
+
+        List<BlogResponse> blogResponseList = blogService.getTop4()
+                .stream()
+                .map(BlogMapper::convertToBlogResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("blogResponseList", blogResponseList);
 
 //        List<ProductResponse> randomAllProductList = productService.getRandomAllProduct(12)
 //                .stream()
@@ -260,14 +266,22 @@ public class BasicController {
         return "search_product_page";
     }
 
-    @GetMapping("/blog-detail")
-    public String blogDetail(Model model) {
-        return "blog_detail";
+    @GetMapping("/blog")
+    public String blog(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+
+        Page<BlogResponse> blogResponsePage = blogService.getAllActive(page-1)
+                .map(BlogMapper::convertToBlogResponse);
+        model.addAttribute("blogList", blogResponsePage.getContent());
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", blogResponsePage.getTotalPages());
+        return "blog";
     }
 
-    @GetMapping("/blog")
-    public String blog(Model model) {
-        return "blog";
+    @GetMapping("/blog-detail/{id}")
+    public String blogDetail(Model model, @PathVariable(value = "id") long blogId) throws Throwable {
+        BlogResponse blogResponse = BlogMapper.convertToBlogResponse(blogService.getDetail(blogId));
+        model.addAttribute("blogResponse", blogResponse);
+        return "blog_detail";
     }
 
     @GetMapping("/faq")

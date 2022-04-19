@@ -3,8 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sửa slide</title>
+    <title>Tạo Blog mới</title>
     <div th:replace="fragment::head-custom"></div>
+    <!-- summernote -->
+    <!-- include libraries(jQuery, bootstrap) -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" />
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- include summernote css/js-->
+    <!-- summernote -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/summernote/summernote-bs4.min.css}">
+    <!-- Summernote -->
+    <script th:src="@{/assets/plugins/summernote/summernote-bs4.min.js}"></script>
 </head>
 
 <body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
@@ -38,43 +49,38 @@
                     <div class="col-md-6" style="    flex: 0 0 100%; max-width: 100%;">
                         <!-- general form elements -->
                         <div class="card card-primary">
-                            <div class="card-header">Sửa slide</h3>
+                            <div class="card-header">
+                                <h3 class="card-title">Thêm blog</h3>
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form th:action="@{'/admin/slide/edit/'+${slideResponse.id}}" method="post" th:object="${slideRequest}"
-                                enctype="multipart/form-data" id="formCreateSlide" >
+                            <form th:action="@{/admin/blog/create}" method="post" th:object="${blogRequest}"
+                                enctype="multipart/form-data" id="formCreateblog">
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label>Tiêu đề</label>
-                                        <input type="text" class="form-control" th:id="title"
-                                            placeholder="Tiêu đề" th:name="title" th:value="${slideResponse.title}">
+                                        <input type="text" class="form-control" th:id="title" placeholder="Tiêu đề"
+                                            th:name="title" th:field="*{title}">
                                     </div>
                                     <div class="form-group">
-                                        <label>Tiêu đề nhấn mạnh</label>
-                                        <input type="text" class="form-control" th:id="titleStrong"
-                                            placeholder="Tiêu đề ..." th:name="titleStrong" th:value="${slideResponse.titleStrong}">
+                                        <label>Nội dung</label>
+                                        <div>
+                                            <textarea id="summernote" th:name="content" th:field="*{content}">
+                                            </textarea>
+                                        </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>Mô tả ngắn gọn</label>
-                                        <input type="text" class="form-control" th:id="briefDescription"
-                                            placeholder="Mô tả" th:name="briefDescription" th:value="${slideResponse.briefDescription}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Link </label>
-                                        <input type="text" class="form-control" th:id="link"
-                                            placeholder="link" th:name="link" th:value="${slideResponse.link}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="fileImage" class="btn btn-success"><i class="fa-solid fa-upload"></i> Chọn ảnh</label>
+                                        <label for="fileImage" class="btn btn-success"><i
+                                                class="fa-solid fa-upload"></i> Chọn ảnh</label>
                                         <input id="fileImage" th:name="image" type="file"
-                                            accept="image/png, image/jpg, image/jpeg" style="display: none;">
-                                        <img id="thumbnail" alt="image preview" width="200px" style="display: block;" th:src="${slideResponse.apiGetImage}"/>
+                                            accept="image/png, image/jpg, image/jpeg" style="display: none;" required>
+                                        <img id="thumbnail" alt="image preview" width="200px" style="display: none;" />
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Lưu</button>
+                                    <button type="submit" class="btn btn-primary" onclick="checkInputImage()">Thêm
+                                        blog</button>
                                 </div>
                             </form>
                         </div>
@@ -100,6 +106,7 @@
                 showImageThumbnail(this);
             });
 
+            $('#summernote').summernote();
         });
 
 
@@ -113,6 +120,13 @@
             }
 
             reader.readAsDataURL(file);
+        }
+
+        function checkInputImage() {
+            var inputImage = document.getElementById("fileImage");
+            if (inputImage.files.length == 0) {
+                toastr.warning("Hãy chọn ảnh !");
+            }
         }
 
     </script>

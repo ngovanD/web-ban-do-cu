@@ -7,13 +7,13 @@
 </head>
 
 <body>
-    <!--
-  một số cái cần chú ý
-  //khai báo 1 fragment
+<!--
+một số cái cần chú ý
+//khai báo 1 fragment
 <div th:fragment="header"></div>  //có thể thêm th:remove="tag" :)) chưa hiểu lắm sẽ chú thích thêm
-  //để sử dụng fragment
+//để sử dụng fragment
 <div th:replace="fragment::header"></div>
-  //có thể truyền tham số cho fragment
+//có thể truyền tham số cho fragment
 <div th:fragment="pagination(currentPage, totalPage)"></div>
 <div th:replace="fragment::pagination(currentPage="1", totalPage="5")"></div>
 -->
@@ -630,6 +630,15 @@
                                 <i class="nav-icon fa-solid fa-user"></i>
                                 <p>
                                     Quản lý slide
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a th:href="@{/admin/blog/get-all}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-user"></i>
+                                <p>
+                                    Quản lý blog
                                 </p>
                             </a>
                         </li>

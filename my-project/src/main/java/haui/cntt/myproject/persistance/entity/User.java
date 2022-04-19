@@ -47,4 +47,8 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private Collection<Product> products;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "wishlist", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Collection<Product> wishlistProducts;
 }
