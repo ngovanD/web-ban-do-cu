@@ -22,4 +22,8 @@ public class ProductResponse {
     private List<ImageProductResponse> apiGetImageList;
     private AddressResponse addressResponse;
     private CategoryResponse categoryResponse;
+
+    private String tag;
+    private String sellerName;
+    private String sellerPhone;
 }

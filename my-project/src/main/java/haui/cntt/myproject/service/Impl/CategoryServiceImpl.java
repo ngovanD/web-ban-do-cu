@@ -5,21 +5,24 @@ import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.common.text.VNCharacterUtil;
 import haui.cntt.myproject.persistance.entity.Category;
+import haui.cntt.myproject.persistance.entity.Product;
 import haui.cntt.myproject.persistance.entity.Property;
 import haui.cntt.myproject.persistance.repository.CategoryRepository;
+import haui.cntt.myproject.persistance.repository.ProductRepository;
 import haui.cntt.myproject.persistance.repository.PropertyRepository;
 import haui.cntt.myproject.presentation.response.PropertyResponse;
 import haui.cntt.myproject.service.CategoryService;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +31,8 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
     @Autowired
     PropertyRepository propertyRepository;
+    @Autowired
+    ProductRepository productRepository;
 
     static final String UPLOAD_DIR_CATEGORY = "src/main/resources/static/category/";
 
@@ -141,9 +146,19 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(category);
     }
 
-    public List<Property> getListProperty(long categoryId) throws Throwable{
+    public List<Property> getListProperty(long categoryId) throws Throwable {
         return categoryRepository.findById(categoryId).orElseThrow(() -> {
             throw new BadRequestException("Loại sản phẩm không tồn tại !!!");
         }).getProperties().stream().collect(Collectors.toList());
+    }
+
+    public Page<Product> getProductByCategory(String slug, int page, int min, int max, String sort, int codeProvince) throws Throwable {
+        Pageable pageable = PageRequest.of(page, 12);
+        if (sort.equals("price")) {
+            return productRepository.filterProductAndSortByPrice(pageable, slug, min, max, codeProvince);
+        }
+
+        // sắp xếp theo ngày tạo
+        return productRepository.filterProductAndSortByCreateDate(pageable, slug, min, max, codeProvince);
     }
 }

@@ -4,6 +4,7 @@ import com.github.slugify.Slugify;
 import haui.cntt.myproject.base.BaseEntity;
 import haui.cntt.myproject.common.enum_.ProductStatusEnum;
 import haui.cntt.myproject.common.text.VNCharacterUtil;
+import jdk.nashorn.internal.runtime.options.Option;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -60,13 +62,32 @@ public class Product extends BaseEntity {
     private Collection<ProductProperty> productProperties;
 
     @PrePersist
-    public void onPrePersist(){
+    public void onPrePersist() {
         super.onPrePersist();
         slug = new Slugify().slugify(VNCharacterUtil.removeAccent(name) + this.getId());
     }
 
     @PreUpdate
-    public void onPreUpdate(){
+    public void onPreUpdate() {
         slug = new Slugify().slugify(VNCharacterUtil.removeAccent(name) + this.getId());
+    }
+
+    @Transient
+    private String keyword;
+
+    @PostLoad
+    public void onPostLoad() {
+        String propertyKeyword = "";
+        Optional<ProductProperty> propertyHang = productProperties
+                .stream()
+                .filter(p -> p.getProperty()
+                        .getName().equals("Hãng")).findFirst();
+        if (propertyHang.isPresent()) {
+            propertyKeyword = propertyHang.get().getValue();
+        }
+        keyword = (VNCharacterUtil.removeAccent(name) + " "
+                + VNCharacterUtil.removeAccent(description) + " "
+                + VNCharacterUtil.removeAccent(propertyKeyword))
+                .toLowerCase();
     }
 }

@@ -3,20 +3,22 @@ package haui.cntt.myproject.service.Impl;
 import haui.cntt.myproject.common.enum_.ProductStatusEnum;
 import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
+import haui.cntt.myproject.common.text.VNCharacterUtil;
 import haui.cntt.myproject.persistance.entity.*;
 import haui.cntt.myproject.persistance.repository.CategoryRepository;
 import haui.cntt.myproject.persistance.repository.ProductRepository;
 import haui.cntt.myproject.persistance.repository.PropertyRepository;
 import haui.cntt.myproject.persistance.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +63,7 @@ public class ProductServiceImpl {
     }
 
     @Transactional
-    public void uploadImage(long productId, MultipartFile[] multipartFiles) throws IOException {
+    public void uploadImage(long productId, MultipartFile[] multipartFiles) throws IOException, Throwable {
         Product foundProduct = productRepository.findById(productId).orElseThrow(() -> {
             throw new BadRequestException("Sản phẩm không tồn tại !!!");
         });
@@ -86,10 +88,14 @@ public class ProductServiceImpl {
         productRepository.save(foundProduct);
     }
 
-    public Product getProductResponse(long productId) throws Throwable {
-        return productRepository.findById(productId).orElseThrow(() -> {
+    @Transactional
+    public Product getDetailProduct(long productId) throws Throwable {
+        Product foundProduct = productRepository.findById(productId).orElseThrow(() -> {
             throw new BadRequestException("Sản phẩm không tồn tại !!!");
         });
+
+        foundProduct.setView(foundProduct.getView() + 1);
+        return productRepository.save(foundProduct);
     }
 
     @Transactional
@@ -145,5 +151,53 @@ public class ProductServiceImpl {
         String uploadDir = UPLOAD_DIR_IMAGE_PRODUCT + productId;
         FileUploadUtil.deleteDir(uploadDir);
         productRepository.delete(foundProduct);
+    }
+
+    public List<Product> getRandomProduct(int limit) {
+        return productRepository.getRandomProduct(limit);
+    }
+
+    public List<Product> getNewProduct(int limit) {
+        return productRepository.getNewProduct(limit);
+    }
+
+    public List<Product> getHotProduct(int limit) {
+        return productRepository.getHotProduct(limit);
+    }
+
+    public Page<Product> searchProduct(String keyword, int page, String slugCategory, int min, int max, String sort, int codeProvince) {
+
+
+        List<Product> productList = productRepository.filterProductList(slugCategory, min, max, codeProvince);
+        String formatKeyword = VNCharacterUtil.removeAccent(keyword).toLowerCase();
+        String[] listKey = formatKeyword.split(" ");
+        Set<Product> setProduct = new HashSet<>();
+
+        for(String key : listKey)
+        {
+            setProduct.addAll(productList.stream().filter(p -> p.getKeyword().contains(key)).collect(Collectors.toList()));
+        }
+        productList = new ArrayList<>(setProduct);
+
+        if(sort.equals("price"))
+        {
+            Collections.sort(productList, Comparator.comparingLong(Product::getPrice));
+        }
+        if(sort.equals("created_date"))
+        {
+            Collections.sort(productList, (lhs, rhs) -> {
+                if(lhs.getCreatedDate().isBefore(rhs.getCreatedDate()))
+                {
+                    return 1;
+                }
+                return -1;
+            });
+        }
+
+
+        Pageable pageable = PageRequest.of(page, 12);
+        final int start = (int)pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), productList.size());
+        return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
     }
 }

@@ -12,4 +12,5 @@ public class ProductPropertyResponse {
     private String propertyName;
     private String value;
     private String note;
+    private String unit;
 }

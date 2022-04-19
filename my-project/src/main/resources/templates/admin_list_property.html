@@ -116,14 +116,18 @@
                                 <table class="table table-hover">
                                     <tbody>
                                         <tr>
-                                            <th width="33%">Tên thuộc tính</th>
-                                            <th width="33%">Đơn vị</th>
-                                            <th width="34%"></th>
+                                            <th width="20%">Tên thuộc tính</th>
+                                            <th width="20%">Đơn vị</th>
+                                            <th width="45%">Ghi chú</th>
+                                            <th width="15%"></th>
                                         </tr>
                                         <th:block th:each="property : ${propertyResponseList}">
                                             <tr>
                                                 <td>
                                                     <a th:text="${property.name}"></a>
+                                                </td>
+                                                <td>
+                                                    <a th:text="${property.unit}"></a>
                                                 </td>
                                                 <td>
                                                     <a th:text="${property.note}"></a>
@@ -156,6 +160,7 @@
             </div>
         </section>
         <!-- /.content -->
+        <div th:replace="fragment::paginate('/admin/property/get-all-property', ${keyword}, ${current_page}, ${total_page})"></div>
 
         <div id="id01" class="modal" style="z-index: 99999;">
             <form class="modal-content animate">

@@ -9,6 +9,7 @@ import haui.cntt.myproject.presentation.request.ProductRequest;
 import haui.cntt.myproject.presentation.response.ProductResponse;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 public class ProductMapper {
@@ -27,6 +28,17 @@ public class ProductMapper {
                 , "product", product.getId().toString(), fileName).toUriString();
 
         String status = product.getStatus().equals(ProductStatusEnum.STOCKING) ? "Đang bán" : "Đã bán";
+
+        String tag = "";
+        if(LocalDateTime.now().minusDays(1).isBefore(product.getCreatedDate()))
+        {
+            tag = "New";
+        }
+
+        if(product.getView() > 100)
+        {
+            tag = "Hot";
+        }
 
         return ProductResponse.builder()
                 .id(product.getId())
@@ -47,6 +59,9 @@ public class ProductMapper {
                         .collect(Collectors.toList()))
                 .addressResponse(AddressMapper.convertToAddressResponse(product.getAddress()))
                 .categoryResponse(CategoryMapper.convertToCategoryResponse(product.getCategory()))
+                .tag(tag)
+                .sellerName(product.getUser().getFullName())
+                .sellerPhone(product.getUser().getCellphone())
                 .build();
     }
 

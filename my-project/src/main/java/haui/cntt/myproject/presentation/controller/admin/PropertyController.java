@@ -5,6 +5,7 @@ import haui.cntt.myproject.presentation.request.PropertyRequest;
 import haui.cntt.myproject.presentation.response.PropertyResponse;
 import haui.cntt.myproject.service.Impl.PropertyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,12 +37,12 @@ public class PropertyController {
     }
 
     @GetMapping("/get-all-property")
-    public String getAllProperty(Model model) {
-        List<PropertyResponse> propertyResponseList = propertyService.getAll()
-                .stream()
-                .map(PropertyMapper::convertToPropertyResponse)
-                .collect(Collectors.toList());
-        model.addAttribute("propertyResponseList", propertyResponseList);
+    public String getAllProperty(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+        Page<PropertyResponse> propertyResponseList = propertyService.getAllPage(page - 1)
+                .map(PropertyMapper::convertToPropertyResponse);
+        model.addAttribute("propertyResponseList", propertyResponseList.getContent());
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", propertyResponseList.getTotalPages());
         return "admin_list_property";
     }
 

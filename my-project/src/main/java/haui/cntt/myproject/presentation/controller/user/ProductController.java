@@ -1,18 +1,10 @@
 package haui.cntt.myproject.presentation.controller.user;
 
-import haui.cntt.myproject.common.file.FileUploadUtil;
-import haui.cntt.myproject.persistance.entity.ImageProduct;
-import haui.cntt.myproject.presentation.mapper.CategoryMapper;
 import haui.cntt.myproject.presentation.mapper.ProductMapper;
 import haui.cntt.myproject.presentation.mapper.PropertyMapper;
-import haui.cntt.myproject.presentation.mapper.UserMapper;
 import haui.cntt.myproject.presentation.request.ProductPropertyRequest;
 import haui.cntt.myproject.presentation.request.ProductRequest;
-import haui.cntt.myproject.presentation.request.PropertyRequest;
-import haui.cntt.myproject.presentation.response.CategoryResponse;
 import haui.cntt.myproject.presentation.response.ProductResponse;
-import haui.cntt.myproject.presentation.response.PropertyResponse;
-import haui.cntt.myproject.presentation.response.UserResponse;
 import haui.cntt.myproject.service.Impl.CategoryServiceImpl;
 import haui.cntt.myproject.service.Impl.ImageProductServiceImpl;
 import haui.cntt.myproject.service.Impl.ProductServiceImpl;
@@ -23,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,14 +56,14 @@ public class ProductController {
 
     @PostMapping("/upload-image-product/{id}")
     public ResponseEntity<String> uploadImage(@PathVariable(value = "id") long productId
-            , @RequestPart(value = "images") MultipartFile[] multipartFiles) throws IOException {
+            , @RequestPart(value = "images") MultipartFile[] multipartFiles) throws Throwable {
         productService.uploadImage(productId, multipartFiles);
         return ResponseEntity.ok().body("Cập nhật ảnh thành công !!!");
     }
 
     @GetMapping("/detail/{id}")
     public String getDetailProduct(Model model, @PathVariable(value = "id") long productId) throws Throwable {
-        ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getProductResponse(productId));
+        ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getDetailProduct(productId));
         model.addAttribute("productResponse", productResponse);
         return "my_product_detail";
     }

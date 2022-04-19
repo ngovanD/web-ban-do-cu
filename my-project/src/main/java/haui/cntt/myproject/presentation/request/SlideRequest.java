@@ -1,0 +1,22 @@
+package haui.cntt.myproject.presentation.request;
+
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class SlideRequest {
+    private long id;
+
+    private String title;
+
+    private String titleStrong;
+
+    private String briefDescription;
+
+    private String link;
+
+    private boolean status;
+}

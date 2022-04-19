@@ -3,13 +3,16 @@ package haui.cntt.myproject.presentation.controller.basic;
 import haui.cntt.myproject.common.otp.RandomOtpUtil;
 import haui.cntt.myproject.presentation.mapper.CategoryMapper;
 import haui.cntt.myproject.presentation.mapper.ProductMapper;
+import haui.cntt.myproject.presentation.mapper.SlideMapper;
 import haui.cntt.myproject.presentation.mapper.UserMapper;
 import haui.cntt.myproject.presentation.request.OtpRequest;
 import haui.cntt.myproject.presentation.request.UserRequest;
 import haui.cntt.myproject.presentation.response.CategoryResponse;
 import haui.cntt.myproject.presentation.response.ProductResponse;
+import haui.cntt.myproject.presentation.response.SlideResponse;
 import haui.cntt.myproject.service.Impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,9 +37,55 @@ public class BasicController {
     private EmailServiceImpl emailService;
     @Autowired
     private ProductServiceImpl productService;
+    @Autowired
+    private SlideServiceImpl slideService;
 
     @GetMapping("/home")
     public String home(Model model) {
+        HashMap<CategoryResponse, List<CategoryResponse>> menuResponse = new HashMap<>();
+        categoryService.getTreeCategory().forEach((k, v) ->
+                menuResponse.put(
+                        CategoryMapper.convertToCategoryResponse(k)
+                        , v.stream().map(CategoryMapper::convertToCategoryResponse).collect(Collectors.toList())
+                )
+        );
+        model.addAttribute("menuResponse", menuResponse);
+
+        List<ProductResponse> randomProductList = productService.getRandomProduct(9)
+                .stream()
+                .map(ProductMapper::convertToProductResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("randomProductList", randomProductList);
+
+        List<ProductResponse> newProductList = productService.getNewProduct(6)
+                .stream()
+                .map(ProductMapper::convertToProductResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("newProductList", newProductList);
+
+        List<ProductResponse> hotProductList = productService.getHotProduct(3)
+                .stream()
+                .map(ProductMapper::convertToProductResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("hotProductList", hotProductList);
+
+        List<SlideResponse> slideResponseList = slideService.getAllActive()
+                .stream()
+                .map(SlideMapper::convertToSlideResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("slideResponseList", slideResponseList);
+
+//        List<ProductResponse> randomAllProductList = productService.getRandomAllProduct(12)
+//                .stream()
+//                .map(ProductMapper::convertToProductResponse)
+//                .collect(Collectors.toList());
+//        model.addAttribute("randomAllProductList", randomAllProductList);
+//
+//        List<ProductResponse> randomProductList = productService.getRandomAllProduct(12)
+//                .stream()
+//                .map(ProductMapper::convertToProductResponse)
+//                .collect(Collectors.toList());
+//        model.addAttribute("randomAllProductList", randomAllProductList);
         return "index";
     }
 
@@ -111,20 +160,6 @@ public class BasicController {
         }
     }
 
-    @GetMapping("/get-menu")
-    public String getMenu(Model model) {
-        HashMap<CategoryResponse, List<CategoryResponse>> menuResponse = new HashMap<>();
-
-        categoryService.getTreeCategory().forEach((k, v) ->
-                menuResponse.put(
-                        CategoryMapper.convertToCategoryResponse(k)
-                        , v.stream().map(CategoryMapper::convertToCategoryResponse).collect(Collectors.toList())
-                )
-        );
-        model.addAttribute("menuResponse", menuResponse);
-        return "fragment_menu";
-    }
-
     @GetMapping("/get-menu2")
     public String getMenu2(Model model) {
         HashMap<CategoryResponse, List<CategoryResponse>> menuResponse = new HashMap<>();
@@ -152,11 +187,77 @@ public class BasicController {
     }
 
 
-    @GetMapping("/product/detail/{id}")
-    public String getDetailProduct(Model model, @PathVariable(value = "id") long productId) throws Throwable{
-        ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getProductResponse(productId)) ;
+    @GetMapping("/product/{id}")
+    public String getDetailProduct(Model model, @PathVariable(value = "id") long productId) throws Throwable {
+        ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getDetailProduct(productId));
         model.addAttribute("productResponse", productResponse);
         return "product_detail";
+    }
+
+    @GetMapping("/category/{slug}")
+    public String getListProductByCategory(Model model, @PathVariable(value = "slug") String slug
+            , @RequestParam(value = "page", required = false, defaultValue = "1") int page
+            , @RequestParam(value = "min", required = false, defaultValue = "0") int min
+            , @RequestParam(value = "max", required = false, defaultValue = "30000000") int max
+            , @RequestParam(value = "sort", required = false, defaultValue = "created_date") String sort
+            , @RequestParam(value = "location", required = false, defaultValue = "0") int codeProvince) throws Throwable {
+
+        HashMap<CategoryResponse, List<CategoryResponse>> menuResponse = new HashMap<>();
+        categoryService.getTreeCategory().forEach((k, v) ->
+                menuResponse.put(
+                        CategoryMapper.convertToCategoryResponse(k)
+                        , v.stream().map(CategoryMapper::convertToCategoryResponse).collect(Collectors.toList())
+                )
+        );
+        model.addAttribute("menuResponse", menuResponse);
+
+        Page<ProductResponse> productResponsePage = categoryService.getProductByCategory(slug, page - 1, min, max, sort, codeProvince)
+                .map(ProductMapper::convertToProductResponse);
+        model.addAttribute("list_product", productResponsePage.getContent());
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", productResponsePage.getTotalPages());
+        model.addAttribute("slug", slug);
+        model.addAttribute("min", min);
+        model.addAttribute("max", max);
+        model.addAttribute("sort", sort);
+        model.addAttribute("location", codeProvince);
+
+        return "list_product_category";
+    }
+
+    @GetMapping("/search")
+    public String search(Model model
+            , @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword
+            , @RequestParam(value = "category_slug", required = false, defaultValue = "") String slugCategory
+            , @RequestParam(value = "page", required = false, defaultValue = "1") int page
+            , @RequestParam(value = "min", required = false, defaultValue = "0") int min
+            , @RequestParam(value = "max", required = false, defaultValue = "30000000") int max
+            , @RequestParam(value = "sort", required = false, defaultValue = "created_date") String sort
+            , @RequestParam(value = "location", required = false, defaultValue = "0") int codeProvince) throws Throwable {
+
+        HashMap<CategoryResponse, List<CategoryResponse>> menuResponse = new HashMap<>();
+        categoryService.getTreeCategory().forEach((k, v) ->
+                menuResponse.put(
+                        CategoryMapper.convertToCategoryResponse(k)
+                        , v.stream().map(CategoryMapper::convertToCategoryResponse).collect(Collectors.toList())
+                )
+        );
+        model.addAttribute("menuResponse", menuResponse);
+
+        Page<ProductResponse> productResponsePage = productService.searchProduct(keyword, page - 1, slugCategory, min, max, sort, codeProvince)
+                .map(ProductMapper::convertToProductResponse);
+
+        model.addAttribute("list_product", productResponsePage.getContent());
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", productResponsePage.getTotalPages());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("category_slug", slugCategory);
+        model.addAttribute("min", min);
+        model.addAttribute("max", max);
+        model.addAttribute("sort", sort);
+        model.addAttribute("location", codeProvince);
+
+        return "search_product_page";
     }
 
     @GetMapping("/blog-detail")
@@ -172,11 +273,6 @@ public class BasicController {
     @GetMapping("/faq")
     public String faq(Model model) {
         return "faq";
-    }
-
-    @GetMapping("/search")
-    public String search(Model model) {
-        return "search";
     }
 
     @GetMapping("/term-and-condition")

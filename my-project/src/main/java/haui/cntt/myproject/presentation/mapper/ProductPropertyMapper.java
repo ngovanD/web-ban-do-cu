@@ -16,6 +16,7 @@ public class ProductPropertyMapper {
                 .propertyName(productProperty.getProperty().getName())
                 .value(productProperty.getValue())
                 .note(productProperty.getProperty().getNote())
+                .unit(productProperty.getProperty().getUnit())
                 .build();
     }
     public static ProductProperty convertToProductProperty(ProductPropertyRequest productPropertyRequest) {
