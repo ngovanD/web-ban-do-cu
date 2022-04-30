@@ -1,14 +1,12 @@
 package haui.cntt.myproject.service.Impl;
 
+import haui.cntt.myproject.common.enum_.OrderStatusEnum;
 import haui.cntt.myproject.common.enum_.ProductStatusEnum;
 import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.common.text.VNCharacterUtil;
 import haui.cntt.myproject.persistance.entity.*;
-import haui.cntt.myproject.persistance.repository.CategoryRepository;
-import haui.cntt.myproject.persistance.repository.ProductRepository;
-import haui.cntt.myproject.persistance.repository.PropertyRepository;
-import haui.cntt.myproject.persistance.repository.UserRepository;
+import haui.cntt.myproject.persistance.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +29,8 @@ public class ProductServiceImpl {
     private PropertyRepository propertyRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderRepository orderRepository;
     static final String UPLOAD_DIR_IMAGE_PRODUCT = "src/main/resources/static/product/";
 
     @Transactional
@@ -148,6 +148,10 @@ public class ProductServiceImpl {
                     throw new BadRequestException("Sản phẩm không tồn tại !!!");
                 }
         );
+
+        if (!foundProduct.getStatus().equals(ProductStatusEnum.STOCKING)) {
+            throw new BadRequestException("Không thể xóa sản phẩm đang ở trạng thái chờ xác nhận hoặc đã bán !!!");
+        }
         String uploadDir = UPLOAD_DIR_IMAGE_PRODUCT + productId;
         FileUploadUtil.deleteDir(uploadDir);
         productRepository.delete(foundProduct);
@@ -173,21 +177,17 @@ public class ProductServiceImpl {
         String[] listKey = formatKeyword.split(" ");
         Set<Product> setProduct = new HashSet<>();
 
-        for(String key : listKey)
-        {
+        for (String key : listKey) {
             setProduct.addAll(productList.stream().filter(p -> p.getKeyword().contains(key)).collect(Collectors.toList()));
         }
         productList = new ArrayList<>(setProduct);
 
-        if(sort.equals("price"))
-        {
+        if (sort.equals("price")) {
             Collections.sort(productList, Comparator.comparingLong(Product::getPrice));
         }
-        if(sort.equals("created_date"))
-        {
+        if (sort.equals("created_date")) {
             Collections.sort(productList, (lhs, rhs) -> {
-                if(lhs.getCreatedDate().isBefore(rhs.getCreatedDate()))
-                {
+                if (lhs.getCreatedDate().isBefore(rhs.getCreatedDate())) {
                     return 1;
                 }
                 return -1;
@@ -196,8 +196,77 @@ public class ProductServiceImpl {
 
 
         Pageable pageable = PageRequest.of(page, 12);
-        final int start = (int)pageable.getOffset();
+        final int start = (int) pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), productList.size());
         return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
+    }
+
+    public void deliveryConfirmation(long productId) throws Throwable {
+        Product foundProduct = productRepository.findById(productId).orElseThrow(
+                () -> {
+                    throw new BadRequestException("Không tìm thấy sản phẩm !!!");
+                }
+        );
+        foundProduct.setStatus(ProductStatusEnum.SOLD_OUT);
+        productRepository.save(foundProduct);
+
+        Order foundOrder = orderRepository.findByProductId(productId).orElseThrow(
+                () -> {
+                    throw new BadRequestException("Không tìm thấy đơn hàng đặt sản phẩm này !!!");
+                }
+        );
+        foundOrder.setStatus(OrderStatusEnum.DELIVERY);
+        orderRepository.save(foundOrder);
+    }
+
+    public void cancelDelivery(long productId) throws Throwable {
+        Product foundProduct = productRepository.findById(productId).orElseThrow(
+                () -> {
+                    throw new BadRequestException("Không tìm thấy sản phẩm !!!");
+                }
+        );
+        foundProduct.setStatus(ProductStatusEnum.SOLD_OUT);
+        productRepository.save(foundProduct);
+
+        Order foundOrder = orderRepository.findByProductId(productId).orElseThrow(
+                () -> {
+                    throw new BadRequestException("Không tìm thấy đơn hàng đặt sản phẩm này !!!");
+                }
+        );
+        if (foundOrder.getStatus().equals(OrderStatusEnum.PAID)) {
+            foundOrder.setStatus(OrderStatusEnum.WAITING_REFUND);
+        } else {
+            foundOrder.setStatus(OrderStatusEnum.CANCELED);
+        }
+        orderRepository.save(foundOrder);
+    }
+
+    public int getNewProduct(String from, String to) {
+        return productRepository.getNewProduct(from, to);
+    }
+
+    public List<Product> getRandomAllProduct(int limit) {
+        return productRepository.getRandomProduct(limit);
+    }
+
+    public List<Product> getRandomQuanAo(int limit) {
+        return productRepository.getRandomQuanAo(limit);
+    }
+
+    public List<Product> getRandomDoDienTu(int limit) {
+        return productRepository.getRandomDoDienTu(limit);
+    }
+
+    public List<Product> getRandomSachTruyen(int limit) {
+        return productRepository.getRandomSachTruyen(limit);
+    }
+
+    public List<Product> getRecommendList(long productId, int limit) throws Throwable{
+        Product foundProduct = productRepository.findById(productId).orElseThrow(
+                () -> {
+                    throw new BadRequestException("Không tìm thấy sản phẩm !!!");
+                }
+        );
+        return productRepository.getRecommendList(foundProduct.getCategory().getId(), productId, limit);
     }
 }

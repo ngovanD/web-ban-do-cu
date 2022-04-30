@@ -1,15 +1,16 @@
 package haui.cntt.myproject.common.exception;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @ControllerAdvice
 public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(RuntimeException.class)
-    public String checkException(RuntimeException e)
+    public Object checkException(RuntimeException e)
     {
         if(e instanceof BadRequestException)
         {
-            return e.getMessage();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
         else if(e instanceof UnauthorizedException)
         {

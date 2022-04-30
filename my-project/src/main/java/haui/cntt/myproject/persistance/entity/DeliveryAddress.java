@@ -15,7 +15,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-public class Address extends BaseEntity {
+@Table(name = "delivery_address")
+public class DeliveryAddress extends BaseEntity {
     @Column(name = "province")
     private String province;
 
@@ -37,7 +38,13 @@ public class Address extends BaseEntity {
     @Column(name = "detail")
     private String detail;
 
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "cellphone")
+    private String cellphone;
+
     @OneToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
 }

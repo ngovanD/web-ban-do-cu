@@ -1,0 +1,63 @@
+package haui.cntt.myproject.presentation.mapper;
+
+import haui.cntt.myproject.common.enum_.OrderStatusEnum;
+import haui.cntt.myproject.persistance.entity.Order;
+import haui.cntt.myproject.persistance.entity.Product;
+import haui.cntt.myproject.presentation.request.OrderRequest;
+import haui.cntt.myproject.presentation.response.OrderResponse;
+
+public class OrderMapper {
+    private OrderMapper() {
+        super();
+    }
+
+    public static Order convertToOrder(OrderRequest orderRequest) {
+        return Order.builder()
+                .id(orderRequest.getId())
+                .feeShipping(orderRequest.getFeeShipping())
+                .methodPayment(orderRequest.getMethodPayment())
+                .product(Product.builder().id(orderRequest.getProductId()).build())
+                .deliveryAddress(DeliveryAddressMapper.convertToDeliveryAddress(orderRequest.getDeliveryAddressRequest()))
+                .build();
+    }
+
+    public static OrderResponse convertToOrderResponse(Order order) {
+        String status = "Chờ xác nhận";
+
+        if (order.getStatus().equals(OrderStatusEnum.CANCELED)) {
+            status = "Đã hủy";
+        }
+        if (order.getStatus().equals(OrderStatusEnum.COMPLETED)) {
+            status = "Hoàn thành";
+        }
+        if (order.getStatus().equals(OrderStatusEnum.WAITING_CONFIRM)) {
+            status = "Chờ xác nhận";
+        }
+        if (order.getStatus().equals(OrderStatusEnum.PENDING)) {
+            status = "Chờ";
+        }
+        if (order.getStatus().equals(OrderStatusEnum.DELIVERY)) {
+            status = "Chờ giao hàng";
+        }
+        if (order.getStatus().equals(OrderStatusEnum.WAITING_REFUND)) {
+            status = "Chờ hoàn tiền";
+        }
+        if (order.getStatus().equals(OrderStatusEnum.REFUNDED)) {
+            status = "Đã hoàn tiền";
+        }
+        if (order.getStatus().equals(OrderStatusEnum.WAITING_DELIVERY)) {
+            status = "Chờ lấy hàng";
+        }
+
+        return OrderResponse.builder()
+                .id(order.getId())
+                .status(status)
+                .deliveryAddressResponse(DeliveryAddressMapper.convertToDeliveryAddressResponse(order.getDeliveryAddress()))
+                .createTime(order.getCreatedDate().toString())
+                .feeShipping(order.getFeeShipping())
+                .priceProduct(order.getPriceProduct())
+                .methodPayment(order.getMethodPayment())
+                .productResponse(ProductMapper.convertToProductResponse(order.getProduct()))
+                .build();
+    }
+}

@@ -23,6 +23,16 @@
 
     <!-- ============================================== HEADER : END ============================================== -->
     <div class="body-content outer-top-xs">
+        <div class="breadcrumb" style="font-size: 13px;">
+            <div class="container">
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li class="active">Tin tức</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+        </div>
         <div class="container">
             <div class="row">
                 <div class="blog-page">
@@ -31,8 +41,8 @@
                             <div class="blog-post  wow fadeInUp" style="margin-bottom: 50px">
                                 <a th:href="@{'/blog-detail/' + ${blog.id}}"><img class="img-responsive"
                                         th:src="${blog.apiGetImage}" alt="" style="object-fit: contain;
-                                        width: 808px;
-                                        height: 418px;
+                                        width: 600px;
+                                        height: 309px;
                                         margin-left: 50%;
                                         transform: translate(-50%, 0%);"></a>
                                 <h1><a th:href="@{'/blog-detail/' + ${blog.id}}">[[${blog.title}]]</a>

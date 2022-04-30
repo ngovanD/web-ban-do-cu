@@ -96,7 +96,7 @@ public class MyProjectApplication {
 				categoryService.createTest2(
 						Category.builder().name("Điện thoại").build(),
 						"Đồ điện tử",
-						Arrays.asList("Hãng", "ROM", "RAM", "Kích thước màn hình", "Bảo hành")
+						Arrays.asList("Hãng", "ROM", "Kích thước màn hình", "Bảo hành")
 				);
 				categoryService.createTest2(
 						Category.builder().name("Laptop").build(),

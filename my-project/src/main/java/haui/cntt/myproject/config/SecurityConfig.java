@@ -20,7 +20,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -35,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
     @Autowired
     private FilterConfig filterConfig;
 
-    @Value("${domain}")
-    private String DOMAIN;
+//    @Value("${domain}")
+//    private String DOMAIN;
 
     @Value("${spring.mail.username}")
     private String EMAIL_NAME;
@@ -84,6 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
                             , "/check-username-exist", "/check-email-exist", "/check-cellphone-exist"
                             , "/favicon.ico", "/register", "/get-menu", "/forget-password", "/send-new_password-by-email"
                             , "/product/detail/*", "/random-list-product", "/product/**", "/category/**", "/slide/**"
+                            , "/blog/**"
                             , "/blog-detail", "/blog", "/faq", "/search", "/term-and-condition"
                             , "/assets/**", "/assets2/**")
                         .permitAll() // cho phép tất cả người dùng truy cập các api /basic
@@ -128,4 +134,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
 
         return mailSender;
     }
+
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//        List<String> listDomain = new ArrayList<>();
+//        listDomain.add("https://sandbox.vnpayment.vn");
+//        config.setAllowedOrigins(listDomain);
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//        return source;
+//    }
 }

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Danh sách yêu thích</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+    .sidebar .side-menu nav .nav>li {
+      -moz-border-bottom-colors: none;
+      -moz-border-left-colors: none;
+      -moz-border-right-colors: none;
+      -moz-border-top-colors: none;
+      -webkit-transition: none;
+      -moz-transition: none;
+      -o-transition: none;
+      transition: none;
+      position: relative;
+      width: 100%;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    li.menu-hover_:hover {
+      background-color: rgb(235, 235, 235);
+    }
+
+    .menu-hover_:hover>.dropdown-menu {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="cnt-home">
+<div th:replace="fragment::header-user"></div>
+<!-- ============================================== HEADER : END ============================================== -->
+<div class="body-content outer-top-xs" id="top-banner-and-menu">
+    <div class="breadcrumb" style="font-size: 13px;">
+        <div class="container">
+            <div class="breadcrumb-inner">
+                <ul class="list-inline list-unstyled">
+                    <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                    <li class="active">Danh sách yêu thích</li>
+                </ul>
+            </div><!-- /.breadcrumb-inner -->
+        </div><!-- /.container -->
+    </div>
+    <div class="container">
+        <div class="row">
+            <!-- /.sidebar -->
+            <div class="col-md-12">
+                <!-- ========================================== SECTION – HERO ========================================= -->
+                <div class="clearfix filters-container m-t-10">
+                    <div class="row">
+                        <div class="col col-sm-12 col-md-6">
+                            <div class="col col-sm-3 col-md-6 no-padding">
+                                <div class="lbl-cnt"> <span class="lbl">Trạng thái</span>
+                                    <div class="fld inline">
+                                        <select>
+                                            <option>Tất cả</option>
+                                            <option>Đã bán</option>
+                                            <option>Chưa bán</option>
+                                        </select>
+                                        <!-- <div class="dropdown dropdown-small dropdown-med dropdown-white inline">
+                                          <button data-toggle="dropdown" type="button" class="btn dropdown-toggle"> Chọn trạng thái sản phẩm <span
+                                              class="caret"></span> </button>
+                                          <ul role="menu" class="dropdown-menu">
+                                            <li role="presentation"><a href="#">Tất cả</a></li>
+                                            <li role="presentation"><a href="#">Đã bán</a></li>
+                                            <li role="presentation"><a href="#">Chưa bán</a></li>
+                                          </ul>
+                                        </div> -->
+                                    </div>
+                                    <!-- /.fld -->
+                                </div>
+                                <!-- /.lbl-cnt -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col col-sm-6 col-md-6 text-right">
+                            <div class="pagination-container">
+                                <ul class="list-inline list-unstyled">
+                                    <li class="prev"><a href="#"><i class="fa fa-angle-left"></i></a></li>
+                                    <li><a href="#">1</a></li>
+                                    <li class="active"><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li class="next"><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                </ul>
+                                <!-- /.list-inline -->
+                            </div>
+                            <!-- /.pagination-container -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <div class="search-result-container ">
+                    <div id="myTabContent" class="tab-content category-list">
+                        <div class="tab-pane active" id="list-container">
+                            <div class="category-product">
+                                <th:block th:each="product : ${productResponseList}">
+                                    <div class="category-product-inner wow fadeInUp animated" style="visibility: visible;" th:id="'product-' + ${product.id}">
+                                        <div class="products">
+                                            <div class="product-list product">
+                                                <div class="row product-list-row">
+                                                    <div class="col col-sm-4 col-lg-4">
+                                                        <div>
+                                                            <div> <img th:src="${product.mainImage}" alt="" width="200px" style="margin-left: 50%;
+                                                                transform: translate(-50%, 0);"> </div>
+                                                        </div>
+                                                        <!-- /.product-image -->
+                                                    </div>
+                                                    <!-- /.col -->
+                                                    <div class="col col-sm-8 col-lg-8">
+                                                        <div class="product-info">
+                                                            <h3 class="name"><a th:href="@{'/user/product/detail/' + ${product.id}}">[[${product.name}]]</a></h3>
+                                                            <div class="product-price"> <span class="price"> [[${product.price}]] </span></div>
+                                                            <!-- /.product-price -->
+                                                            <!-- /.cart -->
+
+                                                        </div>
+                                                        <!-- /.product-info -->
+                                                    </div>
+                                                    <!-- /.col -->
+                                                </div>
+                                                <!-- /.product-list-row -->
+                                                <div class="tag" th:data-id="${product.id}" onclick="removeProduct(this)"><i class="fa-solid fa-xmark" style="color: red; font-size: 18px; cursor: pointer;"></i></div>
+                                            </div>
+                                            <!-- /.product-list -->
+                                        </div>
+                                        <!-- /.products -->
+                                    </div>
+                                </th:block>
+                                <!-- /.category-product-inner -->
+                            </div>
+                            <!-- /.category-product -->
+                        </div>
+                        <!-- /.tab-pane #list-container -->
+                    </div>
+                    <!-- /.tab-content -->
+                    <div class="clearfix filters-container">
+                        <div class="text-right">
+                            <div class="pagination-container">
+                                <ul class="list-inline list-unstyled">
+                                    <li class="prev"><a href="#"><i class="fa fa-angle-left"></i></a></li>
+                                    <li><a href="#">1</a></li>
+                                    <li class="active"><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li class="next"><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                </ul>
+                                <!-- /.list-inline -->
+                            </div>
+                            <!-- /.pagination-container -->
+                        </div>
+                        <!-- /.text-right -->
+
+                    </div>
+                    <!-- /.filters-container -->
+
+                </div>
+                <!-- /.search-result-container -->
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /#top-banner-and-menu -->
+<div th:replace="fragment::footer-user"></div>
+
+<div th:replace="fragment::script-custom2"></div>
+
+<script>
+    var origin = window.location.origin;
+
+    $(document).ready(function () {
+      $.ajax({
+        method: "GET",
+        url: origin + "/get-menu",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          document.getElementById("menu_").innerHTML = data;
+        }
+      })
+    });
+
+    function removeProduct(e){
+        $.ajax({
+        method: "POST",
+        url: origin + "/user/remove-wishlist/" + $(e).attr('data-id'),
+        contentType: "application/json; charset=utf-8",
+      }).done(function(){
+        document.getElementById('product-'+ $(e).attr('data-id')).remove();
+        toastr.success("Loại bỏ sản phẩm thành công.");
+      }).fail(function(){
+        toastr.error("Có lỗi xảy ra.");
+      })
+    }
+  </script>
+</body>
+
+</html>

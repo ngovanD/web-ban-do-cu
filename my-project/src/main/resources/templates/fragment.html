@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<!--
+    <!--
 một số cái cần chú ý
 //khai báo 1 fragment
 <div th:fragment="header"></div>  //có thể thêm th:remove="tag" :)) chưa hiểu lắm sẽ chú thích thêm
@@ -68,12 +68,22 @@ một số cái cần chú ý
         <style>
             body {
                 font-size: 16px;
-                
+
             }
-            .lnk.wishlist{
+
+            .lnk.wishlist {
                 font-size: 13px;
+                cursor: pointer;
             }
-            
+
+            #toast-container>.toast-success {
+                font-size: 13px !important;
+            }
+
+            #toast-container>.toast-error {
+                font-size: 13px !important;
+            }
+
             .top-bar {
                 padding: 0px;
                 font-size: 13px;
@@ -273,6 +283,19 @@ một số cái cần chú ý
                     }
                 })
             });
+
+            function addWishlist(e) {
+                var productId = $(e).attr('data-id');
+                $.ajax({
+                    method: "post",
+                    url: origin + "/user/add-wishlist/" + productId,
+                    contentType: "application/json; charset=utf-8",
+                }).done(function (data) {
+                    toastr.success("Thêm vào danh sách yêu thích thành công !");
+                }).fail(function (error) {
+                    toastr.error(error.responseText);
+                })
+            }
         </script>
     </div>
     //header user
@@ -285,9 +308,10 @@ một số cái cần chú ý
                         <div class="cnt-account">
                             <ul class="list-unstyled">
                                 <li><a th:href="@{/home}"><i class="icon fa fa-home"></i>Trang chủ</a></li>
-                                <li><a th:href="@{/user/wish-list}"><i class="icon fa fa-heart"></i>Danh sách yêu
+                                <li><a th:href="@{/user/get-wishlist}"><i class="icon fa fa-heart"></i>Danh sách yêu
                                         thích</a></li>
-                                <li><a th:href="@{/user/my-list-product}"><i class="icon fa fa-list"></i>Quản lý tin</a></li>
+                                <li><a th:href="@{/user/my-list-product}"><i class="icon fa fa-list"></i>Quản lý tin</a>
+                                </li>
                                 <li class="dropdown_">
                                     <a href="#"><i class="icon fa-solid fa-circle-info"></i>Về chúng tôi</a>
                                     <div class="dropdown-content_" style="margin-top: 10px;">
@@ -315,7 +339,7 @@ một số cái cần chú ý
                                         <a th:href="@{/user/get-info}"
                                             style="color: black;padding: 12px 16px;text-decoration: none;display: block;">
                                             <i class="fa-solid fa-circle-user"></i> Thông tin tài khoản</a>
-                                        <a href="#"
+                                        <a th:href="@{/user/order/get-all}"
                                             style="color: black;padding: 12px 16px;text-decoration: none;display: block;">
                                             <i class="fa-solid fa-clock-rotate-left"></i> Hóa đơn</a>
                                         <a href="javascript: logoutForm.submit();"
@@ -355,8 +379,10 @@ một số cái cần chú ý
                             <div class="search-area" style="font-size: 14px;">
                                 <form th:action="@{/search}" method="get">
                                     <div class="control-group" style="display: flex;">
-                                        <input th:if="${keyword != null}" class="search-field" placeholder="Tìm kiếm..." style="flex-grow: 9" name="keyword" id="keyword_" th:value="${keyword}">
-                                        <input th:unless="${keyword != null}"class="search-field" placeholder="Tìm kiếm..." style="flex-grow: 9" name="keyword" id="keyword_">
+                                        <input th:if="${keyword != null}" class="search-field" placeholder="Tìm kiếm..."
+                                            style="flex-grow: 9" name="keyword" id="keyword_" th:value="${keyword}">
+                                        <input th:unless="${keyword != null}" class="search-field"
+                                            placeholder="Tìm kiếm..." style="flex-grow: 9" name="keyword" id="keyword_">
                                         <button class="search-button" href="#" style="flex-grow: 1"></button>
                                     </div>
                                 </form>
@@ -370,10 +396,11 @@ một số cái cần chú ý
                             <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
 
                             <div class="dropdown dropdown-cart" style="font-size: 14px;">
-                                <a th:href="@{/user/product/create-product}" class="lnk-cart" >
+                                <a th:href="@{/user/product/create-product}" class="lnk-cart">
                                     <div class="items-cart-inner">
                                         <div class="basket"> <i class="fa fa-pencil"></i> </div>
-                                        <div class="total-price-basket"> <span class="lbl" style="font-size: 13px;">Đăng tin</span></div>
+                                        <div class="total-price-basket"> <span class="lbl" style="font-size: 13px;">Đăng
+                                                tin</span></div>
                                     </div>
                                 </a>
                                 <!-- /.dropdown-menu-->
@@ -398,37 +425,36 @@ một số cái cần chú ý
     <div th:fragment="footer-user" th:remove="tag">
 
         <!-- ============================================================= FOOTER ============================================================= -->
-        <footer id="footer" class="footer color-bg">
+        <footer id="footer" class="footer color-bg" style="margin-top: 20px;">
             <div class="footer-bottom">
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 col-sm-6 col-md-3">
                             <div class="module-heading">
-                                <h4 class="module-title">Contact Us</h4>
+                                <h4 class="module-title">Liên hệ với chúng tôi</h4>
                             </div>
                             <!-- /.module-heading -->
 
-                            <div class="module-body">
+                            <div class="module-body" style="font-size: 13px;">
                                 <ul class="toggle-footer">
                                     <li class="media">
                                         <div class="pull-left"> <span class="icon fa-stack fa-lg"> <i
                                                     class="fa fa-map-marker fa-stack-1x fa-inverse"></i> </span> </div>
                                         <div class="media-body">
-                                            <p>ThemesGround, 789 Main rd, Anytown, CA 12345 USA</p>
+                                            <p>Nam Từ Liêm, Hà Nội</p>
                                         </div>
                                     </li>
                                     <li class="media">
                                         <div class="pull-left"> <span class="icon fa-stack fa-lg"> <i
                                                     class="fa fa-mobile fa-stack-1x fa-inverse"></i> </span> </div>
                                         <div class="media-body">
-                                            <p>+(888) 123-4567<br>
-                                                +(888) 456-7890</p>
+                                            <p>+(84) 373559622</p>
                                         </div>
                                     </li>
                                     <li class="media">
                                         <div class="pull-left"> <span class="icon fa-stack fa-lg"> <i
                                                     class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span> </div>
-                                        <div class="media-body"> <span><a href="#">flipmart@themesground.com</a></span>
+                                        <div class="media-body"> <span><a href="#">chocu_contact@gmail.com</a></span>
                                         </div>
                                     </li>
                                 </ul>
@@ -439,14 +465,14 @@ một số cái cần chú ý
 
                         <div class="col-xs-12 col-sm-6 col-md-3">
                             <div class="module-heading">
-                                <h4 class="module-title">Customer Service</h4>
+                                <h4 class="module-title">Dịch vụ khách hàng</h4>
                             </div>
                             <!-- /.module-heading -->
 
                             <div class="module-body">
                                 <ul class='list-unstyled'>
-                                    <li class="first"><a href="#" title="Contact us">My Account</a></li>
-                                    <li><a href="#" title="About us">Order History</a></li>
+                                    <li class="first"><a href="#" title="Contact us">Tài khoản</a></li>
+                                    <li><a href="#" title="About us">Lịch sử đơn hàng</a></li>
                                     <li><a href="#" title="faq">FAQ</a></li>
                                     <li><a href="#" title="Popular Searches">Specials</a></li>
                                     <li class="last"><a href="#" title="Where is my order?">Help Center</a></li>
@@ -464,7 +490,7 @@ một số cái cần chú ý
 
                             <div class="module-body">
                                 <ul class='list-unstyled'>
-                                    <li class="first"><a title="Your Account" href="#">About us</a></li>
+                                    <li class="first"><a title="Your Account" href="#">Tài khoản</a></li>
                                     <li><a title="Information" href="#">Customer Service</a></li>
                                     <li><a title="Addresses" href="#">Company</a></li>
                                     <li><a title="Addresses" href="#">Investor Relations</a></li>
@@ -602,6 +628,14 @@ một số cái cần chú ý
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a th:href="@{/admin/order/get-all}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-user"></i>
+                                <p>
+                                    Quản đơn hàng
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link">
                                 <i class="nav-icon fa-solid fa-list-ul"></i>
                                 <p>
@@ -652,37 +686,39 @@ một số cái cần chú ý
     </div>
     //footer admin
     <div th:fragment="footer-admin" th:remove="tag">
-        <footer class="main-footer">
+        <!-- <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.2.0-rc
             </div>
             <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
             reserved.
-        </footer>
+        </footer> -->
     </div>
     //paginate
     <div th:fragment="paginate(url, keyword, current_page, total_page)" th:remove="tag">
         <div class="row" style="justify-content: center;">
             <ul class="pagination">
                 <li th:if="${current_page != 1} " class="paginate_button page-item previous">
-                    <a th:href="@{${url} + '?page=' + 1 + '&search=' + ${keyword}}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link"><i
-                            class="fa-solid fa-angles-left"></i></a>
+                    <a th:href="@{${url} + '?page=' + 1 + '&search=' + ${keyword}}" aria-controls="example2"
+                        data-dt-idx="0" tabindex="0" class="page-link"><i class="fa-solid fa-angles-left"></i></a>
                 </li>
                 <li th:unless="${current_page != 1} " class="paginate_button page-item previous disabled"><a
                         aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link"><i
                             class="fa-solid fa-angles-left"></i></a></li>
 
                 <li th:if="${current_page > 1} " class="paginate_button page-item previous">
-                    <a th:href="@{${url} + '?page=' +${current_page - 1} + '&search=' + ${keyword}}" aria-controls="example2" data-dt-idx="0" tabindex="0"
-                        class="page-link"><i class="fa-solid fa-angle-left"></i></a>
+                    <a th:href="@{${url} + '?page=' +${current_page - 1} + '&search=' + ${keyword}}"
+                        aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link"><i
+                            class="fa-solid fa-angle-left"></i></a>
                 </li>
                 <li th:unless="${current_page > 1} " class="paginate_button page-item previous disabled"><a
                         aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link"><i
                             class="fa-solid fa-angle-left"></i></a></li>
 
-                <th:block th:each="i: ${#numbers.sequence(1, total_page)}">
-                    <li th:if="${i != current_page}" class="paginate_button page-item "><a th:href="@{${url} + '?page=' + ${i} + '&search=' + ${keyword}}"
-                            aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">[[${i}]]</a></li>
+                <th:block th:if="${total_page > 0}" th:each="i: ${#numbers.sequence(1, total_page)}">
+                    <li th:if="${i != current_page}" class="paginate_button page-item "><a
+                            th:href="@{${url} + '?page=' + ${i} + '&search=' + ${keyword}}" aria-controls="example2"
+                            data-dt-idx="2" tabindex="0" class="page-link">[[${i}]]</a></li>
                     <li th:unless="${i != current_page}" class="paginate_button page-item active"><a
                             aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">[[${i}]]</a></li>
                 </th:block>
@@ -691,16 +727,17 @@ một số cái cần chú ý
                     id="example2_next"><a aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link"><i
                             class="fa-solid fa-angle-right"></i></a></li>
                 <li th:unless="${current_page >= total_page}" class="paginate_button page-item next">
-                    <a th:href="@{${url} + '?page=' + ${current_page + 1} + '&search=' + ${keyword}}" aria-controls="example2" data-dt-idx="7" tabindex="0"
-                        class="page-link"><i class="fa-solid fa-angle-right"></i></a>
+                    <a th:href="@{${url} + '?page=' + ${current_page + 1} + '&search=' + ${keyword}}"
+                        aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link"><i
+                            class="fa-solid fa-angle-right"></i></a>
                 </li>
 
-                <li th:if="${current_page == total_page}" class="paginate_button page-item next disabled"><a
+                <li th:if="${current_page >= total_page}" class="paginate_button page-item next disabled"><a
                         aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link"><i
                             class="fa-solid fa-angles-right"></i></a></li>
-                <li th:unless="${current_page == total_page}" class="paginate_button page-item next">
-                    <a th:href="@{${url} + '?page=' + ${total_page} + '&search=' + ${keyword}}" aria-controls="example2" data-dt-idx="7" tabindex="0"
-                        class="page-link"><i class="fa-solid fa-angles-right"></i></a>
+                <li th:if="${total_page > current_page}" class="paginate_button page-item next">
+                    <a th:href="@{${url} + '?page=' + ${total_page} + '&search=' + ${keyword}}" aria-controls="example2"
+                        data-dt-idx="7" tabindex="0" class="page-link"><i class="fa-solid fa-angles-right"></i></a>
                 </li>
             </ul>
         </div>

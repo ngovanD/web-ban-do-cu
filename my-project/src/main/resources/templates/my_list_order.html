@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Danh sách đơn hàng</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+    </style>
+</head>
+
+<body class="cnt-home">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs" id="top-banner-and-menu">
+        <div class="breadcrumb" style="font-size: 13px;">
+            <div class="container">
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li class="active">Danh sách đơn hàng</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+        </div>
+        <div class="container">
+            <div class="row ">
+                <div class="shopping-cart">
+                    <div class="shopping-cart-table ">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="cart-romove item">Tên sản phẩm</th>
+                                        <th class="cart-total last-item">Tổng tiền</th>
+                                        <th class="cart-product-name item">Ngày đặt</th>
+                                        <th class="cart-edit item">Trạng thái</th>
+                                        <th class="cart-edit item">Xác nhận</th>
+                                        <th class="cart-romove item">Chi tiết</th>
+                                    </tr>
+                                </thead><!-- /thead -->
+                                <tbody>
+                                    <th:block th:each="order : ${list_order}">
+                                        <tr>
+                                            <td class="cart-product-name-info">
+                                                <h4 class="cart-product-description"><a th:href="@{'/user/order/' + ${order.id}}">[[${order.productResponse.name}]]</a></h4>
+                                            </td>
+                                            <td class="cart-product-sub-total"><span
+                                                    class="cart-sub-total-price">[[${order.priceProduct + order.feeShipping}]]</span></td>
+                                            <td class="romove-item"><span>[[${order.createTime}]]</span></td></td>
+                                            <td class="cart-image text-center"><span>[[${order.status}]]</span></td>
+                                            <td class="cart-image text-center">
+                                                <a th:if="${order.status == 'Chờ giao hàng'}" th:href="@{'/user/order/completed/' + ${order.id}}"class="btn btn-sm btn-primary" style="text-decoration: none;">Đã nhận</a>
+                                                <a th:unless="${order.status == 'Chờ giao hàng'}" class="btn btn-sm btn-primary disabled" style="text-decoration: none;">Đã nhận</a>
+                                            </td>
+                                            <td class="cart-product-name-info">
+                                                <h4 class="cart-product-description"><a th:href="@{'/user/order/' + ${order.id}}"><i class="fa-solid fa-arrow-right"></i></a></h4>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                </tbody><!-- /tbody -->
+                            </table><!-- /table -->
+                        </div>
+                    </div><!-- /.shopping-cart-table -->
+                </div><!-- /.shopping-cart -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /#top-banner-and-menu -->
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+
+    <script>
+        var origin = window.location.origin;
+
+        $(document).ready(function () {
+            
+        });
+    </script>
+</body>
+
+</html>

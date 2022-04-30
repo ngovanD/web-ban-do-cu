@@ -2,7 +2,12 @@ package haui.cntt.myproject.common.enum_;
 
 public enum OrderStatusEnum {
     PENDING,
-    RESOLVED,
+    PAID,
+    WAITING_CONFIRM,
+    WAITING_DELIVERY,
+    DELIVERY,
     COMPLETED,
-    CANCELED
+    WAITING_REFUND,
+    REFUNDED,
+    CANCELED,
 }

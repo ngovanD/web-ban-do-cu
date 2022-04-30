@@ -121,13 +121,16 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" style="padding-top: 13px; margin-left: 0px">
-        <!-- <div class="breadcrumb-inner container">
-  <ul class="list-inline list-unstyled">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Clothing</a></li>
-    <li class="active">Floral Print Buttoned</li>
-  </ul>
-</div> -->
+        <div class="breadcrumb">
+            <div class="container">
+              <div class="breadcrumb-inner">
+                <ul class="list-inline list-unstyled">
+                  <li  style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                  <li class="active">Đăng tin</li>
+                </ul>
+              </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+          </div>
         <!-- Main content -->
         <div class="body-content outer-top-xs" id="top-banner-and-menu">
             <div class="container">
@@ -139,7 +142,7 @@
                             <div class="card card-outline">
                                 <div class="card-body box-profile">
                                     <div class="text-center">
-                                        <label for="fileImage" style="font-size: 20px;"><i
+                                        <label for="fileImage" style="font-size: 20px;" title="Thêm tối đa 10 ảnh"><i
                                                 class="fa-solid fa-images"></i></label>
                                         <input id="fileImage" name="files[]" type="file"
                                             accept="image/png, image/jpg, image/jpeg" style="display: none;"
@@ -236,7 +239,14 @@
                 "parentIndex": index,
                 "file": file
             };
-            listFile.push(fileAndIndex);
+            if(listFile.length>10)
+            {
+                toastr.warning("Thêm được tối đa 10 ảnh.");
+            }
+            else{
+                listFile.push(fileAndIndex);
+            }
+            
 
             reader = new FileReader();
             reader.onload = function (e) {

@@ -9,6 +9,7 @@ import haui.cntt.myproject.presentation.response.ProductResponse;
 import haui.cntt.myproject.presentation.response.UserResponse;
 import haui.cntt.myproject.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -88,12 +89,33 @@ public class UserController {
     }
 
     @GetMapping("/my-list-product")
-    public String getMyListProduct(Model model) throws Throwable{
-        List<ProductResponse> productResponseList =  userService.getMyListProduct()
+    public String getMyListProduct(Model model) throws Throwable {
+        List<ProductResponse> productResponseList = userService.getMyListProduct()
                 .stream()
                 .map(ProductMapper::convertToProductResponse)
                 .collect(Collectors.toList());
         model.addAttribute("productResponseList", productResponseList);
         return "my_list_product";
+    }
+
+    @PostMapping("/add-wishlist/{id}")
+    public ResponseEntity<String> addWishlist(@PathVariable(value = "id") long productId) throws Throwable {
+        userService.addWishlist(productId);
+        return ResponseEntity.ok().body("Thêm sản phần vào danh sách yêu thích thành công !!!");
+    }
+
+    @GetMapping("/get-wishlist")
+    public String getWishlist(Model model
+            , @RequestParam(value = "page", required = false, defaultValue = "1") int page) throws Throwable {
+        Page<ProductResponse> productResponseList = userService.getWishlist(page - 1)
+                .map(ProductMapper::convertToProductResponse);
+        model.addAttribute("productResponseList", productResponseList);
+        return "wishlist";
+    }
+
+    @PostMapping("/remove-wishlist/{id}")
+    public ResponseEntity<String> removeWishlist(@PathVariable(value = "id") long productId) throws Throwable {
+        userService.removeWishlist(productId);
+        return ResponseEntity.ok().body("Loại bỏ sản phần từ danh sách yêu thích thành công !!!");
     }
 }

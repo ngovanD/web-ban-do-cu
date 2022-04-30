@@ -9,21 +9,18 @@ import haui.cntt.myproject.persistance.entity.User;
 import haui.cntt.myproject.persistance.repository.ProductRepository;
 import haui.cntt.myproject.persistance.repository.RoleRepository;
 import haui.cntt.myproject.persistance.repository.UserRepository;
+import haui.cntt.myproject.presentation.response.ProductResponse;
 import haui.cntt.myproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.print.PageFormat;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,8 +31,8 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
-//    @Autowired
-//    ProductRepository productRepository;
+    @Autowired
+    ProductRepository productRepository;
 
     @Transactional
     public void createAdmin(User user) {
@@ -203,12 +200,66 @@ public class UserServiceImpl implements UserService {
         return newPassword;
     }
 
-    public List<Product> getMyListProduct() throws Throwable{
+    public List<Product> getMyListProduct() throws Throwable {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User foundUser = userRepository.findByUsername(username).orElseThrow(
-                ()->{throw  new BadRequestException("User không tồn tại !!!");}
+                () -> {
+                    throw new BadRequestException("User không tồn tại !!!");
+                }
         );
 
-        return foundUser.getProducts().stream().collect(Collectors.toList());
+        List<Product> productList = foundUser.getProducts().stream().collect(Collectors.toList());
+        Collections.sort(productList, Comparator.comparingLong(Product::getId).reversed());
+        return productList;
+    }
+
+    public void addWishlist(long productId) throws Throwable {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User foundUser = userRepository.findByUsername(username).orElseThrow(() -> {
+            throw new BadRequestException("User không tồn tại !!!");
+        });
+        Product foundProduct = productRepository.findById(productId).orElseThrow(() -> {
+            throw new BadRequestException("Sản phẩm không tồn tại !!!");
+        });
+        if (foundUser.getWishlistProducts().contains(foundProduct)) {
+            throw new BadRequestException("Bạn đã thêm sản phẩm này vào danh sách yêu thích rồi !!!");
+        } else {
+            foundUser.getWishlistProducts().add(foundProduct);
+            userRepository.save(foundUser);
+        }
+    }
+
+    public Page<Product> getWishlist(int page) throws Throwable {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User foundUser = userRepository.findByUsername(username).orElseThrow(() -> {
+            throw new BadRequestException("User không tồn tại !!!");
+        });
+        List<Product> productList = foundUser.getWishlistProducts()
+                .stream()
+                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), productList.size());
+        return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
+    }
+
+    public void removeWishlist(long productId) throws Throwable{
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User foundUser = userRepository.findByUsername(username).orElseThrow(() -> {
+            throw new BadRequestException("User không tồn tại !!!");
+        });
+        Product foundProduct = productRepository.findById(productId).orElseThrow(() -> {
+            throw new BadRequestException("Sản phẩm không tồn tại !!!");
+        });
+        if (foundUser.getWishlistProducts().contains(foundProduct)) {
+            foundUser.getWishlistProducts().remove(foundProduct);
+            userRepository.save(foundUser);
+        } else {
+            throw new BadRequestException("Không có sản phẩm này trong danh sách yêu thích !!!");
+        }
+    }
+
+    public int getNewUser(String from, String to) {
+        return userRepository.getNewUser(from, to);
     }
 }

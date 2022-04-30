@@ -26,15 +26,29 @@ public class ProductMapper {
                 .getFileName();
         String apiImage = MvcUriComponentsBuilder.fromMethodName(ImageController.class, "readDetailFile"
                 , "product", product.getId().toString(), fileName).toUriString();
-
-        String status = product.getStatus().equals(ProductStatusEnum.STOCKING) ? "Đang bán" : "Đã bán";
+        String status = "Đang bán";
+        if(product.getStatus().equals(ProductStatusEnum.STOCKING))
+        {
+            status = "Đang bán";
+        }
+        if(product.getStatus().equals(ProductStatusEnum.SOLD_OUT))
+        {
+            status = "Đã bán";
+        }
+        if(product.getStatus().equals(ProductStatusEnum.WAITING_CONFIRM))
+        {
+            status = "Chờ xác nhận";
+        }
+        if(product.getStatus().equals(ProductStatusEnum.COMPLETED))
+        {
+            status = "Đã thanh toán cho người bán";
+        }
 
         String tag = "";
         if(LocalDateTime.now().minusDays(1).isBefore(product.getCreatedDate()))
         {
             tag = "New";
         }
-
         if(product.getView() > 100)
         {
             tag = "Hot";

@@ -37,6 +37,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
                                 "where role.name = 'ROLE_ADMIN')", nativeQuery = true)
     Page<User> findAllUserAndSearch(Pageable pageable, @Param(value = "keyword") String keyword);
 
+    @Query(value = "select count(*) from user where (date(created_date) between :from and :to)", nativeQuery = true)
+    int getNewUser(@Param(value = "from") String from, @Param(value = "to") String to);
+
 //    @Query(value = "select case when count(*) > 0 then 'true' else 'false' end result " +
 //            "from user u " +
 //            "where u.username = :username and hidden_flag = 1 ", nativeQuery = true)

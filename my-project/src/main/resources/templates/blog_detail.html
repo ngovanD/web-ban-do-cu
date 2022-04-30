@@ -28,15 +28,25 @@
     <div th:replace="fragment::header-user"></div>
 
     <!-- ============================================== HEADER : END ============================================== -->
-
     <div class="body-content outer-top-xs">
+        <div class="breadcrumb" style="font-size: 13px;">
+            <div class="container">
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li style="display: inline;"><a th:href="@{/blog}">Tin tức</a></li>
+                        <li class="active">[[${blogResponse.title}]]</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+        </div>
         <div class="container">
             <div class="row">
                 <div class="blog-page">
                     <div class="col-md-12">
                         <div class="blog-post wow fadeInUp">
                             <img class="img-responsive" th:src="${blogResponse.apiGetImage}" alt="" 
-                            style="width: 807px; height:417px; margin-left: 50%; transform: translate(-50%, 0%);">
+                            style="object-fit: contain; width: 807px; height:417px; margin-left: 50%; transform: translate(-50%, 0%);">
                             <h1>[[${blogResponse.title}]]</h1>
                             <span class="date-time">[[${blogResponse.dateTime}]]</span>
                             <div id="content_">

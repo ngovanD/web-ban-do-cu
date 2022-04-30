@@ -12,753 +12,291 @@
     <title>Chi tiết sản phẩm</title>
     <div th:replace="fragment::head-custom2"></div>
     <!-- Link Swiper's CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
-    .swiper {
-      width: 100%;
-      height: 100%;
-    }
+        .swiper {
+            width: 100%;
+            height: 100%;
+        }
 
-    .swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      background: #000;
-    }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #000;
+        }
 
-    .swiper-slide img {
-      width: auto;
-      height: auto;
-      max-width: 100%;
-      max-height: 100%;
-      -ms-transform: translate(-50%, -50%);
-      -webkit-transform: translate(-50%, -50%);
-      -moz-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-      position: absolute;
-      left: 50%;
-      top: 50%;
-    }
-
-
-
+        .swiper-slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            -ms-transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
     </style>
 </head>
 
 <body class="cnt-home">
-<div th:replace="fragment::header-user"></div>
-<!-- ============================================== HEADER : END ============================================== -->
-<div class="body-content outer-top-xs">
-    <div class="container">
-        <div class="row single-product">
-            <div class="col-md-12">
-                <div class="detail-block">
-                    <div class="row  wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs">
+        <div class="container">
+            <div class="row single-product">
+                <div class="col-md-12">
+                    <div class="detail-block">
+                        <div class="row  wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">
 
-                        <div class="col-xs-12 col-sm-6 col-md-5 gallery-holder">
-                            <div>
-                                <div style="height: 317px;">
-                                    <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
-                                         class="swiper mySwiper">
-                                        <div class="swiper-wrapper">
-                                            <th:block th:each="imageProduct : ${productResponse.apiGetImageList}">
-                                                <div class="swiper-slide">
-                                                    <img th:data-src="${imageProduct.apiGetImage}" class="swiper-lazy"
-                                                         style="object-fit:contain; width:317px;height:317px;"/>
-                                                    <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-                                                </div>
-                                            </th:block>
-                                        </div>
-                                        <div class="swiper-button-next"></div>
-                                        <div class="swiper-button-prev"></div>
-                                        <div class="swiper-pagination"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div><!-- /.gallery-holder -->
-                        <div class="col-sm-6 col-md-7 product-info-block">
-                            <div class="product-info">
-                                <h1 class="name">[[${productResponse.name}]]</h1>
-                                <div class="stock-container info-container m-t-10">
-                                    <div class="row">
-                                        <div class="col-sm-2">
-                                            <div class="stock-box">
-                                                <span class="label">Trạng thái :</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="stock-box">
-                                                <span class="value">[[${productResponse.status}]]</span>
-                                            </div>
-                                        </div>
-                                    </div><!-- /.row -->
-                                </div><!-- /.stock-container -->
-                                <div class="description-container m-t-20">
-                                    [[${productResponse.description}]]
-                                </div><!-- /.description-container -->
-                                <div class="price-container info-container m-t-20">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="price-box">
-                                                <span class="price">[[${productResponse.price}]]</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="favorite-button m-t-10">
-                                                <a class="btn btn-primary" data-toggle="tooltip" data-placement="right"
-                                                   title="" href="#"
-                                                   data-original-title="Wishlist">
-                                                    <i class="fa fa-heart"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                    </div><!-- /.row -->
-                                </div><!-- /.price-container -->
-                                <div class="quantity-container info-container">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <a href="#" class="btn btn-primary"><i
-                                                    class="fa fa-shopping-cart inner-right-vs"></i>Mua
-                                                ngay</a>
-                                        </div>
-                                    </div><!-- /.row -->
-                                </div><!-- /.quantity-container -->
-                            </div><!-- /.product-info -->
-                        </div><!-- /.col-sm-7 -->
-                    </div><!-- /.row -->
-                </div>
-
-                <div class="product-tabs inner-bottom-xs  wow fadeInUp animated"
-                     style="visibility: visible; animation-name: fadeInUp;">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
-                                <li class="active"><a data-toggle="tab" href="#description">Thông tin chi tiết</a></li>
-                                <li><a data-toggle="tab" href="#review">Người bán</a></li>
-                            </ul><!-- /.nav-tabs #product-tabs -->
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="tab-content">
-                                <div id="description" class="tab-pane in active">
-                                    <div class="product-tab">
-                                        <h2 class="heading-title" style="font-size: 15px;">Thông tin sản phẩm</h2>
-                                        <div class="form-group">
-                                            <label class="info-title">Loại sản phẩm:</label>
-                                            <div style="display: inline;">
-                                                [[${productResponse.categoryResponse.name}]]
-                                            </div>
-                                        </div>
-                                        <div id="form-content_">
-                                            <form class="register-form outer-top-xs" role="form" id="formDetailProduct">
-                                                <th:block th:each="property : ${productResponse.propertyResponseList}">
-                                                    <div class="form-group">
-                                                        <label class="info-title"
-                                                               th:text="${property.propertyName} + ':'">Lỗi</label>
-                                                        <div style="display: inline;">
-                                                            [[${property.value}]] [[${property.unit}]]
+                            <div class="col-xs-12 col-sm-6 col-md-5 gallery-holder">
+                                <div>
+                                    <div style="height: 317px;">
+                                        <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+                                            class="swiper mySwiper">
+                                            <div class="swiper-wrapper">
+                                                <th:block th:each="imageProduct : ${productResponse.apiGetImageList}">
+                                                    <div class="swiper-slide">
+                                                        <img th:data-src="${imageProduct.apiGetImage}"
+                                                            class="swiper-lazy"
+                                                            style="object-fit:contain; width:317px;height:317px;" />
+                                                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white">
                                                         </div>
                                                     </div>
                                                 </th:block>
-                                                <div class="form-group">
-                                                    <label class="info-title">Tình trạng:</label>
-                                                    <div style="display: inline;">
-                                                        [[${productResponse.currentStatus}]]
-                                                    </div>
-                                                </div>
-                                                <div class="form-group" style="margin-bottom: 50px;">
-                                                    <label class="info-title">Địa chỉ:</label>
-                                                    <div style="display: inline;">
-                                                        [[${productResponse.addressResponse.detail}]],
-                                                        [[${productResponse.addressResponse.commune}]],
-                                                        [[${productResponse.addressResponse.district}]],
-                                                        [[${productResponse.addressResponse.province}]]
-                                                    </div>
-                                                </div>
-                                            </form>
+                                            </div>
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                            <div class="swiper-pagination"></div>
                                         </div>
                                     </div>
-                                </div><!-- /.tab-pane -->
+                                </div>
 
-                                <div id="review" class="tab-pane">
-                                    <div class="product-tag">
-                                        <h2 class="heading-title"
-                                            style="text-align: left!important;text-transform: none!important;
+                            </div><!-- /.gallery-holder -->
+                            <div class="col-sm-6 col-md-7 product-info-block">
+                                <div class="product-info">
+                                    <h1 class="name">[[${productResponse.name}]]</h1>
+                                    <div class="stock-container info-container m-t-10">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <div class="stock-box">
+                                                    <span class="label">Trạng thái :</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="stock-box">
+                                                    <span class="value">[[${productResponse.status}]]</span>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.row -->
+                                    </div><!-- /.stock-container -->
+                                    <div class="description-container m-t-20">
+                                        [[${productResponse.description}]]
+                                    </div><!-- /.description-container -->
+                                    <div class="price-container info-container m-t-20">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="price-box">
+                                                    <span class="price">[[${productResponse.price}]]</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="favorite-button m-t-10">
+                                                    <a class="btn btn-primary" data-toggle="tooltip"
+                                                        data-placement="right" title=""
+                                                        th:data-id="${productResponse.id}" onclick="addWishlist(this)"
+                                                        data-original-title="Wishlist">
+                                                        <i class="fa fa-heart"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div><!-- /.row -->
+                                    </div><!-- /.price-container -->
+                                    <div class="quantity-container info-container">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <a th:if="${productResponse.status == 'Đang bán'}"
+                                                    th:href="@{'/user/order/create/' + ${productResponse.id}}"
+                                                    class="btn btn-primary"><i
+                                                        class="fa fa-shopping-cart inner-right-vs"></i>Mua
+                                                    ngay</a>
+                                            </div>
+                                        </div><!-- /.row -->
+                                    </div><!-- /.quantity-container -->
+                                </div><!-- /.product-info -->
+                            </div><!-- /.col-sm-7 -->
+                        </div><!-- /.row -->
+                    </div>
+
+                    <div class="product-tabs inner-bottom-xs  wow fadeInUp animated"
+                        style="visibility: visible; animation-name: fadeInUp;">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
+                                    <li class="active"><a data-toggle="tab" href="#description">Thông tin chi tiết</a>
+                                    </li>
+                                    <li><a data-toggle="tab" href="#review">Người bán</a></li>
+                                </ul><!-- /.nav-tabs #product-tabs -->
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="tab-content">
+                                    <div id="description" class="tab-pane in active">
+                                        <div class="product-tab">
+                                            <h2 class="heading-title" style="font-size: 15px;">Thông tin sản phẩm</h2>
+                                            <div class="form-group">
+                                                <label class="info-title">Loại sản phẩm:</label>
+                                                <div style="display: inline;">
+                                                    [[${productResponse.categoryResponse.name}]]
+                                                </div>
+                                            </div>
+                                            <div id="form-content_">
+                                                <form class="register-form outer-top-xs" role="form"
+                                                    id="formDetailProduct">
+                                                    <th:block
+                                                        th:each="property : ${productResponse.propertyResponseList}">
+                                                        <div class="form-group">
+                                                            <label class="info-title"
+                                                                th:text="${property.propertyName} + ':'">Lỗi</label>
+                                                            <div style="display: inline;">
+                                                                [[${property.value}]] [[${property.unit}]]
+                                                            </div>
+                                                        </div>
+                                                    </th:block>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Tình trạng:</label>
+                                                        <div style="display: inline;">
+                                                            [[${productResponse.currentStatus}]]
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="margin-bottom: 50px;">
+                                                        <label class="info-title">Địa chỉ:</label>
+                                                        <div style="display: inline;">
+                                                            [[${productResponse.addressResponse.detail}]],
+                                                            [[${productResponse.addressResponse.commune}]],
+                                                            [[${productResponse.addressResponse.district}]],
+                                                            [[${productResponse.addressResponse.province}]]
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.tab-pane -->
+
+                                    <div id="review" class="tab-pane">
+                                        <div class="product-tag">
+                                            <h2 class="heading-title" style="text-align: left!important;text-transform: none!important;
                                             padding: 0px 0px 15px 0px!important;font-weight: bold!important;
                                             font-size: 22px!important;border-bottom: 1px #e5e5e5 solid!important;">
-                                            Thông tin người bán</h2>
-                                        <form role="form" class="form-inline form-cnt">
-                                            <div class="form-container">
+                                                Thông tin người bán</h2>
+                                            <form role="form" class="form-inline form-cnt">
+                                                <div class="form-container">
 
-                                                <div style="margin-bottom: 10px;">
-                                                    <div><b>Tên:</b> [[${productResponse.sellerName}]]</div>
+                                                    <div style="margin-bottom: 10px;">
+                                                        <div><b>Tên:</b> [[${productResponse.sellerName}]]</div>
+                                                    </div>
+                                                    <div style="margin-bottom: 10px;">
+                                                        <div><b>Số điện thoại:</b> [[${productResponse.sellerPhone}]]
+                                                        </div>
+                                                    </div>
+                                                    <div style="margin-bottom: 10px;">
+                                                        <button class="btn btn-upper btn-primary" type="submit">Chat với
+                                                            người bán
+                                                        </button>
+                                                    </div>
+                                                </div><!-- /.form-container -->
+                                            </form><!-- /.form-cnt -->
+                                        </div><!-- /.product-tab -->
+                                    </div><!-- /.tab-pane -->
+
+                                </div><!-- /.tab-content -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.product-tabs -->
+
+                    <!-- ============================================== UPSELL PRODUCTS ============================================== -->
+                    <section class="section featured-product wow fadeInUp">
+                        <h3 class="section-title">upsell products</h3>
+                        <div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs">
+                            <th:block th:each="product : ${recommendProductList}">
+                                <div class="item item-carousel">
+                                    <div class="products">
+                                        <div class="product">
+                                            <div class="product-image">
+                                                <div class="image"> <a th:href="@{'/product/' + ${product.id}}"><img
+                                                            th:src="${product.mainImage}" alt=""
+                                                            style="object-fit:contain;width:189px;height:189px;"></a>
                                                 </div>
-                                                <div style="margin-bottom: 10px;">
-                                                    <div><b>Số điện thoại:</b>  [[${productResponse.sellerPhone}]]</div>
+                                                <!-- /.image -->
+                                            </div>
+                                            <!-- /.product-image -->
+
+                                            <div class="product-info text-left">
+                                                <h3 class="name"><a
+                                                        th:href="@{'/product/' + ${product.id}}">[[${product.name}]]</a>
+                                                </h3>
+                                                <div class="product-price">
+                                                    <span class="price"> [[${product.price}]]
+                                                    </span>
                                                 </div>
-                                                <div style="margin-bottom: 10px;">
-                                                    <button class="btn btn-upper btn-primary" type="submit">Chat với
-                                                        người bán
-                                                    </button>
-                                                </div>
-                                            </div><!-- /.form-container -->
-                                        </form><!-- /.form-cnt -->
-                                    </div><!-- /.product-tab -->
-                                </div><!-- /.tab-pane -->
+                                                <!-- /.product-price -->
 
-                            </div><!-- /.tab-content -->
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.product-tabs -->
+                                            </div>
+                                            <!-- /.product-info -->
+                                            <!-- /.cart -->
+                                        </div>
+                                        <!-- /.product -->
 
-                <!-- ============================================== UPSELL PRODUCTS ============================================== -->
-                <section class="section featured-product wow fadeInUp"
-                         style="visibility: hidden; animation-name: none;">
-                    <h3 class="section-title">upsell products</h3>
-                    <div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs"
-                         style="opacity: 1; display: block;">
+                                    </div><!-- /.products -->
+                                </div><!-- /.item -->
+                            </th:block>
+                        </div><!-- /.home-owl-carousel -->
+                    </section><!-- /.section -->
+                    <!-- ============================================== UPSELL PRODUCTS : END ============================================== -->
 
-                        <div class="owl-wrapper-outer">
-                            <div class="owl-wrapper" style="width: 2484px; left: 0px; display: block;">
-                                <div class="owl-item" style="width: 207px;">
-                                    <div class="item item-carousel">
-                                        <div class="products">
+                </div><!-- /.col -->
+                <div class="clearfix"></div>
+            </div><!-- /.row -->
+        </div><!-- /.container -->
+    </div>
+    <!-- /#top-banner-and-menu -->
+    <div th:replace="fragment::footer-user"></div>
 
-                                            <div class="product">
-                                                <div class="product-image">
-                                                    <div class="image">
-                                                        <a href="detail.html"><img src="assets\images\products\p1.jpg"
-                                                                                   alt=""></a>
-                                                    </div><!-- /.image -->
+    <div th:replace="fragment::script-custom2"></div>
 
-                                                    <div class="tag sale"><span>sale</span></div>
-                                                </div><!-- /.product-image -->
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            lazy: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
 
-                                                <div class="product-info text-left">
-                                                    <h3 class="name"><a href="detail.html">Floral Print Buttoned</a>
-                                                    </h3>
-                                                    <div class="rating rateit-small rateit">
-                                                        <button id="rateit-reset-6" data-role="none"
-                                                                class="rateit-reset" aria-label="reset rating"
-                                                                aria-controls="rateit-range-6"
-                                                                style="display: none;"></button>
-                                                        <div id="rateit-range-6" class="rateit-range" tabindex="0"
-                                                             role="slider"
-                                                             aria-label="rating" aria-owns="rateit-reset-6"
-                                                             aria-valuemin="0" aria-valuemax="5"
-                                                             aria-valuenow="4" aria-readonly="true"
-                                                             style="width: 70px; height: 14px;">
-                                                            <div class="rateit-selected"
-                                                                 style="height: 14px; width: 56px;"></div>
-                                                            <div class="rateit-hover" style="height:14px"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="description"></div>
 
-                                                    <div class="product-price">
-                              <span class="price">
-                                $650.99 </span>
-                                                        <span class="price-before-discount">$ 800</span>
 
-                                                    </div><!-- /.product-price -->
+    </script>
 
-                                                </div><!-- /.product-info -->
-                                                <div class="cart clearfix animate-effect">
-                                                    <div class="action">
-                                                        <ul class="list-unstyled">
-                                                            <li class="add-cart-button btn-group">
-                                                                <button class="btn btn-primary icon"
-                                                                        data-toggle="dropdown" type="button">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
-                                                                <button class="btn btn-primary cart-btn" type="button">
-                                                                    Add to cart
-                                                                </button>
+    <script th:inline="javascript">
+        var origin = window.location.origin;
 
-                                                            </li>
+        $(document).ready(function () {
 
-                                                            <li class="lnk wishlist">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Wishlist">
-                                                                    <i class="icon fa fa-heart"></i>
-                                                                </a>
-                                                            </li>
+        });
 
-                                                            <li class="lnk">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Compare">
-                                                                    <i class="fa fa-signal"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div><!-- /.action -->
-                                                </div><!-- /.cart -->
-                                            </div><!-- /.product -->
 
-                                        </div><!-- /.products -->
-                                    </div>
-                                </div>
-                                <div class="owl-item" style="width: 207px;">
-                                    <div class="item item-carousel">
-                                        <div class="products">
 
-                                            <div class="product">
-                                                <div class="product-image">
-                                                    <div class="image">
-                                                        <a href="detail.html"><img src="assets\images\products\p2.jpg"
-                                                                                   alt=""></a>
-                                                    </div><!-- /.image -->
-
-                                                    <div class="tag sale"><span>sale</span></div>
-                                                </div><!-- /.product-image -->
-
-
-                                                <div class="product-info text-left">
-                                                    <h3 class="name"><a href="detail.html">Floral Print Buttoned</a>
-                                                    </h3>
-                                                    <div class="rating rateit-small rateit">
-                                                        <button id="rateit-reset-7" data-role="none"
-                                                                class="rateit-reset" aria-label="reset rating"
-                                                                aria-controls="rateit-range-7"
-                                                                style="display: none;"></button>
-                                                        <div id="rateit-range-7" class="rateit-range" tabindex="0"
-                                                             role="slider"
-                                                             aria-label="rating" aria-owns="rateit-reset-7"
-                                                             aria-valuemin="0" aria-valuemax="5"
-                                                             aria-valuenow="4" aria-readonly="true"
-                                                             style="width: 70px; height: 14px;">
-                                                            <div class="rateit-selected"
-                                                                 style="height: 14px; width: 56px;"></div>
-                                                            <div class="rateit-hover" style="height:14px"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="description"></div>
-
-                                                    <div class="product-price">
-                              <span class="price">
-                                $650.99 </span>
-                                                        <span class="price-before-discount">$ 800</span>
-
-                                                    </div><!-- /.product-price -->
-
-                                                </div><!-- /.product-info -->
-                                                <div class="cart clearfix animate-effect">
-                                                    <div class="action">
-                                                        <ul class="list-unstyled">
-                                                            <li class="add-cart-button btn-group">
-                                                                <button class="btn btn-primary icon"
-                                                                        data-toggle="dropdown" type="button">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
-                                                                <button class="btn btn-primary cart-btn" type="button">
-                                                                    Add to cart
-                                                                </button>
-
-                                                            </li>
-
-                                                            <li class="lnk wishlist">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Wishlist">
-                                                                    <i class="icon fa fa-heart"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li class="lnk">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Compare">
-                                                                    <i class="fa fa-signal"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div><!-- /.action -->
-                                                </div><!-- /.cart -->
-                                            </div><!-- /.product -->
-
-                                        </div><!-- /.products -->
-                                    </div>
-                                </div>
-                                <div class="owl-item" style="width: 207px;">
-                                    <div class="item item-carousel">
-                                        <div class="products">
-
-                                            <div class="product">
-                                                <div class="product-image">
-                                                    <div class="image">
-                                                        <a href="detail.html"><img src="assets\images\products\p3.jpg"
-                                                                                   alt=""></a>
-                                                    </div><!-- /.image -->
-
-                                                    <div class="tag hot"><span>hot</span></div>
-                                                </div><!-- /.product-image -->
-
-
-                                                <div class="product-info text-left">
-                                                    <h3 class="name"><a href="detail.html">Floral Print Buttoned</a>
-                                                    </h3>
-                                                    <div class="rating rateit-small rateit">
-                                                        <button id="rateit-reset-8" data-role="none"
-                                                                class="rateit-reset" aria-label="reset rating"
-                                                                aria-controls="rateit-range-8"
-                                                                style="display: none;"></button>
-                                                        <div id="rateit-range-8" class="rateit-range" tabindex="0"
-                                                             role="slider"
-                                                             aria-label="rating" aria-owns="rateit-reset-8"
-                                                             aria-valuemin="0" aria-valuemax="5"
-                                                             aria-valuenow="4" aria-readonly="true"
-                                                             style="width: 70px; height: 14px;">
-                                                            <div class="rateit-selected"
-                                                                 style="height: 14px; width: 56px;"></div>
-                                                            <div class="rateit-hover" style="height:14px"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="description"></div>
-
-                                                    <div class="product-price">
-                              <span class="price">
-                                $650.99 </span>
-                                                        <span class="price-before-discount">$ 800</span>
-
-                                                    </div><!-- /.product-price -->
-
-                                                </div><!-- /.product-info -->
-                                                <div class="cart clearfix animate-effect">
-                                                    <div class="action">
-                                                        <ul class="list-unstyled">
-                                                            <li class="add-cart-button btn-group">
-                                                                <button class="btn btn-primary icon"
-                                                                        data-toggle="dropdown" type="button">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
-                                                                <button class="btn btn-primary cart-btn" type="button">
-                                                                    Add to cart
-                                                                </button>
-
-                                                            </li>
-
-                                                            <li class="lnk wishlist">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Wishlist">
-                                                                    <i class="icon fa fa-heart"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li class="lnk">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Compare">
-                                                                    <i class="fa fa-signal"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div><!-- /.action -->
-                                                </div><!-- /.cart -->
-                                            </div><!-- /.product -->
-
-                                        </div><!-- /.products -->
-                                    </div>
-                                </div>
-                                <div class="owl-item" style="width: 207px;">
-                                    <div class="item item-carousel">
-                                        <div class="products">
-
-                                            <div class="product">
-                                                <div class="product-image">
-                                                    <div class="image">
-                                                        <a href="detail.html"><img src="assets\images\products\p4.jpg"
-                                                                                   alt=""></a>
-                                                    </div><!-- /.image -->
-
-                                                    <div class="tag new"><span>new</span></div>
-                                                </div><!-- /.product-image -->
-
-
-                                                <div class="product-info text-left">
-                                                    <h3 class="name"><a href="detail.html">Floral Print Buttoned</a>
-                                                    </h3>
-                                                    <div class="rating rateit-small rateit">
-                                                        <button id="rateit-reset-9" data-role="none"
-                                                                class="rateit-reset" aria-label="reset rating"
-                                                                aria-controls="rateit-range-9"
-                                                                style="display: none;"></button>
-                                                        <div id="rateit-range-9" class="rateit-range" tabindex="0"
-                                                             role="slider"
-                                                             aria-label="rating" aria-owns="rateit-reset-9"
-                                                             aria-valuemin="0" aria-valuemax="5"
-                                                             aria-valuenow="4" aria-readonly="true"
-                                                             style="width: 70px; height: 14px;">
-                                                            <div class="rateit-selected"
-                                                                 style="height: 14px; width: 56px;"></div>
-                                                            <div class="rateit-hover" style="height:14px"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="description"></div>
-
-                                                    <div class="product-price">
-                              <span class="price">
-                                $650.99 </span>
-                                                        <span class="price-before-discount">$ 800</span>
-
-                                                    </div><!-- /.product-price -->
-
-                                                </div><!-- /.product-info -->
-                                                <div class="cart clearfix animate-effect">
-                                                    <div class="action">
-                                                        <ul class="list-unstyled">
-                                                            <li class="add-cart-button btn-group">
-                                                                <button class="btn btn-primary icon"
-                                                                        data-toggle="dropdown" type="button">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
-                                                                <button class="btn btn-primary cart-btn" type="button">
-                                                                    Add to cart
-                                                                </button>
-
-                                                            </li>
-
-                                                            <li class="lnk wishlist">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Wishlist">
-                                                                    <i class="icon fa fa-heart"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li class="lnk">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Compare">
-                                                                    <i class="fa fa-signal"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div><!-- /.action -->
-                                                </div><!-- /.cart -->
-                                            </div><!-- /.product -->
-
-                                        </div><!-- /.products -->
-                                    </div>
-                                </div>
-                                <div class="owl-item" style="width: 207px;">
-                                    <div class="item item-carousel">
-                                        <div class="products">
-
-                                            <div class="product">
-                                                <div class="product-image">
-                                                    <div class="image">
-                                                        <a href="detail.html"><img src="assets\images\blank.gif"
-                                                                                   data-echo="assets/images/products/p5.jpg"
-                                                                                   alt=""></a>
-                                                    </div><!-- /.image -->
-
-                                                    <div class="tag hot"><span>hot</span></div>
-                                                </div><!-- /.product-image -->
-
-
-                                                <div class="product-info text-left">
-                                                    <h3 class="name"><a href="detail.html">Floral Print Buttoned</a>
-                                                    </h3>
-                                                    <div class="rating rateit-small rateit">
-                                                        <button id="rateit-reset-10" data-role="none"
-                                                                class="rateit-reset" aria-label="reset rating"
-                                                                aria-controls="rateit-range-10"
-                                                                style="display: none;"></button>
-                                                        <div id="rateit-range-10" class="rateit-range" tabindex="0"
-                                                             role="slider"
-                                                             aria-label="rating" aria-owns="rateit-reset-10"
-                                                             aria-valuemin="0" aria-valuemax="5"
-                                                             aria-valuenow="4" aria-readonly="true"
-                                                             style="width: 70px; height: 14px;">
-                                                            <div class="rateit-selected"
-                                                                 style="height: 14px; width: 56px;"></div>
-                                                            <div class="rateit-hover" style="height:14px"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="description"></div>
-
-                                                    <div class="product-price">
-                              <span class="price">
-                                $650.99 </span>
-                                                        <span class="price-before-discount">$ 800</span>
-
-                                                    </div><!-- /.product-price -->
-
-                                                </div><!-- /.product-info -->
-                                                <div class="cart clearfix animate-effect">
-                                                    <div class="action">
-                                                        <ul class="list-unstyled">
-                                                            <li class="add-cart-button btn-group">
-                                                                <button class="btn btn-primary icon"
-                                                                        data-toggle="dropdown" type="button">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
-                                                                <button class="btn btn-primary cart-btn" type="button">
-                                                                    Add to cart
-                                                                </button>
-
-                                                            </li>
-
-                                                            <li class="lnk wishlist">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Wishlist">
-                                                                    <i class="icon fa fa-heart"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li class="lnk">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Compare">
-                                                                    <i class="fa fa-signal"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div><!-- /.action -->
-                                                </div><!-- /.cart -->
-                                            </div><!-- /.product -->
-
-                                        </div><!-- /.products -->
-                                    </div>
-                                </div>
-                                <div class="owl-item" style="width: 207px;">
-                                    <div class="item item-carousel">
-                                        <div class="products">
-
-                                            <div class="product">
-                                                <div class="product-image">
-                                                    <div class="image">
-                                                        <a href="detail.html"><img src="assets\images\blank.gif"
-                                                                                   data-echo="assets/images/products/p6.jpg"
-                                                                                   alt=""></a>
-                                                    </div><!-- /.image -->
-
-                                                    <div class="tag new"><span>new</span></div>
-                                                </div><!-- /.product-image -->
-
-
-                                                <div class="product-info text-left">
-                                                    <h3 class="name"><a href="detail.html">Floral Print Buttoned</a>
-                                                    </h3>
-                                                    <div class="rating rateit-small rateit">
-                                                        <button id="rateit-reset-11" data-role="none"
-                                                                class="rateit-reset" aria-label="reset rating"
-                                                                aria-controls="rateit-range-11"
-                                                                style="display: none;"></button>
-                                                        <div id="rateit-range-11" class="rateit-range" tabindex="0"
-                                                             role="slider"
-                                                             aria-label="rating" aria-owns="rateit-reset-11"
-                                                             aria-valuemin="0" aria-valuemax="5"
-                                                             aria-valuenow="4" aria-readonly="true"
-                                                             style="width: 70px; height: 14px;">
-                                                            <div class="rateit-selected"
-                                                                 style="height: 14px; width: 56px;"></div>
-                                                            <div class="rateit-hover" style="height:14px"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="description"></div>
-
-                                                    <div class="product-price">
-                              <span class="price">
-                                $650.99 </span>
-                                                        <span class="price-before-discount">$ 800</span>
-
-                                                    </div><!-- /.product-price -->
-
-                                                </div><!-- /.product-info -->
-                                                <div class="cart clearfix animate-effect">
-                                                    <div class="action">
-                                                        <ul class="list-unstyled">
-                                                            <li class="add-cart-button btn-group">
-                                                                <button class="btn btn-primary icon"
-                                                                        data-toggle="dropdown" type="button">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
-                                                                <button class="btn btn-primary cart-btn" type="button">
-                                                                    Add to cart
-                                                                </button>
-
-                                                            </li>
-
-                                                            <li class="lnk wishlist">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Wishlist">
-                                                                    <i class="icon fa fa-heart"></i>
-                                                                </a>
-                                                            </li>
-
-                                                            <li class="lnk">
-                                                                <a class="add-to-cart" href="detail.html"
-                                                                   title="Compare">
-                                                                    <i class="fa fa-signal"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div><!-- /.action -->
-                                                </div><!-- /.cart -->
-                                            </div><!-- /.product -->
-
-                                        </div><!-- /.products -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- /.item -->
-
-                        <!-- /.item -->
-
-                        <!-- /.item -->
-
-                        <!-- /.item -->
-
-                        <!-- /.item -->
-
-                        <!-- /.item -->
-                        <div class="owl-controls clickable">
-                            <div class="owl-buttons">
-                                <div class="owl-prev"></div>
-                                <div class="owl-next"></div>
-                            </div>
-                        </div>
-                    </div><!-- /.home-owl-carousel -->
-                </section><!-- /.section -->
-                <!-- ============================================== UPSELL PRODUCTS : END ============================================== -->
-
-            </div><!-- /.col -->
-            <div class="clearfix"></div>
-        </div><!-- /.row -->
-    </div><!-- /.container -->
-</div>
-<!-- /#top-banner-and-menu -->
-<div th:replace="fragment::footer-user"></div>
-
-<div th:replace="fragment::script-custom2"></div>
-
-<!-- Swiper JS -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-<!-- Initialize Swiper -->
-<script>
-    var swiper = new Swiper(".mySwiper", {
-      lazy: true,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
-
-
-
-</script>
-
-<script th:inline="javascript">
-    var origin = window.location.origin;
-
-    $(document).ready(function () {
-
-    });
-
-
-
-</script>
+    </script>
 </body>
 
 </html>

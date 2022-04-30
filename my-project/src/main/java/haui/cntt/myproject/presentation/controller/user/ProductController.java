@@ -1,11 +1,15 @@
 package haui.cntt.myproject.presentation.controller.user;
 
+import haui.cntt.myproject.persistance.entity.DeliveryAddress;
+import haui.cntt.myproject.presentation.mapper.DeliveryAddressMapper;
 import haui.cntt.myproject.presentation.mapper.ProductMapper;
 import haui.cntt.myproject.presentation.mapper.PropertyMapper;
 import haui.cntt.myproject.presentation.request.ProductPropertyRequest;
 import haui.cntt.myproject.presentation.request.ProductRequest;
+import haui.cntt.myproject.presentation.response.DeliveryAddressResponse;
 import haui.cntt.myproject.presentation.response.ProductResponse;
 import haui.cntt.myproject.service.Impl.CategoryServiceImpl;
+import haui.cntt.myproject.service.Impl.DeliveryAddressServiceImpl;
 import haui.cntt.myproject.service.Impl.ImageProductServiceImpl;
 import haui.cntt.myproject.service.Impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,8 @@ public class ProductController {
     private CategoryServiceImpl categoryService;
     @Autowired
     private ImageProductServiceImpl imageProductService;
+    @Autowired
+    private DeliveryAddressServiceImpl deliveryAddressService;
 
     static final String UPLOAD_DIR_IMAGE_PRODUCT = "src/main/resources/static/product/";
 
@@ -106,5 +112,28 @@ public class ProductController {
     public ResponseEntity<String> delete(@PathVariable(value = "id") long productId) throws Throwable {
         productService.delete(productId);
         return ResponseEntity.ok().body("Xóa thành công !!!");
+    }
+
+    @GetMapping("/get-info-delivery/{id}")
+    public ResponseEntity<DeliveryAddressResponse> getInfoDelivery(@PathVariable(value = "id") long productId) throws Throwable {
+
+        DeliveryAddressResponse deliveryAddressResponse = DeliveryAddressMapper.convertToDeliveryAddressResponse(
+                deliveryAddressService.getInfoDelivery(productId)
+        );
+        return ResponseEntity.ok().body(deliveryAddressResponse);
+    }
+
+    @PostMapping("/delivery-confirmation/{id}")
+    public ResponseEntity<String> deliveryConfirmation(@PathVariable(value = "id") long productId) throws Throwable {
+
+        productService.deliveryConfirmation(productId);
+        return ResponseEntity.ok().body("Xác nhận thành công !!!");
+    }
+
+    @PostMapping("/cancel-delivery/{id}")
+    public ResponseEntity<String> cancelDelivery(@PathVariable(value = "id") long productId) throws Throwable {
+
+        productService.cancelDelivery(productId);
+        return ResponseEntity.ok().body("Đã hủy !!!");
     }
 }

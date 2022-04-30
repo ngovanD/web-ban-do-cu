@@ -81,17 +81,30 @@ public class BasicController {
                 .collect(Collectors.toList());
         model.addAttribute("blogResponseList", blogResponseList);
 
-//        List<ProductResponse> randomAllProductList = productService.getRandomAllProduct(12)
-//                .stream()
-//                .map(ProductMapper::convertToProductResponse)
-//                .collect(Collectors.toList());
-//        model.addAttribute("randomAllProductList", randomAllProductList);
-//
-//        List<ProductResponse> randomProductList = productService.getRandomAllProduct(12)
-//                .stream()
-//                .map(ProductMapper::convertToProductResponse)
-//                .collect(Collectors.toList());
-//        model.addAttribute("randomAllProductList", randomAllProductList);
+        List<ProductResponse> randomAllProductList = productService.getRandomAllProduct(12)
+                .stream()
+                .map(ProductMapper::convertToProductResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("randomAllProductList", randomAllProductList);
+
+        List<ProductResponse> randomQuanAoList = productService.getRandomQuanAo(12)
+                .stream()
+                .map(ProductMapper::convertToProductResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("randomQuanAoList", randomQuanAoList);
+
+        List<ProductResponse> randomQuanDoDienTuList = productService.getRandomDoDienTu(12)
+                .stream()
+                .map(ProductMapper::convertToProductResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("randomQuanDoDienTuList", randomQuanDoDienTuList);
+
+        List<ProductResponse> randomSachTruyenList = productService.getRandomSachTruyen(12)
+                .stream()
+                .map(ProductMapper::convertToProductResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("randomSachTruyenList", randomSachTruyenList);
+
         return "index";
     }
 
@@ -197,6 +210,12 @@ public class BasicController {
     public String getDetailProduct(Model model, @PathVariable(value = "id") long productId) throws Throwable {
         ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getDetailProduct(productId));
         model.addAttribute("productResponse", productResponse);
+
+        List<ProductResponse> recommendProductList = productService.getRecommendList(productId, 12)
+                .stream()
+                .map(ProductMapper::convertToProductResponse)
+                .collect(Collectors.toList());
+        model.addAttribute("recommendProductList", recommendProductList);
         return "product_detail";
     }
 

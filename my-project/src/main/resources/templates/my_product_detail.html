@@ -5,12 +5,90 @@
     <meta charset="UTF-8">
     <title>Chi tiết sản phẩm</title>
     <div th:replace="fragment::head-custom2"></div>
+    <style>
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 50%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes animatezoom {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+    </style>
 </head>
 
 <body class="cnt-home">
     <div th:replace="fragment::header-user"></div>
     <!-- ============================================== HEADER : END ============================================== -->
     <div class="body-content outer-top-xs">
+        <div class="breadcrumb" style="font-size: 13px;">
+            <div class="container">
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li style="display: inline;"><a th:href="@{/user/my-list-product}">Danh sách tin</a></li>
+                        <li class="active">[[${productResponse.name}]]</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+        </div>
         <div class="container">
             <div class="row single-product">
                 <div class="col-md-12">
@@ -50,6 +128,24 @@
                                             </div>
                                         </div><!-- /.row -->
                                     </div><!-- /.price-container -->
+                                    <div class="info-container m-t-20">
+                                        <div class="row">
+                                            <div th:if="${productResponse.status == 'Chờ xác nhận'}" class="col-sm-6"
+                                                style="display: flex; justify-content: center;">
+                                                <a class="btn btn-primary btn-upper" onclick="getInfoDelivery()">Xem
+                                                    thông tin người mua</a>
+                                            </div>
+                                            <div th:if="${productResponse.status == 'Đang bán'}" class="col-sm-6"
+                                                style="display: flex; justify-content: center;">
+                                                <a class="btn btn-primary btn-upper" onclick="changeStatus()">Đã bán</a>
+                                            </div>
+                                            <div th:if="${productResponse.status == 'Đang bán'}" class="col-sm-6"
+                                                style="display: flex; justify-content: center;">
+                                                <a class="btn btn-danger btn-upper" onclick="deleteProduct()">Xóa sản
+                                                    phẩm</a>
+                                            </div>
+                                        </div><!-- /.row -->
+                                    </div><!-- /.price-container -->
                                 </div><!-- /.product-info -->
                             </div><!-- /.col-sm-7 -->
                         </div><!-- /.row -->
@@ -62,7 +158,7 @@
                                 <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
                                     <li class="active"><a data-toggle="tab" href="#info">Thông tin chi tiết</a></li>
                                     <li><a data-toggle="tab" href="#images">Ảnh</a></li>
-                                    <li><a data-toggle="tab" href="#setting">Tác vụ</a></li>
+                                    <li><a data-toggle="tab" href="#setting">Địa chỉ giao</a></li>
                                 </ul><!-- /.nav-tabs #product-tabs -->
                             </div>
                             <div class="col-sm-9">
@@ -170,7 +266,8 @@
                                                             th:value="${productResponse.addressResponse.detail}">
                                                     </div>
 
-                                                    <a class=" btn-upper btn btn-primary checkout-page-button"
+                                                    <a th:if="${productResponse.status == 'Đang bán'}"
+                                                        class=" btn-upper btn btn-primary checkout-page-button"
                                                         onclick="editProduct()">Lưu</a>
                                                 </form>
                                             </div>
@@ -216,9 +313,8 @@
                                                                                 onclick="changeMainImage(this)">
                                                                         </td>
                                                                         <td>
-                                                                            <p class="btn btn-primary btn-upper"
-                                                                                th:data-id="${imageProduct.id}"
-                                                                                onclick="deleteImage(this)">Xóa</p>
+                                                                            <p th:data-id="${imageProduct.id}"
+                                                                                onclick="deleteImage(this)"><i class="fa-solid fa-trash-can"></i></p>
                                                                         </td>
                                                                     </tr>
                                                                 </th:block>
@@ -235,13 +331,18 @@
                                         </div><!-- /.product-tab -->
                                     </div><!-- /.tab-pane -->
                                     <div id="setting" class="tab-pane">
-                                        <div class="product-tag">
-                                            <div class="col-sm-6" style="display: flex; justify-content: center;">
-                                                <a class="btn btn-primary btn-upper" onclick="changeStatus()">Đã bán</a>
+                                        <div class="product-tag" id="deliveryAddress_">
+                                            <div class="form-group card-body" style="margin-bottom: 0px">
+                                                <label>Tên người nhận</label>
+                                                <input type="text" class="form-control" id="full_name_2" disabled>
                                             </div>
-                                            <div class="col-sm-6" style="display: flex; justify-content: center;">
-                                                <a class="btn btn-danger btn-upper" onclick="deleteProduct()">Xóa sản
-                                                    phẩm</a>
+                                            <div class="form-group card-body" style="margin-bottom: 0px">
+                                                <label>Số điện thoại</label>
+                                                <input type="text" class="form-control" id="cellphone_2" disabled>
+                                            </div>
+                                            <div class="form-group card-body" style="margin-bottom: 0px">
+                                                <label>Địa chỉ</label>
+                                                <input type="text" class="form-control" id="address_2" disabled>
                                             </div>
                                         </div><!-- /.product-tab -->
                                     </div><!-- /.tab-pane -->
@@ -254,6 +355,29 @@
                 <div class="clearfix"></div>
             </div><!-- /.row -->
         </div><!-- /.container -->
+    </div>
+
+    <div id="id01" class="modal" style="z-index: 99999;">
+        <form class="modal-content animate">
+            <div class="form-group card-body" style="margin-bottom: 0px">
+                <label>Tên người nhận</label>
+                <input type="text" class="form-control" id="full_name_" disabled>
+            </div>
+            <div class="form-group card-body" style="margin-bottom: 0px">
+                <label>Số điện thoại</label>
+                <input type="text" class="form-control" id="cellphone_" disabled>
+            </div>
+            <div class="form-group card-body" style="margin-bottom: 0px">
+                <label>Địa chỉ</label>
+                <input type="text" class="form-control" id="address_" disabled>
+            </div>
+            <div class="card-body" style="background-color:#f1f1f1">
+                <a class="btn btn-primary" onclick="confirmDelivery()">Xác nhận còn sản phẩm</a>
+                <a class="btn btn-primary btn-danger" onclick="cancelDelivery()">Hết sản phẩm</a>
+                <a type="button" onclick="document.getElementById('id01').style.display='none'"
+                    class="btn btn-primary btn-danger">Hủy</a>
+            </div>
+        </form>
     </div>
     <!-- /#top-banner-and-menu -->
     <div th:replace="fragment::footer-user"></div>
@@ -273,7 +397,78 @@
 
         $(document).ready(function () {
             loadAddressResponse();
+            getInfoDelivery2();
         });
+
+        // Get the modal
+        var modal = document.getElementById('id01');
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function confirmDelivery() {
+            $.ajax({
+                method: 'POST',
+                url: origin + "/user/product/delivery-confirmation/" + productId,
+            })
+                .done(function (data) {
+                    toastr.success(data);
+                    location.reload();
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function cancelDelivery() {
+            $.ajax({
+                method: 'POST',
+                url: origin + "/user/product/cancel-delivery/" + productId,
+            })
+                .done(function (data) {
+                    toastr.success(data);
+                    location.reload();
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+
+        }
+
+        function getInfoDelivery() {
+            $.ajax({
+                method: 'GET',
+                url: origin + "/user/product/get-info-delivery/" + productId,
+            })
+                .done(function (data) {
+                    document.getElementById('full_name_').value = data.fullName;
+                    document.getElementById('cellphone_').value = data.cellphone;
+                    document.getElementById('address_').value = data.detail + ", " + data.commune + ", " + data.district + ", " + data.province;
+                    document.getElementById('id01').style.display = 'block';
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function getInfoDelivery2() {
+            $.ajax({
+                method: 'GET',
+                url: origin + "/user/product/get-info-delivery/" + productId,
+            })
+                .done(function (data) {
+                    document.getElementById('full_name_2').value = data.fullName;
+                    document.getElementById('cellphone_2').value = data.cellphone;
+                    document.getElementById('address_2').value = data.detail + ", " + data.commune + ", " + data.district + ", " + data.province;
+                })
+                .fail(function () {
+                    document.getElementById('deliveryAddress_').innerHTML = '';
+                });
+        }
 
         function editProduct() {
             if (!$('#formDetailProduct').valid()) {
@@ -471,8 +666,8 @@
                     document.getElementById('imageProduct-' + imageProductId).remove();
                     toastr.success("Xóa thành công.");
                 })
-                .fail(function () {
-                    toastr.error("Không thể xóa ảnh bìa hoặc có lỗi xảy ra.");
+                .fail(function (error) {
+                    toastr.error(error.responseText);
                 });
 
         }
