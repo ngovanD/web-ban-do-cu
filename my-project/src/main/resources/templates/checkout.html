@@ -155,11 +155,11 @@
                                                 </div>
                                                 <br>
                                                 <br>
-                                                <h4 class="checkout-subtitle">Sản phẩm: [[${productResponse.price}]]
+                                                <h4 class="checkout-subtitle">Sản phẩm:  [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
                                                 </h4>
-                                                <h4 class="checkout-subtitle">Phí giao hàng: 39.000đ</h4>
+                                                <h4 class="checkout-subtitle">Phí giao hàng: 39.000 VNĐ</h4>
                                                 <h4 class="checkout-subtitle">Tổng tiền thanh toán:
-                                                    [[${productResponse.price} + 39000]]</h4>
+                                                    [[${#numbers.formatDecimal(productResponse.price + 39000, 0, 'COMMA', 0, 'POINT')}]] VNĐ</h4>
                                                 <br>
                                                 <p class="text title-tag-line" style="font-size: 14px;">Phương thức
                                                     thanh toán:</p>

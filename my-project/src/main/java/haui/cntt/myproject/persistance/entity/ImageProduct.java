@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -18,8 +15,9 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
+@Table(name = "image_product")
 public class ImageProduct extends BaseEntity {
-    @Column(name = "fileName")
+    @Column(name = "file_name")
     private String fileName;
 
     @Column(name = "is_main_image")

@@ -71,8 +71,6 @@
                                     <tbody>
                                         <tr>
                                             <th width="25%">Tên loại sản phẩm</th>
-                                            <th width="25%">Số lượng</th>
-                                            <th width="25%">Đã bán</th>
                                             <th width="25%"></th>
                                         </tr>
                                         <th:block th:each="category : ${treeCategory}">
@@ -81,13 +79,7 @@
                                                     <i class="expandable-table-caret fas fa-caret-right fa-fw"
                                                         th:id="'btn_' + ${category.key.id}" aria-expanded="false"
                                                         onclick="toggle(this.id);" style="cursor: pointer;"></i>
-                                                    <a th:text="${category.key.name}"></a>
-                                                </td>
-                                                <td>
-                                                    219
-                                                </td>
-                                                <td>
-                                                    219
+                                                    <a th:text="${category.key.name}" style="padding-left: 15px;"></a>
                                                 </td>
                                                 <td class="project-actions text-right">
                                                     <a class="btn btn-primary btn-sm"
@@ -114,13 +106,7 @@
                                             <th:block th:each="child : ${category.value}">
                                                 <tr th:class="hidden_ + ' r-btn_' + ${category.key.id}">
                                                     <td>
-                                                        <a th:text="${child.name}"></a>
-                                                    </td>
-                                                    <td>
-                                                        219-1
-                                                    </td>
-                                                    <td>
-                                                        219-1
+                                                        <a th:text="${child.name}" style="padding-left: 15px;"></a>
                                                     </td>
                                                     <td class="project-actions text-right">
                                                         <a class="btn btn-primary btn-sm"

@@ -45,7 +45,7 @@
                 <!-- ============================================== SIDEBAR ============================================== -->
                 <div class="col-xs-12 col-sm-12 col-md-3 sidebar">
 
-                    <!-- ================================== TOP NAVIGATION ================================== -->
+                    <!-- ================================== Danh mục ================================== -->
                     <div class="side-menu animate-dropdown outer-bottom-xs">
                         <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Danh mục</div>
                         <nav class="yamm megamenu-horizontal" id="menu_" style="font-size: 13px;">
@@ -86,7 +86,7 @@
                     </div>
                     <!-- /.side-menu -->
                     <!-- ================================== TOP NAVIGATION : END ================================== -->
-                    <!-- ============================================== SPECIAL OFFER ============================================== -->
+                    <!-- ============================================== Có thể bạn quan tâm ============================================== -->
 
                     <div class="sidebar-widget outer-bottom-small wow fadeInUp">
                         <h3 class="section-title">Có thể bạn quan tâm</h3>
@@ -104,7 +104,7 @@
                                                             <div class="col col-xs-5">
                                                                 <div class="product-image">
                                                                     <div class="image"> <a
-                                                                            th:href="@{'/product/' + ${randomProductList[3*i].id}}">
+                                                                            th:href="@{'/product/' + ${randomProductList[3*i].slug}}">
                                                                             <img th:src="${randomProductList[3*i].mainImage}"
                                                                                 alt=""
                                                                                 style="object-fit:contain;width:90px;height:90px;">
@@ -118,10 +118,10 @@
                                                             <div class="col col-xs-7">
                                                                 <div class="product-info">
                                                                     <h3 class="name"><a
-                                                                            th:href="@{'/product/' + ${randomProductList[3*i].id}}">[[${randomProductList[3*i].name}]]</a>
+                                                                            th:href="@{'/product/' + ${randomProductList[3*i].slug}}">[[${randomProductList[3*i].name}]]</a>
                                                                     </h3>
                                                                     <div class="product-price"> <span class="price">
-                                                                            [[${randomProductList[3*i].price}]]
+                                                                            [[${#numbers.formatDecimal(randomProductList[3*i].price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
                                                                         </span> </div>
                                                                     <!-- /.product-price -->
 
@@ -141,7 +141,7 @@
                                                             <div class="col col-xs-5">
                                                                 <div class="product-image">
                                                                     <div class="image"> <a
-                                                                            th:href="@{'/product/' + ${randomProductList[3*i+1].id}}">
+                                                                            th:href="@{'/product/' + ${randomProductList[3*i+1].slug}}">
                                                                             <img th:src="${randomProductList[3*i+1].mainImage}"
                                                                                 alt=""
                                                                                 style="object-fit:contain;width:90px;height:90px;">
@@ -155,10 +155,10 @@
                                                             <div class="col col-xs-7">
                                                                 <div class="product-info">
                                                                     <h3 class="name"><a
-                                                                            th:href="@{'/product/' + ${randomProductList[3*i+1].id}}">[[${randomProductList[3*i+1].name}]]</a>
+                                                                            th:href="@{'/product/' + ${randomProductList[3*i+1].slug}}">[[${randomProductList[3*i+1].name}]]</a>
                                                                     </h3>
                                                                     <div class="product-price"> <span class="price">
-                                                                            [[${randomProductList[3*i+1].price}]]
+                                                                        [[${#numbers.formatDecimal(randomProductList[3*i+1].price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
                                                                         </span> </div>
                                                                     <!-- /.product-price -->
 
@@ -177,7 +177,7 @@
                                                             <div class="col col-xs-5">
                                                                 <div class="product-image">
                                                                     <div class="image"> <a
-                                                                            th:href="@{'/product/' + ${randomProductList[3*i+2].id}}">
+                                                                            th:href="@{'/product/' + ${randomProductList[3*i+2].slug}}">
                                                                             <img th:src="${randomProductList[3*i+2].mainImage}"
                                                                                 alt=""
                                                                                 style="object-fit:contain;width:90px;height:90px;">
@@ -191,10 +191,10 @@
                                                             <div class="col col-xs-7">
                                                                 <div class="product-info">
                                                                     <h3 class="name"><a
-                                                                            th:href="@{'/product/' + ${randomProductList[3*i+2].id}}">[[${randomProductList[3*i+2].name}]]</a>
+                                                                            th:href="@{'/product/' + ${randomProductList[3*i+2].slug}}">[[${randomProductList[3*i+2].name}]]</a>
                                                                     </h3>
                                                                     <div class="product-price"> <span class="price">
-                                                                            [[${randomProductList[3*i+2].price}]]
+                                                                        [[${#numbers.formatDecimal(randomProductList[3*i+2].price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
                                                                         </span> </div>
                                                                     <!-- /.product-price -->
 
@@ -216,7 +216,7 @@
                     </div>
                     <!-- /.sidebar-widget -->
                     <!-- ============================================== SPECIAL OFFER : END ============================================== -->
-                    <!-- ============================================== PRODUCT TAGS ============================================== -->
+                    <!-- ============================================== Từ khóa tìm kiếm ============================================== -->
                     <div class="sidebar-widget product-tag wow fadeInUp" style="font-size: 13px;">
                         <h3 class="section-title">Từ khóa tìm kiếm nhiều nhất</h3>
                         <div class="sidebar-widget-body outer-top-xs">
@@ -235,7 +235,7 @@
                     </div>
                     <!-- /.sidebar-widget -->
                     <!-- ============================================== PRODUCT TAGS : END ============================================== -->
-                    <!-- ============================================== SPECIAL DEALS ============================================== -->
+                    <!-- ============================================== Sản phẩm nổi bật ============================================== -->
 
                     <div class="sidebar-widget outer-bottom-small wow fadeInUp">
                         <h3 class="section-title">Sản phẩm nổi bật</h3>
@@ -251,7 +251,7 @@
                                                         <div class="col col-xs-5">
                                                             <div class="product-image">
                                                                 <div class="image"> <a
-                                                                        th:href="@{'/product/' + ${product.id}}"> <img
+                                                                        th:href="@{'/product/' + ${product.slug}}"> <img
                                                                             th:src="${product.mainImage}" alt="">
                                                                     </a> </div>
                                                                 <!-- /.image -->
@@ -263,13 +263,12 @@
                                                         <div class="col col-xs-7">
                                                             <div class="product-info">
                                                                 <h3 class="name"><a
-                                                                        th:href="@{'/product/' + ${product.id}}">[[${product.name}]]</a>
+                                                                        th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
                                                                 </h3>
                                                                 <div class="product-price"> <span class="price">
-                                                                        [[${product.price}]]
+                                                                        [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
                                                                     </span> </div>
                                                                 <!-- /.product-price -->
-
                                                             </div>
                                                         </div>
                                                         <!-- /.col -->
@@ -277,7 +276,6 @@
                                                     <!-- /.product-micro-row -->
                                                 </div>
                                                 <!-- /.product-micro -->
-
                                             </div>
                                         </th:block>
                                     </div>
@@ -294,12 +292,12 @@
 
                 <!-- ============================================== CONTENT ============================================== -->
                 <div class="col-xs-12 col-sm-12 col-md-9 homebanner-holder">
-                    <!-- ========================================== SECTION – HERO ========================================= -->
+                    <!-- ========================================== Slide ========================================= -->
 
                     <div id="hero">
                         <div id="owl-main" class="owl-carousel owl-inner-nav owl-ui-sm">
                             <th:block th:each="slide : ${slideResponseList}">
-                                <div class="item" th:style="'background-image: url('+ ${slide.apiGetImage} + ');'">
+                                <div class="item" th:style="'background-image: url('+ ${slide.apiGetImage} + ');' + 'background-size: contain; background-repeat: no-repeat'">
                                     <div class="container-fluid">
                                         <div class="caption bg-color vertical-center text-left">
                                             <div class="slider-header fadeInDown-1">[[${slide.title}]]</div>
@@ -323,7 +321,7 @@
 
                     <!-- ========================================= SECTION – HERO : END ========================================= -->
 
-                    <!-- ============================================== INFO BOXES ============================================== -->
+                    <!-- ============================================== Tiêu đề bên dưới slide ============================================== -->
                     <div class="info-boxes wow fadeInUp">
                         <div class="info-boxes-inner">
                             <div class="row">
@@ -370,7 +368,7 @@
                     </div>
                     <!-- /.info-boxes -->
                     <!-- ============================================== INFO BOXES : END ============================================== -->
-                    <!-- ============================================== SCROLL TABS ============================================== -->
+                    <!-- ============================================== Sản phẩm mới ============================================== -->
                     <div id="product-tabs-slider" class="scroll-tabs outer-top-vs wow fadeInUp">
                         <div class="more-info-tab clearfix ">
                             <h3 class="new-product-title pull-left">Sản phẩm mới</h3>
@@ -386,7 +384,7 @@
                                                     <div class="product">
                                                         <div class="product-image">
                                                             <div class="image"> <a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}"><img
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
                                                                         th:src="${productResponse.mainImage}" alt=""
                                                                         style="object-fit:contain;width:189px;height:189px;"></a>
                                                             </div>
@@ -397,15 +395,17 @@
                                                         <!-- /.product-image -->
 
                                                         <div class="product-info text-left">
-                                                            <h3 class="name"><a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}">[[${productResponse.name}]]</a>
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
                                                             </h3>
-                                                            <div class="product-price">
-                                                                <span class="price"> [[${productResponse.price}]]
-                                                                </span>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
                                                             </div>
                                                             <!-- /.product-price -->
-
                                                         </div>
                                                         <!-- /.product-info -->
                                                         <div class="cart clearfix animate-effect"
@@ -453,7 +453,7 @@
                     <!-- /.scroll-tabs -->
                     <!-- ============================================== SCROLL TABS : END ============================================== -->
 
-                    <!-- ============================================== SCROLL TABS ============================================== -->
+                    <!-- ============================================== sản phẩm theo danh mục ============================================== -->
                     <div id="product-tabs-slider" class="scroll-tabs outer-top-vs wow fadeInUp">
                         <div class="more-info-tab clearfix ">
                             <h3 class="new-product-title pull-left">Sản phẩm theo danh mục</h3>
@@ -481,7 +481,7 @@
                                                     <div class="product">
                                                         <div class="product-image">
                                                             <div class="image"> <a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}"><img
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
                                                                         th:src="${productResponse.mainImage}" alt=""
                                                                         style="object-fit:contain;width:189px;height:189px;"></a>
                                                             </div>
@@ -495,15 +495,17 @@
                                                         <!-- /.product-image -->
 
                                                         <div class="product-info text-left">
-                                                            <h3 class="name"><a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}">[[${productResponse.name}]]</a>
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
                                                             </h3>
-                                                            <div class="product-price">
-                                                                <span class="price"> [[${productResponse.price}]]
-                                                                </span>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
                                                             </div>
                                                             <!-- /.product-price -->
-
                                                         </div>
                                                         <!-- /.product-info -->
                                                         <div class="cart clearfix animate-effect"
@@ -555,7 +557,7 @@
                                                     <div class="product">
                                                         <div class="product-image">
                                                             <div class="image"> <a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}"><img
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
                                                                         th:src="${productResponse.mainImage}" alt=""
                                                                         style="object-fit:contain;width:189px;height:189px;"></a>
                                                             </div>
@@ -569,12 +571,15 @@
                                                         <!-- /.product-image -->
 
                                                         <div class="product-info text-left">
-                                                            <h3 class="name"><a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}">[[${productResponse.name}]]</a>
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
                                                             </h3>
-                                                            <div class="product-price">
-                                                                <span class="price"> [[${productResponse.price}]]
-                                                                </span>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
                                                             </div>
                                                             <!-- /.product-price -->
 
@@ -629,7 +634,7 @@
                                                     <div class="product">
                                                         <div class="product-image">
                                                             <div class="image"> <a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}"><img
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
                                                                         th:src="${productResponse.mainImage}" alt=""
                                                                         style="object-fit:contain;width:189px;height:189px;"></a>
                                                             </div>
@@ -643,12 +648,15 @@
                                                         <!-- /.product-image -->
 
                                                         <div class="product-info text-left">
-                                                            <h3 class="name"><a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}">[[${productResponse.name}]]</a>
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
                                                             </h3>
-                                                            <div class="product-price">
-                                                                <span class="price"> [[${productResponse.price}]]
-                                                                </span>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
                                                             </div>
                                                             <!-- /.product-price -->
 
@@ -703,7 +711,7 @@
                                                     <div class="product">
                                                         <div class="product-image">
                                                             <div class="image"> <a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}"><img
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
                                                                         th:src="${productResponse.mainImage}" alt=""
                                                                         style="object-fit:contain;width:189px;height:189px;"></a>
                                                             </div>
@@ -717,12 +725,15 @@
                                                         <!-- /.product-image -->
 
                                                         <div class="product-info text-left">
-                                                            <h3 class="name"><a
-                                                                    th:href="@{'/product/' + ${productResponse.id}}">[[${productResponse.name}]]</a>
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
                                                             </h3>
-                                                            <div class="product-price">
-                                                                <span class="price"> [[${productResponse.price}]]
-                                                                </span>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
                                                             </div>
                                                             <!-- /.product-price -->
 
@@ -796,7 +807,7 @@
                                                 <div style="overflow: hidden;
                                                 white-space: nowrap;
                                                 text-overflow: ellipsis;
-                                                height: 50px; font-size: 13px;">
+                                                height: 30px; font-size: 13px;">
                                                     <p th:utext="${blog.content}">
                                                     <p th:utext="${blog.content}"></p>
                                                 </div>

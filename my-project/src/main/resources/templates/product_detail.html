@@ -87,7 +87,9 @@
                                             </div>
                                             <div class="col-sm-9">
                                                 <div class="stock-box">
-                                                    <span class="value">[[${productResponse.status}]]</span>
+                                                    <span th:if="${productResponse.status == 'Đang bán'}" class="value">[[${productResponse.status}]]</span>
+                                                    <span th:if="${productResponse.status == 'Đã bán' || productResponse.status == 'Đã thanh toán cho người bán'}" class="value">Đã bán</span>
+                                                    <span th:if="${productResponse.status == 'Chờ xác nhận'}" class="value">Đã có người đặt</span>
                                                 </div>
                                             </div>
                                         </div><!-- /.row -->
@@ -99,7 +101,7 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="price-box">
-                                                    <span class="price">[[${productResponse.price}]]</span>
+                                                    <span class="price">[[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
@@ -225,7 +227,7 @@
                                     <div class="products">
                                         <div class="product">
                                             <div class="product-image">
-                                                <div class="image"> <a th:href="@{'/product/' + ${product.id}}"><img
+                                                <div class="image"> <a th:href="@{'/product/' + ${product.slug}}"><img
                                                             th:src="${product.mainImage}" alt=""
                                                             style="object-fit:contain;width:189px;height:189px;"></a>
                                                 </div>
@@ -235,10 +237,10 @@
 
                                             <div class="product-info text-left">
                                                 <h3 class="name"><a
-                                                        th:href="@{'/product/' + ${product.id}}">[[${product.name}]]</a>
+                                                        th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
                                                 </h3>
                                                 <div class="product-price">
-                                                    <span class="price"> [[${product.price}]]
+                                                    <span class="price"> [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
                                                     </span>
                                                 </div>
                                                 <!-- /.product-price -->

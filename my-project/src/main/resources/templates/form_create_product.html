@@ -400,6 +400,7 @@
             })
                 .done(function () {
                     toastr.success("Đăng tin thành công.");
+                    location.href = origin + "/user/my-list-product";
                 })
                 .fail(function () {
                     toastr.error("Không thẻ upload ảnh, vui lòng thử lại sau.");

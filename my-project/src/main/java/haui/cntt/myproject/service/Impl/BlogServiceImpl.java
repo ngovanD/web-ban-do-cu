@@ -48,14 +48,16 @@ public class BlogServiceImpl {
         foundBlog.setTitle(blog.getTitle());
         foundBlog.setContent(blog.getContent());
 
-        FileUploadUtil.deleteFile(UPLOAD_DIR_BLOG, foundBlog.getImage());
+        if(!multipartFile.isEmpty())
+        {
+            FileUploadUtil.deleteFile(UPLOAD_DIR_BLOG, foundBlog.getImage());
 
-        String originalFilename = multipartFile.getOriginalFilename();
-        String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String fileName = "blog-" + System.currentTimeMillis() + typeOfFile;
-        FileUploadUtil.saveFile(UPLOAD_DIR_BLOG, fileName, multipartFile);
-        foundBlog.setImage(fileName);
-
+            String originalFilename = multipartFile.getOriginalFilename();
+            String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String fileName = "blog-" + System.currentTimeMillis() + typeOfFile;
+            FileUploadUtil.saveFile(UPLOAD_DIR_BLOG, fileName, multipartFile);
+            foundBlog.setImage(fileName);
+        }
         blogRepository.save(foundBlog);
     }
 

@@ -13,6 +13,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+    @Query(value = "select * from product where slug = :slug", nativeQuery = true)
+    Optional<Product> findBySlug(@Param(value = "slug") String slug);
     @Query(value = "select * from product order by rand() limit :limit", nativeQuery = true)
     List<Product> getRandomProduct(@Param(value = "limit") int limit);
 
@@ -40,7 +42,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "order by product.id desc limit :limit", nativeQuery = true)
     List<Product> getRandomQuanAo(@Param(value = "limit")int limit);
 
-    @Query(value = "select * from product where product.view > 100 limit :limit", nativeQuery = true)
+    @Query(value = "select * from product where product.view > 10 limit :limit", nativeQuery = true)
     List<Product> getHotProduct(@Param(value = "limit") int limit);
 
     @Query(value = "select * " +

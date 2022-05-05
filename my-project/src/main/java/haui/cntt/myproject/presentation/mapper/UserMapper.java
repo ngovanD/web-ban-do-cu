@@ -39,7 +39,6 @@ public class UserMapper {
                 .email(user.getEmail())
                 .cellphone(user.getCellphone())
                 .fullName(user.getFullName())
-                .gender(user.getGender())
                 .apiGetAvatar(apiGetAvatar)
                 .status(status)
                 .build();

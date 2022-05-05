@@ -8,14 +8,16 @@ import haui.cntt.myproject.common.text.VNCharacterUtil;
 import haui.cntt.myproject.persistance.entity.*;
 import haui.cntt.myproject.persistance.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,6 +91,16 @@ public class ProductServiceImpl {
     }
 
     @Transactional
+    public Product getDetailProductBySlug(String slug) throws Throwable {
+        Product foundProduct = productRepository.findBySlug(slug).orElseThrow(() -> {
+            throw new BadRequestException("Sản phẩm không tồn tại !!!");
+        });
+
+        foundProduct.setView(foundProduct.getView() + 1);
+        return productRepository.save(foundProduct);
+    }
+
+    @Transactional
     public Product getDetailProduct(long productId) throws Throwable {
         Product foundProduct = productRepository.findById(productId).orElseThrow(() -> {
             throw new BadRequestException("Sản phẩm không tồn tại !!!");
@@ -103,6 +115,9 @@ public class ProductServiceImpl {
         Product foundProduct = productRepository.findById(product.getId()).orElseThrow(() -> {
             throw new BadRequestException("Sản phẩm không tồn tại !!!");
         });
+        if (!foundProduct.getStatus().equals(ProductStatusEnum.STOCKING)) {
+            throw new BadRequestException("Chỉ có thể cập nhật khi sản phẩm ở trạng thái đang bán !!!");
+        }
         foundProduct.setName(product.getName());
         foundProduct.setPrice(product.getPrice());
         foundProduct.setCurrentStatus(product.getCurrentStatus());
@@ -201,6 +216,7 @@ public class ProductServiceImpl {
         return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
     }
 
+    @Transactional
     public void deliveryConfirmation(long productId) throws Throwable {
         Product foundProduct = productRepository.findById(productId).orElseThrow(
                 () -> {
@@ -219,13 +235,15 @@ public class ProductServiceImpl {
         orderRepository.save(foundOrder);
     }
 
+    @Transactional
     public void cancelDelivery(long productId) throws Throwable {
         Product foundProduct = productRepository.findById(productId).orElseThrow(
                 () -> {
                     throw new BadRequestException("Không tìm thấy sản phẩm !!!");
                 }
         );
-        foundProduct.setStatus(ProductStatusEnum.SOLD_OUT);
+
+        foundProduct.setStatus(ProductStatusEnum.STOCKING);
         productRepository.save(foundProduct);
 
         Order foundOrder = orderRepository.findByProductId(productId).orElseThrow(
@@ -261,7 +279,7 @@ public class ProductServiceImpl {
         return productRepository.getRandomSachTruyen(limit);
     }
 
-    public List<Product> getRecommendList(long productId, int limit) throws Throwable{
+    public List<Product> getRecommendList(long productId, int limit) throws Throwable {
         Product foundProduct = productRepository.findById(productId).orElseThrow(
                 () -> {
                     throw new BadRequestException("Không tìm thấy sản phẩm !!!");

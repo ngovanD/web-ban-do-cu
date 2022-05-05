@@ -38,7 +38,7 @@ public class DeliveryAddress extends BaseEntity {
     @Column(name = "detail")
     private String detail;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", length = 50)
     private String fullName;
 
     @Column(name = "cellphone")

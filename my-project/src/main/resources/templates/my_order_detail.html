@@ -235,12 +235,12 @@
                                                             + ', ' + ${orderResponse.deliveryAddressResponse.province}"
                                                             disabled>
                                                     </div>
-                                                    <div th:if="${orderResponse.status == 'Chờ xác nhận' || orderResponse.status == 'Chờ'}"
+                                                    <div th:if="${orderResponse.status == 'Chờ xác nhận' || orderResponse.status == 'Chưa thanh toán'}"
                                                         class="btn btn-info btn-sm" onclick="getAddress()">Đổi địa
                                                         chỉ giao</div>
-                                                    <div th:if="${orderResponse.status == 'Chờ'}"
+                                                    <div th:if="${orderResponse.status == 'Chưa thanh toán'}"
                                                         class="btn btn-info btn-sm"  onclick="document.getElementById('id02').style.display='block'">Thanh toán lại</div>
-                                                    <div th:if="${orderResponse.status == 'Chờ xác nhận' || orderResponse.status == 'Chờ'}"
+                                                    <div th:if="${orderResponse.status == 'Chờ xác nhận' || orderResponse.status == 'Chưa thanh toán'}"
                                                         class="btn btn-danger btn-sm" onclick="cancelOrder()">Hủy đơn
                                                         hàng</div>
                                                 </form>

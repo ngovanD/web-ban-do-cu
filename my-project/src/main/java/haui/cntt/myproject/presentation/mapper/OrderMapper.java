@@ -34,7 +34,7 @@ public class OrderMapper {
             status = "Chờ xác nhận";
         }
         if (order.getStatus().equals(OrderStatusEnum.PENDING)) {
-            status = "Chờ";
+            status = "Chưa thanh toán";
         }
         if (order.getStatus().equals(OrderStatusEnum.DELIVERY)) {
             status = "Chờ giao hàng";

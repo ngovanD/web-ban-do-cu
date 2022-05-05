@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class ProductResponse {
     private long id;
+    private String slug;
     private String name;
     private long price;
     private String status;

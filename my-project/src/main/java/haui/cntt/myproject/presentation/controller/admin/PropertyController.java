@@ -26,6 +26,11 @@ public class PropertyController {
         propertyService.create(PropertyMapper.convertToProperty(propertyRequest));
         return ResponseEntity.ok().body("Tạo thuộc tính loại sản phẩm thành công !!!");
     }
+    @PostMapping("/edit/{id}")
+    public ResponseEntity<String> edit(@PathVariable(value = "id") long propertyId, @RequestBody PropertyRequest propertyRequest) {
+        propertyService.edit(propertyId, PropertyMapper.convertToProperty(propertyRequest));
+        return ResponseEntity.ok().body("Sửa thuộc tính loại sản phẩm thành công !!!");
+    }
 
     @GetMapping("/get-all")
     public ResponseEntity<List<PropertyResponse>> getAll() {

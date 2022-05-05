@@ -31,11 +31,11 @@ public class FilterConfig extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
         String[] arr = request.getServletPath().split("/");
         if (arr.length >= 2
                 && !arr[1].equals("user")
-                && !arr[1].equals("admin")) {
+                && !arr[1].equals("admin")
+                || request.getServletPath().equals("/")) {
 
             filterChain.doFilter(request, response);
         } else {

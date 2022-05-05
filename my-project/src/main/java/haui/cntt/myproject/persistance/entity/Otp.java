@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 @Entity
 public class Otp extends BaseEntity {
 
-    @Column(name = "otp_pass")
+    @Column(name = "otp_pass", length = 4)
     private String otpPass; // giá trị otp
 
     @Column(name = "expired_time")
@@ -31,6 +31,6 @@ public class Otp extends BaseEntity {
     @Column(nullable = false, unique = true, name = "cellphone")
     private String cellphone; // số nhận otp
 
-    @Column(name = "status")
+    @Column(name = "status", length = 10)
     private String status; //trạng thái
 }

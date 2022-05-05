@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query(value = "select * from ordered where product_id = :productId and (status != 'PENDING' or status !='CANCELED')limit 1", nativeQuery = true)
+    @Query(value = "select * from ordered where product_id = :productId and (status != 'PENDING' and status !='CANCELED' and status !='WAITING_REFUND' and status !='REFUNDED')limit 1", nativeQuery = true)
     Optional<Order> findByProductId(@Param(value = "productId") long productId);
 
     @Query(value = "select * from ordered where user_id = :userId order by id desc", nativeQuery = true)

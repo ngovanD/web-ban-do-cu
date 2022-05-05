@@ -13,25 +13,23 @@
     <div class="content-wrapper" style="padding-top: 13px;">
         <section class="content-header">
             <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Project Detail</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Project Detail</li>
-                        </ol>
-                    </div>
+              <div class="row mb-2">
+                <div class="col-sm-12">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/order/get-all}">Quản lý đơn hàng</a></li>
+                    <li class="breadcrumb-item active">#[[${orderResponse.id}]]</li>
+                  </ol>
                 </div>
+              </div>
             </div><!-- /.container-fluid -->
-        </section>
+          </section>
         <section class="content">
 
             <!-- Default box -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Projects Detail</h3>
+                    <h3 class="card-title">Thông tin đơn hàng</h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -47,7 +45,6 @@
                         <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
                             <div class="row">
                                 <div class="col-12">
-                                    <h4 class="checkout-subtitle">Thông tin giao hàng</h4>
                                     <form>
                                         <div class="form-group">
                                             <label class="info-title">Mã đơn hàng
@@ -83,7 +80,7 @@
                                                 th:value="${orderResponse.productResponse.sellerPhone}" disabled>
                                         </div>
                                         <div class="form-group" style="margin-top: 15px">
-                                            <label class="info-title">Địa chỉ
+                                            <label class="info-title">Địa chỉ bán
                                             </label>
                                             <input type="text" class="form-control unicase-form-control text-input"
                                                 required id="detail_"
@@ -108,7 +105,7 @@
                                                 th:value="${orderResponse.deliveryAddressResponse.cellphone}" disabled>
                                         </div>
                                         <div class="form-group" style="margin-top: 15px">
-                                            <label class="info-title">Địa chỉ
+                                            <label class="info-title">Địa chỉ giao
                                             </label>
                                             <input type="text" class="form-control unicase-form-control text-input"
                                                 required id="detail_" th:value="${orderResponse.deliveryAddressResponse.detail} 
@@ -147,19 +144,10 @@
                                                         <div class="col col-sm-8 col-lg-8"
                                                             style="padding-bottom: 20px;">
                                                             <div class="product-info">
-                                                                <h3 class="name">
+                                                                <h5 class="name">
                                                                     <a style="text-decoration: none;">[[${orderResponse.productResponse.name}]]
                                                                     </a>
-                                                                </h3>
-                                                            </div>
-                                                            <div th:if="${orderResponse.status == 'Chờ giao hàng'}"
-                                                                class="product-info">
-                                                                <h3 class="name">
-                                                                    <a th:href="@{'/user/order/completed/' + ${orderResponse.id}}"
-                                                                        class="btn btn-sm btn-primary"
-                                                                        style="text-decoration: none;">Đã
-                                                                        nhận</a>
-                                                                </h3>
+                                                                </h5>
                                                             </div>
                                                             <!-- /.product-info -->
                                                         </div>
@@ -180,14 +168,15 @@
                             </div>
                             <br>
                             <br>
-                            <h4 class="checkout-subtitle">Sản phẩm:
-                                [[${orderResponse.priceProduct}]]
-                            </h4>
-                            <h4 class="checkout-subtitle">Phí giao hàng:
-                                [[${orderResponse.feeShipping}]]</h4>
-                            <h4 class="checkout-subtitle">Tổng tiền thanh toán:
-                                [[${orderResponse.priceProduct} + ${orderResponse.feeShipping}]]
-                            </h4>
+                            <h5 class="checkout-subtitle">Sản phẩm:
+                                [[${#numbers.formatDecimal(orderResponse.priceProduct, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                            </h5>
+                            <h5 class="checkout-subtitle">Phí giao hàng:
+                                [[${#numbers.formatDecimal(orderResponse.feeShipping, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                                </h5>
+                            <h5 class="checkout-subtitle">Tổng tiền thanh toán:
+                                [[${#numbers.formatDecimal(orderResponse.priceProduct + orderResponse.feeShipping, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                            </h5>
                             <br>
                         </div>
                     </div>

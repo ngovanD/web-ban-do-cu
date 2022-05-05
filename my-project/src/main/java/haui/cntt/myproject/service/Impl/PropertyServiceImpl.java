@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,7 +34,16 @@ public class PropertyServiceImpl {
     }
 
     public Page<Property> getAllPage(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         return propertyRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public void edit(long propertyId, Property convertToProperty) {
+        Property foundProperty = propertyRepository.findById(propertyId).orElse(null);
+        foundProperty.setName(convertToProperty.getName());
+        foundProperty.setUnit(convertToProperty.getUnit());
+        foundProperty.setNote(convertToProperty.getNote());
+        propertyRepository.save(foundProperty);
     }
 }

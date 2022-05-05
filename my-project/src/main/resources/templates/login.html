@@ -13,17 +13,17 @@
                 <b>Chợ cũ</b>
             </div>
             <p style="color: red;">[[${statusLogin}]]</p>
-            <form th:action="@{/login}" method="post" th:object="${loginRequest}">
-                <div class="input-group mb-3">
-                    <input type="text" th:field="*{username}" class="form-control" placeholder="Tên đăng nhập" >
+            <form th:action="@{/login}" method="post" th:object="${loginRequest}" id="formLogin">
+                <div class="input-group mb-3 form-group">
+                    <input type="text" th:field="*{username}" class="form-control" placeholder="Tên đăng nhập" name="username">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <i class="fa-solid fa-user"></i>
                         </div>
                     </div>
                 </div>
-                <div class="input-group mb-3">
-                    <input type="password" th:field="*{password}" class="form-control" placeholder="Mật khẩu">
+                <div class="input-group mb-3 form-group">
+                    <input type="password" th:field="*{password}" class="form-control" placeholder="Mật khẩu" name="password">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -54,5 +54,40 @@
     </div>
 </div>
 <!-- /.login-box -->
+<div th:replace="fragment::script-custom"></div>
+<script>
+    $(function () {
+      $('#formLogin').validate({
+        rules: {
+          username: {
+            required: true,
+          },
+          password: {
+            required: true,
+          },
+        },
+        messages: {
+          username: {
+            required: "Hãy nhập tên đăng nhập !",
+          },
+          password: {
+            required: "Hãy nhập mật khẩu !",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
+    });
+
+</script>
 </body>
 </html>

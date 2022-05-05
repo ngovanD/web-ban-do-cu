@@ -62,4 +62,9 @@ public class AdminController {
     public ResponseEntity<String> getName() throws Throwable {
         return ResponseEntity.ok().body(userService.getCurrentUser().getFullName());
     }
+
+    @GetMapping("/change-password")
+    public String changePassword(){
+        return "admin_change_password";
+    }
 }

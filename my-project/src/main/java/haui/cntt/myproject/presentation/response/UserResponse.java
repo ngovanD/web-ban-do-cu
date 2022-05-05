@@ -1,6 +1,5 @@
 package haui.cntt.myproject.presentation.response;
 
-import haui.cntt.myproject.common.enum_.GenderEnum;
 import lombok.*;
 
 @Getter
@@ -21,8 +20,6 @@ public class UserResponse {
     private String fullName;
 
     private String apiGetAvatar;
-
-    private GenderEnum gender;
 
     private String status;
 }

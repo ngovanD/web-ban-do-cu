@@ -1,7 +1,6 @@
 package haui.cntt.myproject.persistance.entity;
 
 import haui.cntt.myproject.base.BaseEntity;
-import haui.cntt.myproject.common.enum_.GenderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,10 +35,6 @@ public class User extends BaseEntity {
 
     @Column(name = "avatar")
     private String avatar;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 10)
-    private GenderEnum gender;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

@@ -233,42 +233,50 @@
                                                     <div class="product">
                                                         <div class="product-image">
                                                             <div class="image"> <a
-                                                                    th:href="@{'/product/' + ${product.id}}"><img
+                                                                    th:href="@{'/product/' + ${product.slug}}"><img
                                                                         th:src="${product.mainImage}" alt=""
                                                                         style="object-fit:contain; width:250px;height:250px;"></a>
                                                             </div>
                                                             <!-- /.image -->
 
                                                             <div th:if="${product.tag == 'New'}" class="tag new">
-                                                                <span>Mới</span></div>
+                                                                <span>Mới</span>
+                                                            </div>
                                                             <div th:if="${product.tag == 'Hot'}" class="tag hot">
-                                                                <span>Hot</span></div>
+                                                                <span>Hot</span>
+                                                            </div>
                                                         </div>
                                                         <!-- /.product-image -->
 
                                                         <div class="product-info text-left">
-                                                            <h3 class="name"><a
-                                                                    th:href="@{'/product/' + ${product.id}}">[[${product.name}]]</a>
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${product.name}"><a
+                                                                    th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
                                                             </h3>
                                                             <!-- <div class="description"></div> -->
                                                             <div class="product-price"> <span class="price">
-                                                                    [[${product.price}]]</span>
+                                                                [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
                                                             </div>
                                                             <!-- /.product-price -->
 
                                                         </div>
                                                         <!-- /.product-info -->
-                                                        <div class="cart clearfix animate-effect">
+                                                        <div class="cart clearfix animate-effect" style="display: flex; justify-content: center; left: 0; margin-left: 0;">
                                                             <div class="action">
                                                                 <ul class="list-unstyled">
                                                                     <li class="add-cart-button btn-group">
-                                                                        <button class="btn btn-primary icon"
-                                                                            data-toggle="dropdown" type="button"> <i
+                                                                        <a th:href="@{'/user/order/create/' + ${product.id}}"
+                                                                            class="btn btn-primary icon"
+                                                                            type="button"> <i
                                                                                 class="fa fa-shopping-cart"></i>
-                                                                        </button>
+                                                                        </a>
                                                                     </li>
                                                                     <li class="lnk wishlist"> <a class="add-to-cart"
-                                                                            href="detail.html" title="Wishlist"> <i
+                                                                            th:data-id="${product.id}"
+                                                                            onclick="addWishlist(this)"
+                                                                            title="Wishlist"> <i
                                                                                 class="icon fa fa-heart"></i> </a> </li>
 
                                                                 </ul>
@@ -313,19 +321,27 @@
                                                         <div class="col col-sm-8 col-lg-8">
                                                             <div class="product-info">
                                                                 <h3 class="name"><a
-                                                                        th:href="@{'/product/' + ${product.id}}">[[${product.name}]]</a>
+                                                                        th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
                                                                 </h3>
+                                                                <div class="product-price">
+                                                                    <span class="price"> [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                                                                    </span>
+                                                                </div>
                                                                 <!-- /.product-price -->
                                                                 <div class="cart clearfix animate-effect">
                                                                     <div class="action">
                                                                         <ul class="list-unstyled">
                                                                             <li class="add-cart-button btn-group">
-                                                                                <button class="btn btn-primary cart-btn"
-                                                                                    type="button">Mua ngay</button>
+                                                                                <a class="btn btn-primary cart-btn"
+                                                                                    type="button"
+                                                                                    th:href="@{'/user/order/create/' + ${product.id}}">Mua
+                                                                                    ngay</a>
                                                                             </li>
                                                                             <li class="lnk wishlist"> <a
                                                                                     class="add-to-cart"
-                                                                                    href="detail.html" title="Wishlist">
+                                                                                    th:data-id="${product.id}"
+                                                                                    onclick="addWishlist(this)"
+                                                                                    title="Wishlist">
                                                                                     <i class="icon fa fa-heart"></i>
                                                                                 </a>
                                                                             </li>
@@ -342,9 +358,11 @@
                                                     </div>
                                                     <!-- /.product-list-row -->
                                                     <div th:if="${product.tag == 'New'}" class="tag new">
-                                                        <span>Mới</span></div>
+                                                        <span>Mới</span>
+                                                    </div>
                                                     <div th:if="${product.tag == 'Hot'}" class="tag hot">
-                                                        <span>Hot</span></div>
+                                                        <span>Hot</span>
+                                                    </div>
                                                 </div>
                                                 <!-- /.product-list -->
                                             </div>
@@ -431,7 +449,7 @@
             max = document.getElementById('max_price').value;
             category_slug = document.getElementById('select_category').value;
             var keyword = document.getElementById('keyword_').value;
-            location.href = origin + '/search?keyword=' + keyword + '&category_slug='+ category_slug + '&min=' + min + '&max=' + max + '&location=' + location_ + '&sort=' + sort;
+            location.href = origin + '/search?keyword=' + keyword + '&category_slug=' + category_slug + '&min=' + min + '&max=' + max + '&location=' + location_ + '&sort=' + sort;
         }
 
         function loadProvince() {

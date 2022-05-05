@@ -49,13 +49,14 @@ public class ProductMapper {
         {
             tag = "New";
         }
-        if(product.getView() > 100)
+        if(product.getView() > 10)
         {
             tag = "Hot";
         }
 
         return ProductResponse.builder()
                 .id(product.getId())
+                .slug(product.getSlug())
                 .name(product.getName())
                 .status(status)
                 .view(product.getView())

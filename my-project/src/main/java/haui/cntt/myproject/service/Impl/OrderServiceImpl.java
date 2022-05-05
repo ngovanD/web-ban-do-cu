@@ -75,13 +75,17 @@ public class OrderServiceImpl {
                 .orElseThrow(() -> {
                     throw new BadRequestException("Không tìm thấy hóa đơn !!!");
                 });
-        if (!foundOrder.getStatus().equals(OrderStatusEnum.PENDING)
-                && !foundOrder.getStatus().equals(OrderStatusEnum.WAITING_CONFIRM)) {
-            throw new BadRequestException("Không thể hủy đơn !!!");
-        } else {
+        if (foundOrder.getStatus().equals(OrderStatusEnum.PENDING)
+                || foundOrder.getStatus().equals(OrderStatusEnum.WAITING_CONFIRM)) {
             foundOrder.setStatus(OrderStatusEnum.CANCELED);
             foundOrder.getProduct().setStatus(ProductStatusEnum.STOCKING);
             orderRepository.save(foundOrder);
+        } else if (foundOrder.getStatus().equals(OrderStatusEnum.PAID)) {
+            foundOrder.setStatus(OrderStatusEnum.WAITING_REFUND);
+            foundOrder.getProduct().setStatus(ProductStatusEnum.STOCKING);
+            orderRepository.save(foundOrder);
+        } else {
+            throw new BadRequestException("Không thể hủy đơn !!!");
         }
     }
 
@@ -197,7 +201,7 @@ public class OrderServiceImpl {
     }
 
     @Transactional
-    public void confirmRefund(long orderId) throws Throwable{
+    public void confirmRefund(long orderId) throws Throwable {
         Order foundOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> {
                     throw new BadRequestException("Không tìm thấy hóa đơn !!!");
@@ -211,7 +215,7 @@ public class OrderServiceImpl {
     }
 
     @Transactional
-    public void paySeller(long orderId) throws Throwable{
+    public void paySeller(long orderId) throws Throwable {
         Order foundOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> {
                     throw new BadRequestException("Không tìm thấy hóa đơn !!!");
@@ -220,7 +224,9 @@ public class OrderServiceImpl {
             throw new BadRequestException("Không thể hoàn trả đơn này !!!");
         } else {
             Product foundProduct = productRepository.findById(foundOrder.getProduct().getId()).orElseThrow(
-                    ()->{throw new BadRequestException("Không tìm thấy sản phẩm !!!");}
+                    () -> {
+                        throw new BadRequestException("Không tìm thấy sản phẩm !!!");
+                    }
             );
             foundProduct.setStatus(ProductStatusEnum.COMPLETED);
             productRepository.save(foundProduct);
@@ -237,41 +243,49 @@ public class OrderServiceImpl {
         LocalDate toDate = LocalDate.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         HashMap<String, Integer> result = new LinkedHashMap<>();
 
-        if(fromDate.plus(12, ChronoUnit.MONTHS).isBefore(toDate))
-        {
+        if (fromDate.plus(12, ChronoUnit.MONTHS).isBefore(toDate)) {
             fromDate = toDate.minus(11, ChronoUnit.MONTHS);
-            while (fromDate.isBefore(toDate))
-            {
+            while (fromDate.isBefore(toDate)) {
                 int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
-                result.put(fromDate.getMonth().getValue() + "/" +  fromDate.getYear(), orders);
+                result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
                 fromDate = fromDate.plus(1, ChronoUnit.MONTHS);
             }
+            if(fromDate.getMonth().getValue() == toDate.getMonth().getValue())
+            {
+                int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
+                result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
+            }
             return result;
-        }
-        else if(fromDate.plus(6, ChronoUnit.MONTHS).isAfter(toDate))
-        {
+        } else if (fromDate.plus(6, ChronoUnit.MONTHS).isAfter(toDate)) {
             fromDate = toDate.minus(5, ChronoUnit.MONTHS);
-            while (fromDate.isBefore(toDate))
-            {
+            while (fromDate.isBefore(toDate)) {
                 int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
-                result.put(fromDate.getMonth().getValue() + "/" +  fromDate.getYear(), orders);
+                result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
                 fromDate = fromDate.plus(1, ChronoUnit.MONTHS);
             }
-            return result;
-        }
-        else
-        {
-            while (fromDate.isBefore(toDate))
+            if(fromDate.getMonth().getValue() == toDate.getMonth().getValue())
             {
                 int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
-                result.put(fromDate.getMonth().getValue() + "/" +  fromDate.getYear(), orders);
+                result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
+            }
+
+            return result;
+        } else {
+            while (fromDate.isBefore(toDate)) {
+                int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
+                result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
                 fromDate = fromDate.plus(1, ChronoUnit.MONTHS);
+            }
+            if(fromDate.getMonth().getValue() == toDate.getMonth().getValue())
+            {
+                int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
+                result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
             }
         }
         return result;
     }
 
-    public Order repayment(long orderId, String methodPayment) throws Throwable{
+    public Order repayment(long orderId, String methodPayment) throws Throwable {
         Order foundOrder = orderRepository.findById(orderId).orElseThrow(() -> {
             throw new BadRequestException("Không tìm thấy hóa đơn !!!");
         });
@@ -283,13 +297,6 @@ public class OrderServiceImpl {
 
         foundOrder.setProduct(foundProduct);
         foundOrder.setPriceProduct(foundProduct.getPrice());
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User foundUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> {
-                    throw new BadRequestException("Không tìm thấy user !!!");
-                });
-        foundOrder.setUser(foundUser);
 
         foundOrder.setStatus(OrderStatusEnum.PENDING);
 

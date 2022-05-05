@@ -45,14 +45,16 @@ public class SlideServiceImpl {
         foundSlide.setBriefDescription(slide.getBriefDescription());
         foundSlide.setLink(slide.getLink());
 
-        FileUploadUtil.deleteFile(UPLOAD_DIR_SLIDE, foundSlide.getImage());
+        if(!multipartFile.isEmpty())
+        {
+            FileUploadUtil.deleteFile(UPLOAD_DIR_SLIDE, foundSlide.getImage());
 
-        String originalFilename = multipartFile.getOriginalFilename();
-        String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String fileName = "slide-" + System.currentTimeMillis() + typeOfFile;
-        FileUploadUtil.saveFile(UPLOAD_DIR_SLIDE, fileName, multipartFile);
-        foundSlide.setImage(fileName);
-
+            String originalFilename = multipartFile.getOriginalFilename();
+            String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String fileName = "slide-" + System.currentTimeMillis() + typeOfFile;
+            FileUploadUtil.saveFile(UPLOAD_DIR_SLIDE, fileName, multipartFile);
+            foundSlide.setImage(fileName);
+        }
         slideRepository.save(foundSlide);
     }
 

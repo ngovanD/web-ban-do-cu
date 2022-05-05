@@ -88,8 +88,7 @@
                     <div class="col-sm-6">
                         <div class="float-sm-right">
                             <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;"
-                                class="btn btn-dark"><i class="fa-solid fa-square-plus"></i>Tạo thêm thuộc
-                                tính</a>
+                                class="btn btn-dark"><i class="fa-solid fa-square-plus"></i>Thêm mới</a>
                         </div>
                     </div>
                 </div>
@@ -124,21 +123,21 @@
                                         <th:block th:each="property : ${propertyResponseList}">
                                             <tr>
                                                 <td>
-                                                    <a th:text="${property.name}"></a>
+                                                    <a th:text="${property.name}" th:id="'name-' + ${property.id}"></a>
                                                 </td>
                                                 <td>
-                                                    <a th:text="${property.unit}"></a>
+                                                    <a th:text="${property.unit}" th:id="'unit-' + ${property.id}"></a>
                                                 </td>
                                                 <td>
-                                                    <a th:text="${property.note}"></a>
+                                                    <a th:text="${property.note}" th:id="'note-' + ${property.id}"></a>
                                                 </td>
                                                 <td class="project-actions text-right">
-                                                    <!-- <a class="btn btn-info btn-sm"
-                                                        th:href="@{'/admin/property/edit/' + ${property.id}}">
+                                                    <a class="btn btn-info btn-sm" th:data-id="${property.id}"
+                                                        onclick="showForm(this)">
                                                         <i class="fas fa-pencil-alt">
                                                         </i>
                                                         Sửa
-                                                    </a> -->
+                                                    </a>
                                                     <a class="btn btn-danger btn-sm"
                                                         th:data-href="'/admin/property/delete/' + ${property.id}"
                                                         onclick="deleteMethod(this)">
@@ -160,7 +159,9 @@
             </div>
         </section>
         <!-- /.content -->
-        <div th:replace="fragment::paginate('/admin/property/get-all-property', ${keyword}, ${current_page}, ${total_page})"></div>
+        <div
+            th:replace="fragment::paginate('/admin/property/get-all-property', ${keyword}, ${current_page}, ${total_page})">
+        </div>
 
         <div id="id01" class="modal" style="z-index: 99999;">
             <form class="modal-content animate">
@@ -183,6 +184,27 @@
                 </div>
             </form>
         </div>
+        <div id="id02" class="modal" style="z-index: 99999;">
+            <form class="modal-content animate">
+                <div class="form-group card-body" style="margin-bottom: 0px">
+                    <label>Tên thuộc tính</label>
+                    <input type="text" class="form-control" placeholder="Tên thuộc tính" id="nameProperty__">
+                </div>
+                <div class="form-group card-body" style="margin-bottom: 0px">
+                    <label>Đơn vị</label>
+                    <input type="text" class="form-control" placeholder="Có thể bỏ trống" id="unit__">
+                </div>
+                <div class="form-group card-body" style="margin-bottom: 0px">
+                    <label>Ghi chú</label>
+                    <input type="text" class="form-control" placeholder="Có thể bỏ trống" id="note__">
+                </div>
+                <div class="card-body" style="background-color:#f1f1f1">
+                    <a class="btn btn-primary" onclick="editProperty()">Lưu</a>
+                    <a type="button" onclick="document.getElementById('id02').style.display='none'"
+                        class="btn btn-primary btn-danger">Hủy</a>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div th:replace="fragment::footer-admin"></div>
@@ -201,6 +223,52 @@
             if (event.target == modal) {
                 modal.style.display = "none";
             }
+        }
+        // Get the modal
+        var modal2 = document.getElementById('id02');
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal2) {
+                modal2.style.display = "none";
+            }
+        }
+
+        var propertyId = 0;
+
+        function showForm(e) {
+            propertyId = $(e).attr('data-id');
+            document.getElementById("nameProperty__").value = document.getElementById('name-' + propertyId).innerText;
+            document.getElementById("unit__").value = document.getElementById('unit-' + propertyId).innerText;
+            document.getElementById("note__").value = document.getElementById('note-' + propertyId).innerText;
+            document.getElementById('id02').style.display = 'block';
+        }
+
+        function editProperty() {
+            var name = document.getElementById("nameProperty__").value;
+            var unit = document.getElementById("unit__").value;
+            var note = document.getElementById("note__").value;
+            var data = {
+                "name": name,
+                "unit": unit,
+                "note": note
+            }
+            $.ajax({
+                method: "POST",
+                url: origin + "/admin/property/edit/" + propertyId,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+            })
+                .done(function (data) {
+                    document.getElementById('id02').style.display = 'none';
+                    document.getElementById('name-' + propertyId).innerText = name;
+                    document.getElementById('unit-' + propertyId).innerText = unit;
+                    document.getElementById('note-' + propertyId).innerText = note;
+                    toastr.success("Sửa thành công !");
+                })
+                .fail(function () {
+                    toastr.error("Đã có lỗi xảy ra khi tạo thuộc tính, vui lòng thử lại sau !");
+                })
         }
 
         function createProperty() {

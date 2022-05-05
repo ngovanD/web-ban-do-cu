@@ -121,7 +121,7 @@
                                                     <div class="col col-sm-8 col-lg-8">
                                                         <div class="product-info">
                                                             <h3 class="name"><a th:href="@{'/user/product/detail/' + ${product.id}}">[[${product.name}]]</a></h3>
-                                                            <div class="product-price"> <span class="price"> [[${product.price}]] </span></div>
+                                                            <div class="product-price"> <span class="price">  [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ </span></div>
                                                             <!-- /.product-price -->
                                                             <!-- /.cart -->
 

@@ -107,6 +107,10 @@ public class BasicController {
 
         return "index";
     }
+    @GetMapping("/")
+    public String homeDefault(){
+        return "redirect:/home";
+    }
 
     @GetMapping("/generate-otp")
     public String generateOtp(@ModelAttribute(value = "cellphone", binding = false) String cellphone
@@ -206,12 +210,12 @@ public class BasicController {
     }
 
 
-    @GetMapping("/product/{id}")
-    public String getDetailProduct(Model model, @PathVariable(value = "id") long productId) throws Throwable {
-        ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getDetailProduct(productId));
+    @GetMapping("/product/{slug}")
+    public String getDetailProduct(Model model, @PathVariable(value = "slug") String slug) throws Throwable {
+        ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getDetailProductBySlug(slug));
         model.addAttribute("productResponse", productResponse);
 
-        List<ProductResponse> recommendProductList = productService.getRecommendList(productId, 12)
+        List<ProductResponse> recommendProductList = productService.getRecommendList(productResponse.getId(), 12)
                 .stream()
                 .map(ProductMapper::convertToProductResponse)
                 .collect(Collectors.toList());
