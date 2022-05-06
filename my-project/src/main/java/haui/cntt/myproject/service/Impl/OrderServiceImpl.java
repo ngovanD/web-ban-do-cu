@@ -3,7 +3,6 @@ package haui.cntt.myproject.service.Impl;
 import haui.cntt.myproject.common.enum_.OrderStatusEnum;
 import haui.cntt.myproject.common.enum_.ProductStatusEnum;
 import haui.cntt.myproject.common.exception.BadRequestException;
-import haui.cntt.myproject.persistance.entity.DeliveryAddress;
 import haui.cntt.myproject.persistance.entity.Order;
 import haui.cntt.myproject.persistance.entity.Product;
 import haui.cntt.myproject.persistance.entity.User;
@@ -25,7 +24,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -94,7 +92,7 @@ public class OrderServiceImpl {
     final String VNP_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?";
     final String VNP_VERSION = "2.1.0";
     final String VNP_COMMAND = "pay";
-    final String ORDER_TYPE = "180000";
+    final String ORDER_TYPE = "110000";
 
     private RestTemplate restTemplate;
     private HttpHeaders headers;

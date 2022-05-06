@@ -184,10 +184,9 @@ public class ProductServiceImpl {
         return productRepository.getHotProduct(limit);
     }
 
-    public Page<Product> searchProduct(String keyword, int page, String slugCategory, int min, int max, String sort, int codeProvince) {
-
-
-        List<Product> productList = productRepository.filterProductList(slugCategory, min, max, codeProvince);
+    public Page<Product> searchProduct(String keyword, int page, String slugCategory
+            , int min, int max, String sort, int codeProvince, String status) {
+        List<Product> productList = productRepository.filterProductList(slugCategory, min, max, codeProvince, status);
         String formatKeyword = VNCharacterUtil.removeAccent(keyword).toLowerCase();
         String[] listKey = formatKeyword.split(" ");
         Set<Product> setProduct = new HashSet<>();

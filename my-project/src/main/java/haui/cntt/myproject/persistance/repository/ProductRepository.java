@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "select * from product order by rand() limit :limit", nativeQuery = true)
     List<Product> getRandomProduct(@Param(value = "limit") int limit);
 
-    @Query(value = "select * from product order by id desc limit :limit", nativeQuery = true)
+    @Query(value = "select * from product where status = 'STOCKING' order by id desc limit :limit", nativeQuery = true)
     List<Product> getNewProduct(@Param(value = "limit") int limit);
 
     @Query(value = "select * " +
@@ -49,30 +49,33 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "from product inner join category child on product.category_id = child.id " +
             "inner join category parent on parent.id = child.category_parent_id " +
             "inner join address on product.id = address.product_id " +
-            "where (parent.slug = :slug or child.slug = :slug) and price >= :min and price <= :max and (code_province = :code_province or 0 = :code_province) " +
+            "where (:status = 'all' or product.status = :status) and (parent.slug = :slug or child.slug = :slug) and price >= :min and price <= :max and (code_province = :code_province or 0 = :code_province) " +
             "order by price", nativeQuery = true)
     Page<Product> filterProductAndSortByPrice(Pageable pageable
             , @Param(value = "slug") String slug, @Param(value = "min") int min
-            , @Param(value = "max") int max, @Param(value = "code_province") int codeProvince);
+            , @Param(value = "max") int max, @Param(value = "code_province") int codeProvince
+            , @Param(value = "status") String status);
 
     @Query(value = "select * " +
             "from product inner join category child on product.category_id = child.id " +
             "inner join category parent on parent.id = child.category_parent_id " +
             "inner join address on product.id = address.product_id " +
-            "where (parent.slug = :slug or child.slug = :slug) and price >= :min and price <= :max and (code_province = :code_province or 0 = :code_province)  " +
+            "where (:status = 'all' or product.status = :status) and (parent.slug = :slug or child.slug = :slug) and price >= :min and price <= :max and (code_province = :code_province or 0 = :code_province)  " +
             "order by product.created_date desc", nativeQuery = true)
     Page<Product> filterProductAndSortByCreateDate(Pageable pageable
             , @Param(value = "slug") String slug, @Param(value = "min") int min
-            , @Param(value = "max") int max, @Param(value = "code_province") int codeProvince);
+            , @Param(value = "max") int max, @Param(value = "code_province") int codeProvince
+            , @Param(value = "status") String status);
 
     @Query(value = "select * " +
             "from product inner join category child on product.category_id = child.id " +
             "inner join category parent on parent.id = child.category_parent_id " +
             "inner join address on product.id = address.product_id " +
-            "where (parent.slug = :slug or child.slug = :slug or '' = :slug) and price >= :min and price <= :max and (code_province = :code_province or 0 = :code_province) ", nativeQuery = true)
+            "where (:status = 'all' or product.status = :status) and (parent.slug = :slug or child.slug = :slug or '' = :slug) and price >= :min and price <= :max and (code_province = :code_province or 0 = :code_province) ", nativeQuery = true)
     List<Product> filterProductList(
             @Param(value = "slug") String slug, @Param(value = "min") int min
-            , @Param(value = "max") int max, @Param(value = "code_province") int codeProvince);
+            , @Param(value = "max") int max, @Param(value = "code_province") int codeProvince
+            , @Param(value = "status") String status);
 
     @Query(value = "select * from product where product.id = :productId and status = 'STOCKING'", nativeQuery = true)
     Optional<Product> findProductOnSale(@Param(value = "productId") long id);

@@ -152,13 +152,13 @@ public class CategoryServiceImpl implements CategoryService {
         }).getProperties().stream().collect(Collectors.toList());
     }
 
-    public Page<Product> getProductByCategory(String slug, int page, int min, int max, String sort, int codeProvince) throws Throwable {
+    public Page<Product> getProductByCategory(String slug, int page, int min, int max, String sort, int codeProvince, String status) throws Throwable {
         Pageable pageable = PageRequest.of(page, 12);
         if (sort.equals("price")) {
-            return productRepository.filterProductAndSortByPrice(pageable, slug, min, max, codeProvince);
+            return productRepository.filterProductAndSortByPrice(pageable, slug, min, max, codeProvince, status);
         }
 
         // sắp xếp theo ngày tạo
-        return productRepository.filterProductAndSortByCreateDate(pageable, slug, min, max, codeProvince);
+        return productRepository.filterProductAndSortByCreateDate(pageable, slug, min, max, codeProvince, status);
     }
 }

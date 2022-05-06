@@ -123,14 +123,14 @@
     <div class="content-wrapper" style="padding-top: 13px; margin-left: 0px">
         <div class="breadcrumb">
             <div class="container">
-              <div class="breadcrumb-inner">
-                <ul class="list-inline list-unstyled">
-                  <li  style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
-                  <li class="active">Đăng tin</li>
-                </ul>
-              </div><!-- /.breadcrumb-inner -->
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li class="active">Đăng tin</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
             </div><!-- /.container -->
-          </div>
+        </div>
         <!-- Main content -->
         <div class="body-content outer-top-xs" id="top-banner-and-menu">
             <div class="container">
@@ -239,14 +239,13 @@
                 "parentIndex": index,
                 "file": file
             };
-            if(listFile.length>10)
-            {
+            if (listFile.length > 10) {
                 toastr.warning("Thêm được tối đa 10 ảnh.");
             }
-            else{
+            else {
                 listFile.push(fileAndIndex);
             }
-            
+
 
             reader = new FileReader();
             reader.onload = function (e) {
@@ -307,9 +306,32 @@
                 async: false,
             }).done(function (data) {
                 document.getElementById("form-content_").innerHTML = data;
+                $('#price_').on('keyup', function () {
+                updateTextView($(this));
+            });
+
             });
             modal.style.display = "none";
             loadProvince();
+        }
+
+        function updateTextView(_obj) {
+            var num = getNumber(_obj.val());
+            if (num == 0) {
+                _obj.val('');
+            } else {
+                _obj.val(num.toLocaleString());
+            }
+        }
+        function getNumber(_str) {
+            var arr = _str.split('');
+            var out = new Array();
+            for (var cnt = 0; cnt < arr.length; cnt++) {
+                if (isNaN(arr[cnt]) == false) {
+                    out.push(arr[cnt]);
+                }
+            }
+            return Number(out.join(''));
         }
 
         function createProduct() {
@@ -338,7 +360,7 @@
             });
 
             var name = document.getElementById("name_").value;
-            var price = document.getElementById("price_").value;
+            var price = getNumber(document.getElementById("price_").value);
             var currentStatus = document.getElementById("currentStatus_").value;
             var description = document.getElementById("description_").value;
 

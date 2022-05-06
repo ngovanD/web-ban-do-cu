@@ -154,8 +154,8 @@
                         toastr.success(data);
                         // document.getElementById('checkSendOtpSuccess').innerHTML = "0";
                     })
-                    .fail(function () {
-                        toastr.error("Không thể gửi OTP lúc này..., vui lòng thử lại sau !!! ");
+                    .fail(function (error) {
+                        toastr.error(error.responseText);
                     })
             }
 

@@ -7,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SmsSender {
-    private SmsSender()
-    {
+    private SmsSender() {
         super();
     }
+
     // Find your Account SID and Auth Token at twilio.com/console
     // and set the environment variables. See http://twil.io/secure
     //TWILIO_ACCOUNT_SID va TWILIO_AUTH_TOKEN lấy từ biến môi trường
@@ -18,19 +18,17 @@ public class SmsSender {
     public static final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
     public static final String HOST_PHONE = System.getenv("TWILIO_HOST_PHONE"); // +18565531074
 
-    public static void sendOtp(String phoneNumber, String otp)  {
+    public static void sendOtp(String phoneNumber, String otp) {
         log.info("Mapped sendOtp method");
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         try {
             Message message = Message.creator(
-                            new com.twilio.type.PhoneNumber("+84"+phoneNumber),
-                            new com.twilio.type.PhoneNumber("TWILIO_HOST_PHONE"),
-                            "Your verification code: " + otp)
+                            new com.twilio.type.PhoneNumber("+84" + phoneNumber),
+                            new com.twilio.type.PhoneNumber(HOST_PHONE),
+                            "Mã xác thực của bạn là: " + otp)
                     .create();
             log.info(message.getSid());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new SmsSendException(e.getMessage());
         }
     }

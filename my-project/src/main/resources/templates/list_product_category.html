@@ -98,8 +98,18 @@
                                     <h4 class="widget-title">Khu vực</h4>
                                 </div>
                                 <div class="sidebar-widget-body">
-                                    <select id="select_location">
+                                    <select id="select_location" style="width: 100%;">
                                         <option value="0">Toàn quốc</option>
+                                    </select>
+                                </div>
+
+                                <div class="widget-header">
+                                    <h4 class="widget-title">Trạng thái</h4>
+                                </div>
+                                <div class="sidebar-widget-body">
+                                    <select id="select_status" style="width: 100%;">
+                                        <option value="all">Tất cả</option>
+                                        <option value="STOCKING">Đang bán</option>
                                     </select>
                                 </div>
                             </div>
@@ -162,10 +172,10 @@
                                             </button>
                                             <ul role="menu" class="dropdown-menu">
                                                 <li role="presentation"><a
-                                                        th:href="@{'/category/' + ${slug} + '?min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=price'}">Giá
+                                                        th:href="@{'/category/' + ${slug} + '?min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=price' + '&status=' + ${status}}">Giá
                                                         từ thấp đến cao</a></li>
                                                 <li role="presentation"><a
-                                                        th:href="@{'/category/' + ${slug} + '?min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=created_date'}">Mới
+                                                        th:href="@{'/category/' + ${slug} + '?min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=created_date' + '&status=' + ${status}}">Mới
                                                         nhất</a></li>
                                             </ul>
                                         </div>
@@ -179,7 +189,7 @@
                                 <div class="pagination-container">
                                     <ul class="list-inline list-unstyled">
                                         <li th:if="${current_page > 1}" class="prev"><a
-                                                th:href="@{'/category/' + ${slug} + '?page=' + ${current_page - 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort}}"><i
+                                                th:href="@{'/category/' + ${slug} + '?page=' + ${current_page - 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
                                                     class="fa fa-angle-left"></i></a></li>
                                         <li th:unless="${current_page > 1}" class="prev"><a><i
                                                     class="fa fa-angle-left"></i></a></li>
@@ -187,11 +197,11 @@
                                             th:each="i: ${#numbers.sequence(1, total_page)}">
                                             <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
                                             <li th:unless="${i == current_page}"><a
-                                                    th:href="@{'/category/' + ${slug} + '?page=' + ${i} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort}}">[[${i}]]</a>
+                                                    th:href="@{'/category/' + ${slug} + '?page=' + ${i} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}">[[${i}]]</a>
                                             </li>
                                         </th:block>
                                         <li th:if="${total_page > current_page}" class="next"><a
-                                                th:href="@{'/category/' + ${slug} + '?page=' + ${current_page + 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort}}"><i
+                                                th:href="@{'/category/' + ${slug} + '?page=' + ${current_page + 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
                                                     class="fa fa-angle-right"></i></a></li>
                                         <li th:unless="${total_page > current_page}" class="next"><a><i
                                                     class="fa fa-angle-right"></i></a></li>
@@ -224,11 +234,17 @@
                                                             </div>
                                                             <!-- /.image -->
 
-                                                            <div th:if="${product.tag == 'New'}" class="tag new">
+                                                            <div th:if="${product.tag == 'New'}" class="tag new"
+                                                                style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
                                                                 <span>Mới</span>
                                                             </div>
-                                                            <div th:if="${product.tag == 'Hot'}" class="tag hot">
+                                                            <div th:if="${product.tag == 'Hot'}" class="tag hot"
+                                                                style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
                                                                 <span>Hot</span>
+                                                            </div>
+                                                            <div th:if="${product.tag == 'Đã bán'}" class="tag hot"
+                                                                style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
+                                                                <span>Đã bán</span>
                                                             </div>
                                                         </div>
                                                         <!-- /.product-image -->
@@ -242,7 +258,8 @@
                                                             </h3>
                                                             <!-- <div class="description"></div> -->
                                                             <div class="product-price"> <span class="price">
-                                                                [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                                    [[${#numbers.formatDecimal(product.price, 0,
+                                                                    'COMMA', 0, 'POINT')}]] VNĐ</span>
                                                             </div>
                                                             <!-- /.product-price -->
 
@@ -345,11 +362,17 @@
                                                         <!-- /.col -->
                                                     </div>
                                                     <!-- /.product-list-row -->
-                                                    <div th:if="${product.tag == 'New'}" class="tag new">
+                                                    <div th:if="${product.tag == 'New'}" class="tag new"
+                                                        style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
                                                         <span>Mới</span>
                                                     </div>
-                                                    <div th:if="${product.tag == 'Hot'}" class="tag hot">
+                                                    <div th:if="${product.tag == 'Hot'}" class="tag hot"
+                                                        style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
                                                         <span>Hot</span>
+                                                    </div>
+                                                    <div th:if="${product.tag == 'Đã bán'}" class="tag hot"
+                                                        style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
+                                                        <span>Đã bán</span>
                                                     </div>
                                                 </div>
                                                 <!-- /.product-list -->
@@ -370,7 +393,7 @@
                                 <div class="pagination-container">
                                     <ul class="list-inline list-unstyled">
                                         <li th:if="${current_page > 1}" class="prev"><a
-                                                th:href="@{'/category/' + ${slug} + '?page=' + ${current_page - 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort}}"><i
+                                                th:href="@{'/category/' + ${slug} + '?page=' + ${current_page - 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
                                                     class="fa fa-angle-left"></i></a></li>
                                         <li th:unless="${current_page > 1}" class="prev"><a><i
                                                     class="fa fa-angle-left"></i></a></li>
@@ -378,11 +401,11 @@
                                             th:each="i: ${#numbers.sequence(1, total_page)}">
                                             <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
                                             <li th:unless="${i == current_page}"><a
-                                                    th:href="@{'/category/' + ${slug} + '?page=' + ${i} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort}}">[[${i}]]</a>
+                                                    th:href="@{'/category/' + ${slug} + '?page=' + ${i} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}">[[${i}]]</a>
                                             </li>
                                         </th:block>
                                         <li th:if="${total_page > current_page}" class="next"><a
-                                                th:href="@{'/category/' + ${slug} + '?page=' + ${current_page + 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort}}"><i
+                                                th:href="@{'/category/' + ${slug} + '?page=' + ${current_page + 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
                                                     class="fa fa-angle-right"></i></a></li>
                                         <li th:unless="${total_page > current_page}" class="next"><a><i
                                                     class="fa fa-angle-right"></i></a></li>
@@ -422,17 +445,22 @@
         var max = /*[[${max}]]*/ '30000000';
         var location_ = /*[[${location}]]*/ '0';
         var sort = /*[[${sort}]]*/ 'created_date';
+        var status = /*[[${status}]]*/ 'all';
         /*]]>*/
 
         $(document).ready(function () {
             loadProvince();
+            if (status == 'STOCKING') {
+                document.getElementById('select_status').value = status
+            }
         });
 
         function filterProduct() {
             location_ = document.getElementById('select_location').value;
             min = document.getElementById('min_price').value;
             max = document.getElementById('max_price').value;
-            location.href = origin + '/category/' + slug + '?min=' + min + '&max=' + max + '&location=' + location_ + '&sort=' + sort;
+            status = document.getElementById('select_status').value;
+            location.href = origin + '/category/' + slug + '?min=' + min + '&max=' + max + '&location=' + location_ + '&sort=' + sort + '&status=' + status;
         }
 
         function loadProvince() {

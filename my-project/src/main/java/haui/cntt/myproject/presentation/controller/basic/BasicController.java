@@ -1,7 +1,9 @@
 package haui.cntt.myproject.presentation.controller.basic;
 
 import haui.cntt.myproject.common.otp.RandomOtpUtil;
+import haui.cntt.myproject.common.otp.SmsSender;
 import haui.cntt.myproject.presentation.mapper.*;
+import haui.cntt.myproject.presentation.request.LoginRequest;
 import haui.cntt.myproject.presentation.request.OtpRequest;
 import haui.cntt.myproject.presentation.request.UserRequest;
 import haui.cntt.myproject.presentation.response.BlogResponse;
@@ -126,7 +128,7 @@ public class BasicController {
         String otp = RandomOtpUtil.createOtp();
         try {
             otpService.addOtp(otp, otpRequest.getCellphone());
-            //SmsSender.sendOtp(otpRequest.getCellphone(), otp);
+           // SmsSender.sendOtp(otpRequest.getCellphone(), otp);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -149,9 +151,11 @@ public class BasicController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute UserRequest userRequest) {
+    public String register(Model model, @ModelAttribute UserRequest userRequest) {
         userService.createUser(UserMapper.convertToUser(userRequest));
-        return "redirect:/login";
+        model.addAttribute("loginRequest", new LoginRequest());
+        model.addAttribute("statusRegister", "Đăng ký thành công !!!");
+        return "login";
     }
 
     @PostMapping("/check-username-exist")
@@ -229,7 +233,8 @@ public class BasicController {
             , @RequestParam(value = "min", required = false, defaultValue = "0") int min
             , @RequestParam(value = "max", required = false, defaultValue = "30000000") int max
             , @RequestParam(value = "sort", required = false, defaultValue = "created_date") String sort
-            , @RequestParam(value = "location", required = false, defaultValue = "0") int codeProvince) throws Throwable {
+            , @RequestParam(value = "location", required = false, defaultValue = "0") int codeProvince
+            , @RequestParam(value = "status", required = false, defaultValue = "all") String status) throws Throwable {
 
         HashMap<CategoryResponse, List<CategoryResponse>> menuResponse = new HashMap<>();
         categoryService.getTreeCategory().forEach((k, v) ->
@@ -240,7 +245,7 @@ public class BasicController {
         );
         model.addAttribute("menuResponse", menuResponse);
 
-        Page<ProductResponse> productResponsePage = categoryService.getProductByCategory(slug, page - 1, min, max, sort, codeProvince)
+        Page<ProductResponse> productResponsePage = categoryService.getProductByCategory(slug, page - 1, min, max, sort, codeProvince, status)
                 .map(ProductMapper::convertToProductResponse);
         model.addAttribute("list_product", productResponsePage.getContent());
         model.addAttribute("current_page", page);
@@ -250,6 +255,7 @@ public class BasicController {
         model.addAttribute("max", max);
         model.addAttribute("sort", sort);
         model.addAttribute("location", codeProvince);
+        model.addAttribute("status", status);
 
         return "list_product_category";
     }
@@ -262,7 +268,8 @@ public class BasicController {
             , @RequestParam(value = "min", required = false, defaultValue = "0") int min
             , @RequestParam(value = "max", required = false, defaultValue = "30000000") int max
             , @RequestParam(value = "sort", required = false, defaultValue = "created_date") String sort
-            , @RequestParam(value = "location", required = false, defaultValue = "0") int codeProvince) throws Throwable {
+            , @RequestParam(value = "location", required = false, defaultValue = "0") int codeProvince
+            , @RequestParam(value = "status", required = false, defaultValue = "all") String status) throws Throwable {
 
         HashMap<CategoryResponse, List<CategoryResponse>> menuResponse = new HashMap<>();
         categoryService.getTreeCategory().forEach((k, v) ->
@@ -273,7 +280,7 @@ public class BasicController {
         );
         model.addAttribute("menuResponse", menuResponse);
 
-        Page<ProductResponse> productResponsePage = productService.searchProduct(keyword, page - 1, slugCategory, min, max, sort, codeProvince)
+        Page<ProductResponse> productResponsePage = productService.searchProduct(keyword, page - 1, slugCategory, min, max, sort, codeProvince, status)
                 .map(ProductMapper::convertToProductResponse);
 
         model.addAttribute("list_product", productResponsePage.getContent());
@@ -285,6 +292,7 @@ public class BasicController {
         model.addAttribute("max", max);
         model.addAttribute("sort", sort);
         model.addAttribute("location", codeProvince);
+        model.addAttribute("status", status);
 
         return "search_product_page";
     }
