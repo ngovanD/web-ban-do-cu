@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <meta name="keywords" content="MediaCenter, Template, eCommerce">
     <meta name="robots" content="all">
-    <title>Thanh toán</title>
+    <title>Chi tiết đơn hàng</title>
     <div th:replace="fragment::head-custom2"></div>
     <style>
         /* Extra styles for the cancel button */
@@ -124,7 +124,7 @@
                                                                                             th:src="${orderResponse.productResponse.mainImage}"
                                                                                             alt=""
                                                                                             style="margin-left: 50%;
-                                                                                        transform: translate(-50%, 0); object-fit: contain; width: 80px; height: 80px;">
+                                                                                        transform: translate(-50%, 0); object-fit: contain; width: 150px; height: 150px;">
                                                                                     </div>
                                                                                 </div>
                                                                                 <!-- /.product-image -->
@@ -168,12 +168,15 @@
                                                 <br>
                                                 <br>
                                                 <h4 class="checkout-subtitle">Sản phẩm:
-                                                    [[${orderResponse.priceProduct}]]
+                                                    [[${#numbers.formatDecimal(orderResponse.priceProduct, 0,'COMMA', 0,
+                                                    'POINT')}]] VNĐ
                                                 </h4>
                                                 <h4 class="checkout-subtitle">Phí giao hàng:
-                                                    [[${orderResponse.feeShipping}]]</h4>
+                                                    [[${#numbers.formatDecimal(orderResponse.feeShipping, 0,'COMMA', 0,
+                                                    'POINT')}]] VNĐ</h4>
                                                 <h4 class="checkout-subtitle">Tổng tiền thanh toán:
-                                                    [[${orderResponse.priceProduct} + ${orderResponse.feeShipping}]]
+                                                    [[${#numbers.formatDecimal(orderResponse.priceProduct +
+                                                    orderResponse.feeShipping, 0,'COMMA', 0, 'POINT')}]] VNĐ
                                                 </h4>
                                                 <br>
                                             </div>
@@ -202,6 +205,14 @@
                                                         <input type="text"
                                                             class="form-control unicase-form-control text-input"
                                                             placeholder="" th:value="${orderResponse.createTime}"
+                                                            disabled>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Phương thức thanh toán
+                                                        </label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            placeholder="" th:value="${orderResponse.methodPayment}"
                                                             disabled>
                                                     </div>
                                                     <div class="form-group">
@@ -239,7 +250,9 @@
                                                         class="btn btn-info btn-sm" onclick="getAddress()">Đổi địa
                                                         chỉ giao</div>
                                                     <div th:if="${orderResponse.status == 'Chưa thanh toán'}"
-                                                        class="btn btn-info btn-sm"  onclick="document.getElementById('id02').style.display='block'">Thanh toán lại</div>
+                                                        class="btn btn-info btn-sm"
+                                                        onclick="document.getElementById('id02').style.display='block'">
+                                                        Thanh toán lại</div>
                                                     <div th:if="${orderResponse.status == 'Chờ xác nhận' || orderResponse.status == 'Chưa thanh toán'}"
                                                         class="btn btn-danger btn-sm" onclick="cancelOrder()">Hủy đơn
                                                         hàng</div>
@@ -362,29 +375,28 @@
                 modal.style.display = "none";
             }
         }
-         // When the user clicks anywhere outside of the modal, close it
-         window.onclick = function (event) {
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
             if (event.target == modal2) {
                 modal2.style.display = "none";
             }
         }
 
-        function rePayment(){
+        function rePayment() {
             var methodPayment = $("#methodPayment_ option:selected").val();
             $.ajax({
                 method: 'POST',
                 url: origin + "/user/order/repayment/" + orderId + "?methodPayment=" + methodPayment,
             })
                 .done(function (data) {
-                    if(methodPayment == 'COD')
-                    {
+                    if (methodPayment == 'COD') {
                         toastr.success(data);
                         location.reload();
                     }
-                    else{
+                    else {
                         location.href = data;
                     }
-                    
+
                 })
                 .fail(function (error) {
                     toastr.error(error.responseText);

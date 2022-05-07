@@ -29,6 +29,36 @@
                 </div><!-- /.breadcrumb-inner -->
             </div><!-- /.container -->
         </div>
+        <div class="container" style="font-size: 13px">
+            <div class="row">
+                <div class="shopping-cart">
+                    <div class="col col-sm-6 col-md-12 text-right">
+                        <div class="pagination-container">
+                            <ul class="list-inline list-unstyled">
+                                <li th:if="${current_page > 1}" class="prev"><a
+                                        th:href="@{'/user/order/get-all?page=' + ${current_page - 1}}"><i
+                                            class="fa fa-angle-left"></i></a></li>
+                                <li th:unless="${current_page > 1}" class="prev"><a><i class="fa fa-angle-left"></i></a>
+                                </li>
+                                <th:block th:if="${total_page != 0}" th:each="i: ${#numbers.sequence(1, total_page)}">
+                                    <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
+                                    <li th:unless="${i == current_page}"><a
+                                            th:href="@{'/user/order/get-all?page=' + ${i}}">[[${i}]]</a>
+                                    </li>
+                                </th:block>
+                                <li th:if="${total_page > current_page}" class="next"><a
+                                        th:href="@{'/user/order/get-all?page=' + ${current_page + 1}}"><i
+                                            class="fa fa-angle-right"></i></a></li>
+                                <li th:unless="${total_page > current_page}" class="next"><a><i
+                                            class="fa fa-angle-right"></i></a></li>
+                            </ul><!-- /.list-inline -->
+                        </div>
+                        <!-- /.pagination-container -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="row ">
                 <div class="shopping-cart">
@@ -42,25 +72,40 @@
                                         <th class="cart-product-name item">Ngày đặt</th>
                                         <th class="cart-edit item">Trạng thái</th>
                                         <th class="cart-edit item">Xác nhận</th>
-                                        <th class="cart-romove item">Chi tiết</th>
+                                        <th class="cart-edit item" style="width: 88px;">Chi tiết</th>
                                     </tr>
                                 </thead><!-- /thead -->
-                                <tbody>
+                                <tbody style="font-size: 14px;">
+                                    <tr th:if="${0 >= list_order.size()}" class="text-center">
+                                        <td colspan="5"> Bạn chưa có đơn hàng nào !!!</td>
+                                    </tr>
                                     <th:block th:each="order : ${list_order}">
                                         <tr>
                                             <td class="cart-product-name-info">
-                                                <h4 class="cart-product-description"><a th:href="@{'/user/order/' + ${order.id}}">[[${order.productResponse.name}]]</a></h4>
+                                                <a
+                                                    th:href="@{'/user/order/' + ${order.id}}">[[${order.productResponse.name}]]</a>
                                             </td>
-                                            <td class="cart-product-sub-total"><span
-                                                    class="cart-sub-total-price">[[${order.priceProduct + order.feeShipping}]]</span></td>
-                                            <td class="romove-item"><span>[[${order.createTime}]]</span></td></td>
+                                            <td class="cart-product-sub-total">
+                                                <span class="cart-sub-total-price" style="font-size: 14px;">
+                                                    [[${#numbers.formatDecimal(order.priceProduct,0,'COMMA', 0,
+                                                    'POINT')}]]
+                                                </span>
+                                            </td>
+                                            <td class="romove-item"><span>[[${order.createTime}]]</span></td>
+                                            </td>
                                             <td class="cart-image text-center"><span>[[${order.status}]]</span></td>
                                             <td class="cart-image text-center">
-                                                <a th:if="${order.status == 'Chờ giao hàng'}" th:href="@{'/user/order/completed/' + ${order.id}}"class="btn btn-sm btn-primary" style="text-decoration: none;">Đã nhận</a>
-                                                <a th:unless="${order.status == 'Chờ giao hàng'}" class="btn btn-sm btn-primary disabled" style="text-decoration: none;">Đã nhận</a>
+                                                <a th:if="${order.status == 'Chờ giao hàng'}"
+                                                    th:href="@{'/user/order/completed/' + ${order.id}}"
+                                                    class="btn btn-sm btn-primary" style="text-decoration: none;">Đã
+                                                    nhận</a>
+                                                <a th:unless="${order.status == 'Chờ giao hàng'}"
+                                                    class="btn btn-sm btn-primary disabled"
+                                                    style="text-decoration: none;">Đã nhận</a>
                                             </td>
                                             <td class="cart-product-name-info">
-                                                <h4 class="cart-product-description"><a th:href="@{'/user/order/' + ${order.id}}"><i class="fa-solid fa-arrow-right"></i></a></h4>
+                                                <a th:href="@{'/user/order/' + ${order.id}}"><i
+                                                        class="fa-solid fa-arrow-right"></i></a></h4>
                                             </td>
                                         </tr>
                                     </th:block>
@@ -83,7 +128,7 @@
         var origin = window.location.origin;
 
         $(document).ready(function () {
-            
+
         });
     </script>
 </body>

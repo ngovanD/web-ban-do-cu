@@ -31,4 +31,20 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query(value = "select count(*) from ordered where month(created_date) = :month and year(created_date) = :year", nativeQuery = true)
     int getOrderOfMonth(@Param(value = "month") int month, @Param(value = "year") int year);
+
+    @Query(value = "select * from ordered inner join product on ordered.product_id = product.id " +
+            "inner join user on user.id = product.user_id " +
+            "where user.username = :username and ordered.status = :status " +
+            "and (date(ordered.created_date) between :from and :to) " +
+            "order by ordered.id desc", nativeQuery = true)
+    Page<Order> filterOrderSaleByStatus(Pageable pageable, @Param(value = "username") String username
+            , @Param(value = "status") String status, @Param(value = "from") String from, @Param(value = "to") String to);
+
+    @Query(value = "select * from ordered inner join product on ordered.product_id = product.id " +
+            "inner join user on user.id = product.user_id " +
+            "where user.username = :username and ordered.status IN ('COMPLETED', 'DELIVERY') " +
+            "and (date(ordered.created_date) between :from and :to) " +
+            "order by ordered.id desc", nativeQuery = true)
+    Page<Order> filterOrderSale(Pageable pageable, @Param(value = "username") String username
+            , @Param(value = "from") String from, @Param(value = "to") String to);
 }

@@ -6,6 +6,8 @@ import haui.cntt.myproject.persistance.entity.Product;
 import haui.cntt.myproject.presentation.request.OrderRequest;
 import haui.cntt.myproject.presentation.response.OrderResponse;
 
+import java.time.format.DateTimeFormatter;
+
 public class OrderMapper {
     private OrderMapper() {
         super();
@@ -53,7 +55,7 @@ public class OrderMapper {
                 .id(order.getId())
                 .status(status)
                 .deliveryAddressResponse(DeliveryAddressMapper.convertToDeliveryAddressResponse(order.getDeliveryAddress()))
-                .createTime(order.getCreatedDate().toString())
+                .createTime(order.getCreatedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm")))
                 .feeShipping(order.getFeeShipping())
                 .priceProduct(order.getPriceProduct())
                 .methodPayment(order.getMethodPayment())

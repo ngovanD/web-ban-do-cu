@@ -110,6 +110,8 @@ public class UserController {
         Page<ProductResponse> productResponseList = userService.getWishlist(page - 1)
                 .map(ProductMapper::convertToProductResponse);
         model.addAttribute("productResponseList", productResponseList);
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", productResponseList.getTotalPages());
         return "wishlist";
     }
 

@@ -229,12 +229,11 @@
                                             <div class="product-image">
                                                 <div class="image"> <a th:href="@{'/product/' + ${product.slug}}"><img
                                                             th:src="${product.mainImage}" alt=""
-                                                            style="object-fit:contain;width:189px;height:189px;"></a>
+                                                            style="object-fit:contain;width:189px;height:189px;margin-left: 50%;transform: translate(-50%, 0)"></a>
                                                 </div>
                                                 <!-- /.image -->
                                             </div>
                                             <!-- /.product-image -->
-
                                             <div class="product-info text-left">
                                                 <h3 class="name"><a
                                                         th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>

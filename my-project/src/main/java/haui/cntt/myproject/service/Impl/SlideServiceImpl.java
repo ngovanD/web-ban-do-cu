@@ -42,7 +42,6 @@ public class SlideServiceImpl {
         );
         foundSlide.setTitle(slide.getTitle());
         foundSlide.setTitleStrong(slide.getTitleStrong());
-        foundSlide.setBriefDescription(slide.getBriefDescription());
         foundSlide.setLink(slide.getLink());
 
         if(!multipartFile.isEmpty())

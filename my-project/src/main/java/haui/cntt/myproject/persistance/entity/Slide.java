@@ -23,9 +23,6 @@ public class Slide extends BaseEntity {
     @Column(name = "title_strong")
     private String titleStrong;
 
-    @Column(name ="brief_description")
-    private String briefDescription;
-
     @Column(name = "image")
     private String image;
 

@@ -89,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
                             , "/check-username-exist", "/check-email-exist", "/check-cellphone-exist"
                             , "/favicon.ico", "/register", "/get-menu", "/forget-password", "/send-new_password-by-email"
                             , "/product/detail/*", "/random-list-product", "/product/**", "/category/**", "/slide/**"
-                            , "/blog/**"
+                            , "/blog/**", "/blog-detail/**"
                             , "/blog-detail", "/blog", "/faq", "/search", "/term-and-condition"
                             , "/assets/**", "/assets2/**")
                         .permitAll() // cho phép tất cả người dùng truy cập các api /basic

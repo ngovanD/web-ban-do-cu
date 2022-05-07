@@ -14,8 +14,6 @@ public class SlideRequest {
 
     private String titleStrong;
 
-    private String briefDescription;
-
     private String link;
 
     private boolean status;

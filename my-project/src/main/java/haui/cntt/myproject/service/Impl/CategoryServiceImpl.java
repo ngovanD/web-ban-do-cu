@@ -10,18 +10,14 @@ import haui.cntt.myproject.persistance.entity.Property;
 import haui.cntt.myproject.persistance.repository.CategoryRepository;
 import haui.cntt.myproject.persistance.repository.ProductRepository;
 import haui.cntt.myproject.persistance.repository.PropertyRepository;
-import haui.cntt.myproject.presentation.response.PropertyResponse;
 import haui.cntt.myproject.service.CategoryService;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-        String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + LocalDateTime.now());
+        String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + System.currentTimeMillis());
         category.setImage(newFileName + typeOfFile);
 
         Category categoryParent = categoryRepository.findById(category.getCategoryParent().getId()).orElse(null);
@@ -86,7 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (originalFilename != null) {
             String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-            String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + LocalDateTime.now());
+            String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + System.currentTimeMillis());
             category.setImage(newFileName + typeOfFile);
         }
 

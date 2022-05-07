@@ -18,7 +18,6 @@ public class SlideMapper {
                 .id(slide.getId())
                 .title(slide.getTitle())
                 .titleStrong(slide.getTitleStrong())
-                .briefDescription(slide.getBriefDescription())
                 .apiGetImage(apiImage)
                 .link(slide.getLink())
                 .status(slide.getHiddenFlag())
@@ -30,7 +29,6 @@ public class SlideMapper {
                 .id(slideRequest.getId())
                 .title(slideRequest.getTitle())
                 .titleStrong(slideRequest.getTitleStrong())
-                .briefDescription(slideRequest.getBriefDescription())
                 .link(slideRequest.getLink())
                 .hiddenFlag(slideRequest.isStatus())
                 .build();

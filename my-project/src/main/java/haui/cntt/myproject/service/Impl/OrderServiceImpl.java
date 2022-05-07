@@ -29,6 +29,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl {
@@ -248,8 +249,7 @@ public class OrderServiceImpl {
                 result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
                 fromDate = fromDate.plus(1, ChronoUnit.MONTHS);
             }
-            if(fromDate.getMonth().getValue() == toDate.getMonth().getValue())
-            {
+            if (fromDate.getMonth().getValue() == toDate.getMonth().getValue()) {
                 int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
                 result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
             }
@@ -261,8 +261,7 @@ public class OrderServiceImpl {
                 result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
                 fromDate = fromDate.plus(1, ChronoUnit.MONTHS);
             }
-            if(fromDate.getMonth().getValue() == toDate.getMonth().getValue())
-            {
+            if (fromDate.getMonth().getValue() == toDate.getMonth().getValue()) {
                 int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
                 result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
             }
@@ -274,8 +273,7 @@ public class OrderServiceImpl {
                 result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
                 fromDate = fromDate.plus(1, ChronoUnit.MONTHS);
             }
-            if(fromDate.getMonth().getValue() == toDate.getMonth().getValue())
-            {
+            if (fromDate.getMonth().getValue() == toDate.getMonth().getValue()) {
                 int orders = orderRepository.getOrderOfMonth(fromDate.getMonth().getValue(), fromDate.getYear());
                 result.put(fromDate.getMonth().getValue() + "/" + fromDate.getYear(), orders);
             }
@@ -304,5 +302,20 @@ public class OrderServiceImpl {
             foundOrder.setStatus(OrderStatusEnum.WAITING_CONFIRM);
         }
         return orderRepository.save(foundOrder);
+    }
+
+    public Page<Order> getMyOrderSale(int page, String status, String from, String to) {
+        LocalDate fromDate = LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate toDate = LocalDate.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Pageable pageable = PageRequest.of(page, 10);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (status.equals("all")) {
+            Page<Order> result = orderRepository
+                    .filterOrderSale(pageable, username, fromDate.toString(), toDate.toString());
+            return result;
+        }
+        Page<Order> result = orderRepository
+                .filterOrderSaleByStatus(pageable, username, status, fromDate.toString(), toDate.toString());
+        return result;
     }
 }

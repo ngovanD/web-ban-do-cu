@@ -163,6 +163,8 @@
         $(document).ready(function () {
             document.getElementById("date_from").value = from;
             document.getElementById("date_to").value = to;
+            document.getElementById('date_from').max = new Date().toLocaleDateString('en-ca');
+            document.getElementById('date_to').max = new Date().toLocaleDateString('en-ca');
         });
         function filter() {
             from = document.getElementById("date_from").value;

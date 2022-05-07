@@ -14,8 +14,6 @@ public class SlideResponse {
 
     private String titleStrong;
 
-    private String briefDescription;
-
     private String apiGetImage;
 
     private String link;

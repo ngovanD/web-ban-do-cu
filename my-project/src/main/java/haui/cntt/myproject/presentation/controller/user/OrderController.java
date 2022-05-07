@@ -20,6 +20,8 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/user/order")
@@ -120,5 +122,31 @@ public class OrderController {
             return ResponseEntity.ok().body(link);
         }
         return ResponseEntity.ok().body("Tạo đơn thành công !!!");
+    }
+
+    @GetMapping("/get-all-sale")
+    public String getAllOrderedSale(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page
+            , @RequestParam(name = "status", required = false, defaultValue = "all") String status
+            , @RequestParam(name = "from", required = false, defaultValue = "") String from
+            , @RequestParam(name = "to", required = false, defaultValue = "") String to) throws Throwable {
+        if (from.equals("")) {
+            from = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        if (to.equals("")) {
+            to = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        Page<OrderResponse> orderResponseList = orderService.getMyOrderSale(page - 1, status, from, to)
+                .map(OrderMapper::convertToOrderResponse);
+        int total_order = orderResponseList.getContent().size();
+        long total_money = orderResponseList.getContent().stream().mapToLong(o -> o.getPriceProduct()).sum();
+        model.addAttribute("total_order", total_order);
+        model.addAttribute("total_money", total_money);
+        model.addAttribute("list_order", orderResponseList.getContent());
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", orderResponseList.getTotalPages());
+        model.addAttribute("status", status);
+        model.addAttribute("from", from);
+        model.addAttribute("to", to);
+        return "my_list_order_sale";
     }
 }
