@@ -13,7 +13,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query(value = "select * from category where hidden_flag = 0 and category_parent_id is null", nativeQuery = true)
     List<Category> getListCategoryHasNotParent();
 
-    List<Category> findByCategoryParentId(long category_parent_id);
+    List<Category> findByCategoryParentId(long categoryParentId);
 
     Category findByName(String nameCategoryParent);
 

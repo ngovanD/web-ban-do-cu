@@ -5,7 +5,9 @@ import haui.cntt.myproject.presentation.request.DeliveryAddressRequest;
 import haui.cntt.myproject.presentation.response.DeliveryAddressResponse;
 
 public class DeliveryAddressMapper {
-    private DeliveryAddressMapper(){super();}
+    private DeliveryAddressMapper() {
+        super();
+    }
 
     public static DeliveryAddress convertToDeliveryAddress(DeliveryAddressRequest deliveryAddressRequest) {
         return DeliveryAddress.builder()

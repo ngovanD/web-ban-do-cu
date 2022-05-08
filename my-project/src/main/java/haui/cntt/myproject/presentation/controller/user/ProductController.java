@@ -96,7 +96,7 @@ public class ProductController {
 
     @PatchMapping("/change-main-image/{id}/{imageId}")
     public ResponseEntity<String> changeMainImage(@PathVariable(value = "id") long productId
-            ,@PathVariable(value = "imageId") long imageProductId) throws Throwable {
+            , @PathVariable(value = "imageId") long imageProductId) throws Throwable {
         imageProductService.changeMainImage(productId, imageProductId);
         return ResponseEntity.ok().body("Sửa ảnh bìa ảnh thành công !!!");
     }

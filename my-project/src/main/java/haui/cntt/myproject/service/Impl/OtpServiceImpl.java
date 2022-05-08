@@ -2,6 +2,7 @@ package haui.cntt.myproject.service.Impl;
 
 import haui.cntt.myproject.persistance.entity.Otp;
 import haui.cntt.myproject.persistance.repository.OtpRepository;
+import haui.cntt.myproject.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
-public class OtpService {
+public class OtpServiceImpl implements OtpService {
     @Autowired
     OtpRepository otpRepository;
 

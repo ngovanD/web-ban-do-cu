@@ -6,13 +6,14 @@ import haui.cntt.myproject.persistance.entity.DeliveryAddress;
 import haui.cntt.myproject.persistance.entity.Order;
 import haui.cntt.myproject.persistance.repository.DeliveryAddressRepository;
 import haui.cntt.myproject.persistance.repository.OrderRepository;
+import haui.cntt.myproject.service.DeliveryAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 @Service
-public class DeliveryAddressServiceImpl {
+public class DeliveryAddressServiceImpl implements DeliveryAddressService {
     @Autowired
     private DeliveryAddressRepository deliveryAddressRepository;
     @Autowired

@@ -19,9 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Controller
 @RequestMapping("user")
 public class UserController {
@@ -89,12 +86,15 @@ public class UserController {
     }
 
     @GetMapping("/my-list-product")
-    public String getMyListProduct(Model model) throws Throwable {
-        List<ProductResponse> productResponseList = userService.getMyListProduct()
-                .stream()
-                .map(ProductMapper::convertToProductResponse)
-                .collect(Collectors.toList());
-        model.addAttribute("productResponseList", productResponseList);
+    public String getMyListProduct(Model model
+            , @RequestParam(value = "page", required = false, defaultValue = "1") int page
+            , @RequestParam(value = "status", required = false, defaultValue = "all") String status) throws Throwable {
+        Page<ProductResponse> productResponseList = userService.getMyListProduct(page -1, status)
+                .map(ProductMapper::convertToProductResponse);
+        model.addAttribute("productResponseList", productResponseList.getContent());
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", productResponseList.getTotalPages());
+        model.addAttribute("status", status);
         return "my_list_product";
     }
 

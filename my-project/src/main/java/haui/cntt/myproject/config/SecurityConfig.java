@@ -20,12 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -39,9 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
     private UserDetailServiceConfig userDetailServiceConfig;
     @Autowired
     private FilterConfig filterConfig;
-
-//    @Value("${domain}")
-//    private String DOMAIN;
 
     @Value("${spring.mail.username}")
     private String EMAIL_NAME;
@@ -96,7 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
                     .antMatchers("/user/**").hasAnyAuthority(RoleEnum.ROLE_USER.toString()) // cho phép người dùng có role là user truy cập các api /user
                     .antMatchers("/admin/**").hasAnyAuthority(RoleEnum.ROLE_ADMIN.toString()) // cho phép người dùng có role là admin truy cập các api /admin
                     .anyRequest().authenticated(); // các api khác cần xác thực mới được truy cập
-
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login")

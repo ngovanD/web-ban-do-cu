@@ -1,13 +1,13 @@
 package haui.cntt.myproject.service.Impl;
 
 import com.github.slugify.Slugify;
-import haui.cntt.myproject.common.enum_.ProductStatusEnum;
 import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.persistance.entity.ImageProduct;
 import haui.cntt.myproject.persistance.entity.Product;
 import haui.cntt.myproject.persistance.repository.ImageProductRepository;
 import haui.cntt.myproject.persistance.repository.ProductRepository;
+import haui.cntt.myproject.service.ImageProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ImageProductServiceImpl {
+public class ImageProductServiceImpl implements ImageProductService {
     @Autowired
     private ImageProductRepository imageProductRepository;
     @Autowired
@@ -37,9 +37,7 @@ public class ImageProductServiceImpl {
         if (imageProduct.isMainImage()) {
             throw new BadRequestException("Không thể xóa ảnh bìa !!!");
         }
-
         String uploadDir = UPLOAD_DIR_IMAGE_PRODUCT + imageProduct.getProduct().getId();
-
         FileUploadUtil.deleteFile(uploadDir, imageProduct.getFileName());
         imageProductRepository.delete(imageProduct);
     }
@@ -51,10 +49,8 @@ public class ImageProductServiceImpl {
                     throw new BadRequestException("Sản phẩm không tồn tại !!!");
                 }
         );
-
         String uploadDir = UPLOAD_DIR_IMAGE_PRODUCT + productId;
         String fileName = new Slugify().slugify(foundProduct.getName() + LocalDateTime.now());
-
         String typeOfImage = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
         ImageProduct imageProduct = ImageProduct.builder()
                 .fileName(fileName + typeOfImage)
@@ -62,7 +58,6 @@ public class ImageProductServiceImpl {
                 .product(foundProduct)
                 .build();
         FileUploadUtil.saveFile(uploadDir, imageProduct.getFileName(), multipartFile);
-
         imageProductRepository.save(imageProduct);
     }
 
@@ -73,7 +68,6 @@ public class ImageProductServiceImpl {
                     throw new BadRequestException("Sản phẩm không tồn tại !!!");
                 }
         );
-
         List<ImageProduct> imageProductList = foundProduct.getImageProducts().stream().collect(Collectors.toList());
         for (ImageProduct imageProduct : imageProductList) {
             if (imageProduct.isMainImage()) {

@@ -11,19 +11,12 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 public class CategoryResponse {
-
     private long id;
-
     private String name;
-
     private String slug;
-
     private String apiGetImage;
-
     private List<PropertyResponse> propertyResponseList;
-
     private CategoryResponse categoryParent;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -31,7 +24,6 @@ public class CategoryResponse {
         CategoryResponse that = (CategoryResponse) o;
         return id == that.id;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(id);

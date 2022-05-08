@@ -22,7 +22,7 @@ public class BlogAdminController {
     private BlogServiceImpl blogService;
 
     @GetMapping("/get-all")
-    public String getAll(Model model){
+    public String getAll(Model model) {
         List<BlogResponse> blogResponseList = blogService.getAll()
                 .stream()
                 .map(BlogMapper::convertToBlogResponse)
@@ -46,7 +46,7 @@ public class BlogAdminController {
         return "redirect:/admin/blog/get-all";
     }
 
-//    new tab
+    //    new tab
 //    <input type="button" value="Open Window" onclick="window.open('http://www.domain.com')">
     @GetMapping("/view/{id}")
     public String blogDetail(Model model, @PathVariable(value = "id") long blogId) throws Throwable {

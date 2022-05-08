@@ -1,7 +1,6 @@
 package haui.cntt.myproject.presentation.controller.basic;
 
 import haui.cntt.myproject.common.otp.RandomOtpUtil;
-import haui.cntt.myproject.common.otp.SmsSender;
 import haui.cntt.myproject.presentation.mapper.*;
 import haui.cntt.myproject.presentation.request.LoginRequest;
 import haui.cntt.myproject.presentation.request.OtpRequest;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 public class BasicController {
 
     @Autowired
-    private OtpService otpService;
+    private OtpServiceImpl otpService;
     @Autowired
     private UserServiceImpl userService;
     @Autowired
@@ -109,8 +108,9 @@ public class BasicController {
 
         return "index";
     }
+
     @GetMapping("/")
-    public String homeDefault(){
+    public String homeDefault() {
         return "redirect:/home";
     }
 
@@ -128,7 +128,7 @@ public class BasicController {
         String otp = RandomOtpUtil.createOtp();
         try {
             otpService.addOtp(otp, otpRequest.getCellphone());
-           // SmsSender.sendOtp(otpRequest.getCellphone(), otp);
+            // SmsSender.sendOtp(otpRequest.getCellphone(), otp);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -300,7 +300,7 @@ public class BasicController {
     @GetMapping("/blog")
     public String blog(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
 
-        Page<BlogResponse> blogResponsePage = blogService.getAllActive(page-1)
+        Page<BlogResponse> blogResponsePage = blogService.getAllActive(page - 1)
                 .map(BlogMapper::convertToBlogResponse);
         model.addAttribute("blogList", blogResponsePage.getContent());
         model.addAttribute("current_page", page);

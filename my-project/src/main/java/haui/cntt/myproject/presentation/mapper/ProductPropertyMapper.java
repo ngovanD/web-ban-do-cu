@@ -19,6 +19,7 @@ public class ProductPropertyMapper {
                 .unit(productProperty.getProperty().getUnit())
                 .build();
     }
+
     public static ProductProperty convertToProductProperty(ProductPropertyRequest productPropertyRequest) {
         return ProductProperty.builder()
                 .property(Property.builder().id(productPropertyRequest.getPropertyId()).build())

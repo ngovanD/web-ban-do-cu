@@ -113,6 +113,11 @@
             margin: 0px 0px 0px 10px;
             text-decoration: none;
         }
+
+        span.error.invalid-feedback {
+            color: red;
+            font-size: 12px;
+        }
     </style>
 </head>
 
@@ -214,6 +219,10 @@
                     document.getElementById("id02").innerHTML = data;
                 }
             })
+
+            $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                return arg !== value;
+            }, "Value must not equal arg.");
         });
 
         var index = 0;
@@ -307,12 +316,74 @@
             }).done(function (data) {
                 document.getElementById("form-content_").innerHTML = data;
                 $('#price_').on('keyup', function () {
-                updateTextView($(this));
-            });
+                    updateTextView($(this));
+                });
 
             });
             modal.style.display = "none";
             loadProvince();
+
+            $(function () {
+                $('#formDetailProduct').validate({
+                    rules: {
+                        "name_": {
+                            required: true,
+                        },
+                        "price_": {
+                            required: true,
+                        },
+                        "detail_": {
+                            required: true,
+                        },
+                        "property": {
+                            required: true,
+                        },
+                        "select_province": {
+                            valueNotEquals: "0"
+                        },
+                        "select_district": {
+                            valueNotEquals: "0"
+                        },
+                        "select_commune": {
+                            valueNotEquals: "0"
+                        },
+                    },
+                    messages: {
+                        "name_": {
+                            required: "Hãy nhập tiêu đề cho bài đăng !",
+                        },
+                        "price_": {
+                            required: "Hãy nhập giá sản phẩm !",
+                        },
+                        "detail_": {
+                            required: "Hãy nhập địa chỉ cụ thể !",
+                        },
+                        "property": {
+                            required: "Hãy điền thông tin sản phẩm !",
+                        },
+                        "select_province": {
+                            valueNotEquals: "Hãy chọn tỉnh thành phố!",
+                        },
+                        "select_district": {
+                            valueNotEquals: "Hãy chọn quận huyện !",
+                        },
+                        "select_commune": {
+                            valueNotEquals: "Hãy chọn xã phường !",
+                        },
+                    },
+                    errorElement: 'span',
+                    errorPlacement: function (error, element) {
+                        error.addClass('invalid-feedback');
+                        element.closest('.form-group').append(error);
+                    },
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).addClass('is-invalid');
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).removeClass('is-invalid');
+                    }
+                });
+            });
         }
 
         function updateTextView(_obj) {
@@ -497,49 +568,6 @@
                 });
         }
 
-        // $(function () {
-        //     $('#formChangePassword').validate({
-        //         rules: {
-        //             "old-password": {
-        //                 required: true,
-        //                 checkOldPassword: true,
-        //             },
-        //             "new-password": {
-        //                 required: true,
-        //                 minlength: 8,
-        //             },
-        //             "re-password": {
-        //                 required: true,
-        //                 equalTo: "#new-password",
-        //             },
-        //         },
-        //         messages: {
-        //             "old-password": {
-        //                 required: "Hãy nhập mật khẩu !",
-        //                 checkOldPassword: "Mật khẩu không chính xác !",
-        //             },
-        //             "new-password": {
-        //                 required: "Hãy nhập mật khẩu !",
-        //                 minlength: "Mật khẩu phải trên 8 ký tự !",
-        //             },
-        //             "re-password": {
-        //                 required: "Hãy nhập mật khẩu !",
-        //                 equalTo: "Mật khẩu không đồng nhất",
-        //             },
-        //         },
-        //         errorElement: 'span',
-        //         errorPlacement: function (error, element) {
-        //             error.addClass('invalid-feedback');
-        //             element.closest('.form-group_show-error').append(error);
-        //         },
-        //         highlight: function (element, errorClass, validClass) {
-        //             $(element).addClass('is-invalid');
-        //         },
-        //         unhighlight: function (element, errorClass, validClass) {
-        //             $(element).removeClass('is-invalid');
-        //         }
-        //     });
-        // });
     </script>
 </body>
 

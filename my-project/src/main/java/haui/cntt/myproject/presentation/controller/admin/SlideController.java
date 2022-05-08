@@ -22,7 +22,7 @@ public class SlideController {
     private SlideServiceImpl slideService;
 
     @GetMapping("/get-all")
-    public String getAll(Model model){
+    public String getAll(Model model) {
         List<SlideResponse> slideResponseList = slideService.getAll()
                 .stream()
                 .map(SlideMapper::convertToSlideResponse)
@@ -55,7 +55,7 @@ public class SlideController {
 
     @PostMapping("/edit/{id}")
     public String editSlide(@PathVariable(value = "id") long slideId, SlideRequest slideRequest
-                                           , @RequestPart(value = "image") MultipartFile multipartFile) throws Throwable {
+            , @RequestPart(value = "image") MultipartFile multipartFile) throws Throwable {
         slideService.edit(slideId, SlideMapper.convertToSlide(slideRequest), multipartFile);
         return "redirect:/admin/slide/get-all";
     }

@@ -2,6 +2,7 @@ package haui.cntt.myproject.service.Impl;
 
 import haui.cntt.myproject.persistance.entity.Property;
 import haui.cntt.myproject.persistance.repository.PropertyRepository;
+import haui.cntt.myproject.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,11 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class PropertyServiceImpl {
+public class PropertyServiceImpl implements PropertyService {
     @Autowired
     PropertyRepository propertyRepository;
 

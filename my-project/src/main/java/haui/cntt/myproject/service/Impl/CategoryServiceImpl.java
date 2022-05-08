@@ -18,7 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -121,11 +124,13 @@ public class CategoryServiceImpl implements CategoryService {
         return treeCategory;
     }
 
+    @Transactional
     // chạy khởi tạo loại sản phẩm
     public void createTest(Category category) {
         categoryRepository.save(category);
     }
 
+    @Transactional
     public void createTest2(Category category, String nameCategoryParent, List<String> properties) {
 
         List<Property> propertyList = new ArrayList<>();
@@ -148,12 +153,12 @@ public class CategoryServiceImpl implements CategoryService {
         }).getProperties().stream().collect(Collectors.toList());
     }
 
-    public Page<Product> getProductByCategory(String slug, int page, int min, int max, String sort, int codeProvince, String status) throws Throwable {
+    public Page<Product> getProductByCategory(String slug, int page, int min, int max
+            , String sort, int codeProvince, String status) throws Throwable {
         Pageable pageable = PageRequest.of(page, 12);
         if (sort.equals("price")) {
             return productRepository.filterProductAndSortByPrice(pageable, slug, min, max, codeProvince, status);
         }
-
         // sắp xếp theo ngày tạo
         return productRepository.filterProductAndSortByCreateDate(pageable, slug, min, max, codeProvince, status);
     }

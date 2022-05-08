@@ -9,15 +9,14 @@ import haui.cntt.myproject.persistance.entity.User;
 import haui.cntt.myproject.persistance.repository.OrderRepository;
 import haui.cntt.myproject.persistance.repository.ProductRepository;
 import haui.cntt.myproject.persistance.repository.UserRepository;
+import haui.cntt.myproject.service.OrderService;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.net.URLEncoder;
@@ -29,10 +28,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
-public class OrderServiceImpl {
+public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -56,6 +54,9 @@ public class OrderServiceImpl {
                 .orElseThrow(() -> {
                     throw new BadRequestException("Không tìm thấy user !!!");
                 });
+        if (foundUser.getId() == foundProduct.getUser().getId()) {
+            throw new BadRequestException("Không thể mua sản phẩm của chính mình !!!");
+        }
         order.setUser(foundUser);
 
         order.setStatus(OrderStatusEnum.PENDING);
@@ -95,11 +96,7 @@ public class OrderServiceImpl {
     final String VNP_COMMAND = "pay";
     final String ORDER_TYPE = "110000";
 
-    private RestTemplate restTemplate;
-    private HttpHeaders headers;
-
     public String createLink(long orderId, long totalPrice, String ipClient, String returnUrl) throws Exception {
-        restTemplate = new RestTemplate();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime dateTimeNow = LocalDateTime.now();
 
@@ -137,7 +134,6 @@ public class OrderServiceImpl {
     public void checkResultPaidVnpay(String vnp_ResponseCode, String vnp_TxnRef, String vnp_Amount) throws Throwable {
         if ("00".equals(vnp_ResponseCode)) {
             long orderId = Long.parseLong(vnp_TxnRef);
-            long totalPaid = Long.parseLong(vnp_Amount);
 
             Order foundOrder = orderRepository.findById(orderId).orElseThrow(
                     () -> {
@@ -148,9 +144,6 @@ public class OrderServiceImpl {
             foundOrder.getProduct().setStatus(ProductStatusEnum.WAITING_CONFIRM);
             orderRepository.save(foundOrder);
         }
-//        else {
-//            throw new BadRequestException("Thanh toán thất bại !!!");
-//        }
     }
 
     @Transactional
@@ -281,6 +274,7 @@ public class OrderServiceImpl {
         return result;
     }
 
+    @Transactional
     public Order repayment(long orderId, String methodPayment) throws Throwable {
         Order foundOrder = orderRepository.findById(orderId).orElseThrow(() -> {
             throw new BadRequestException("Không tìm thấy hóa đơn !!!");
@@ -310,12 +304,10 @@ public class OrderServiceImpl {
         Pageable pageable = PageRequest.of(page, 10);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         if (status.equals("all")) {
-            Page<Order> result = orderRepository
+            return orderRepository
                     .filterOrderSale(pageable, username, fromDate.toString(), toDate.toString());
-            return result;
         }
-        Page<Order> result = orderRepository
+        return orderRepository
                 .filterOrderSaleByStatus(pageable, username, status, fromDate.toString(), toDate.toString());
-        return result;
     }
 }

@@ -7,6 +7,7 @@ import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.common.text.VNCharacterUtil;
 import haui.cntt.myproject.persistance.entity.*;
 import haui.cntt.myproject.persistance.repository.*;
+import haui.cntt.myproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,7 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductServiceImpl {
+public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired

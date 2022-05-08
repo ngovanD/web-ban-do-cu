@@ -22,19 +22,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByCellphone(String cellphone);
 
-    @Query(value =  "select * " +
-                    "from user " +
-                    "where user.id not in (select user_roles.user_id " +
-                                            "from user_roles inner join role on role.id = user_roles.role_id " +
-                                            "where role.name = 'ROLE_ADMIN')", nativeQuery = true)
+    @Query(value = "select * " +
+            "from user " +
+            "where user.username != 'admin' " +
+            "order by id desc", nativeQuery = true)
     Page<User> findAllUser(Pageable pageable);
 
-    @Query(value =  "select * " +
+    @Query(value = "select * " +
             "from user " +
             "where concat_ws('', username, lower(full_name), cellphone, email) like %:keyword% " +
-            "and user.id not in (select user_roles.user_id " +
-                                "from user_roles inner join role on role.id = user_roles.role_id " +
-                                "where role.name = 'ROLE_ADMIN')", nativeQuery = true)
+            "and user.username != 'admin' " +
+            "order by id desc", nativeQuery = true)
     Page<User> findAllUserAndSearch(Pageable pageable, @Param(value = "keyword") String keyword);
 
     @Query(value = "select count(*) from user where (date(created_date) between :from and :to) and username != 'admin'", nativeQuery = true)

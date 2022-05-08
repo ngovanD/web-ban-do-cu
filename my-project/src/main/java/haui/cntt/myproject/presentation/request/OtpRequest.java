@@ -9,6 +9,5 @@ import lombok.*;
 @Builder
 public class OtpRequest {
     private String cellphone;
-
     private String otp;
 }

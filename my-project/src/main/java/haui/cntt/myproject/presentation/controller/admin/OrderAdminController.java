@@ -43,23 +43,23 @@ public class OrderAdminController {
     }
 
     @GetMapping("/view/{id}")
-    public String info(Model model, @PathVariable(value = "id") long orderId) throws Throwable{
+    public String info(Model model, @PathVariable(value = "id") long orderId) throws Throwable {
         OrderResponse orderResponse = OrderMapper.convertToOrderResponse(orderService.getDetail(orderId));
         model.addAttribute("orderResponse", orderResponse);
         return "admin_order_detail";
     }
 
     @GetMapping("/confirm-refund/{id}")
-    public String confirm(@PathVariable(value = "id") long orderId, HttpServletRequest request) throws Throwable{
+    public String confirm(@PathVariable(value = "id") long orderId, HttpServletRequest request) throws Throwable {
         orderService.confirmRefund(orderId);
         String referer = request.getHeader("Referer");
-        return "redirect:"+ referer;
+        return "redirect:" + referer;
     }
 
     @GetMapping("/pay-seller/{id}")
-    public String pay(@PathVariable(value = "id") long orderId, HttpServletRequest request) throws Throwable{
+    public String pay(@PathVariable(value = "id") long orderId, HttpServletRequest request) throws Throwable {
         orderService.paySeller(orderId);
         String referer = request.getHeader("Referer");
-        return "redirect:"+ referer;
+        return "redirect:" + referer;
     }
 }

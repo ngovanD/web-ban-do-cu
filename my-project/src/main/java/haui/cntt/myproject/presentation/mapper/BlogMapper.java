@@ -7,7 +7,9 @@ import haui.cntt.myproject.presentation.response.BlogResponse;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 public class BlogMapper {
-    private BlogMapper(){super();}
+    private BlogMapper() {
+        super();
+    }
 
     public static BlogResponse convertToBlogResponse(Blog blog) {
         String apiImage = MvcUriComponentsBuilder.fromMethodName(ImageController.class, "readDetailFile"

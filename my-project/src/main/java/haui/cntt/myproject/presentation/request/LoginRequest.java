@@ -11,7 +11,6 @@ public class LoginRequest {
     @Getter(AccessLevel.NONE)
     private String username;
     private String password;
-
     public String getUsername() {
         if(username != null)
         {

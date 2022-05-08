@@ -9,7 +9,6 @@ import haui.cntt.myproject.persistance.entity.User;
 import haui.cntt.myproject.persistance.repository.ProductRepository;
 import haui.cntt.myproject.persistance.repository.RoleRepository;
 import haui.cntt.myproject.persistance.repository.UserRepository;
-import haui.cntt.myproject.presentation.response.ProductResponse;
 import haui.cntt.myproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.awt.print.PageFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -200,19 +198,28 @@ public class UserServiceImpl implements UserService {
         return newPassword;
     }
 
-    public List<Product> getMyListProduct() throws Throwable {
+    public Page<Product> getMyListProduct(int page, String status) throws Throwable {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User foundUser = userRepository.findByUsername(username).orElseThrow(
                 () -> {
                     throw new BadRequestException("User không tồn tại !!!");
                 }
         );
+        List<Product> productList = new ArrayList<>();
+        if (status.equals("all")) {
+            productList = foundUser.getProducts().stream().collect(Collectors.toList());
+        } else {
+            productList = foundUser.getProducts().stream().filter(p -> p.getStatus().toString().equals(status)).collect(Collectors.toList());
+        }
 
-        List<Product> productList = foundUser.getProducts().stream().collect(Collectors.toList());
         Collections.sort(productList, Comparator.comparingLong(Product::getId).reversed());
-        return productList;
+        Pageable pageable = PageRequest.of(page, 10);
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), productList.size());
+        return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
     }
 
+    @Transactional
     public void addWishlist(long productId) throws Throwable {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User foundUser = userRepository.findByUsername(username).orElseThrow(() -> {
@@ -243,7 +250,8 @@ public class UserServiceImpl implements UserService {
         return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
     }
 
-    public void removeWishlist(long productId) throws Throwable{
+    @Transactional
+    public void removeWishlist(long productId) throws Throwable {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User foundUser = userRepository.findByUsername(username).orElseThrow(() -> {
             throw new BadRequestException("User không tồn tại !!!");

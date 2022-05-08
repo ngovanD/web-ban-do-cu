@@ -4,6 +4,7 @@ import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.persistance.entity.Slide;
 import haui.cntt.myproject.persistance.repository.SlideRepository;
+import haui.cntt.myproject.service.SlideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class SlideServiceImpl {
+public class SlideServiceImpl implements SlideService {
     @Autowired
     private SlideRepository slideRepository;
 
@@ -44,8 +45,7 @@ public class SlideServiceImpl {
         foundSlide.setTitleStrong(slide.getTitleStrong());
         foundSlide.setLink(slide.getLink());
 
-        if(!multipartFile.isEmpty())
-        {
+        if (!multipartFile.isEmpty()) {
             FileUploadUtil.deleteFile(UPLOAD_DIR_SLIDE, foundSlide.getImage());
 
             String originalFilename = multipartFile.getOriginalFilename();
@@ -83,7 +83,7 @@ public class SlideServiceImpl {
         return slideRepository.findAll();
     }
 
-    public Slide getDetail(long slideId) throws Throwable{
+    public Slide getDetail(long slideId) throws Throwable {
         return slideRepository.findById(slideId).orElseThrow(() -> {
             throw new BadRequestException("Slide không tồn tại !!!");
         });

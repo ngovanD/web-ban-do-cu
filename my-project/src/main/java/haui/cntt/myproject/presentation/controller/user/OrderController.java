@@ -61,9 +61,9 @@ public class OrderController {
 
     @GetMapping(value = "/response/vnpay", name = "responsePaymentVnpay")
     public String checkPaymentVnpay(@RequestParam(name = "vnp_ResponseCode") String vnp_ResponseCode,
-                                                    @RequestParam(name = "vnp_TxnRef") String vnp_TxnRef,
-                                                    @RequestParam(name = "vnp_Amount") String vnp_Amount,
-                                                    HttpServletRequest request, HttpServletResponse response) throws Throwable {
+                                    @RequestParam(name = "vnp_TxnRef") String vnp_TxnRef,
+                                    @RequestParam(name = "vnp_Amount") String vnp_Amount,
+                                    HttpServletRequest request, HttpServletResponse response) throws Throwable {
 
         //log.info("Mapped checkPaymentVnpay method {{GET: /payment/zalopay/orderId}}");
         orderService.checkResultPaidVnpay(vnp_ResponseCode, vnp_TxnRef, vnp_Amount);

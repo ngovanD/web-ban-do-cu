@@ -58,23 +58,27 @@
           <div class="clearfix filters-container m-t-10">
             <div class="row">
               <div class="col col-sm-12 col-md-6">
-                <div class="col col-sm-3 col-md-6 no-padding">
+                <div class="col col-sm-3 col-md-10 no-padding">
                   <div class="lbl-cnt"> <span class="lbl">Trạng thái</span>
                     <div class="fld inline">
-                      <select>
+                      <!-- <select>
                         <option>Tất cả</option>
                         <option>Đã bán</option>
                         <option>Chưa bán</option>
-                      </select>
-                      <!-- <div class="dropdown dropdown-small dropdown-med dropdown-white inline">
-                        <button data-toggle="dropdown" type="button" class="btn dropdown-toggle"> Chọn trạng thái sản phẩm <span
-                            class="caret"></span> </button>
+                        <option>Chờ xác nha</option>
+                      </select> -->
+                      <div class="dropdown dropdown-small dropdown-med dropdown-white inline">
+                        <button th:if="${status == 'all'}" data-toggle="dropdown" type="button" class="btn dropdown-toggle"> Tất cả <span class="caret"></span> </button>
+                        <button th:if="${status == 'SOLD_OUT'}" data-toggle="dropdown" type="button" class="btn dropdown-toggle"> Đã bán <span class="caret"></span> </button>
+                        <button th:if="${status == 'STOCKING'}" data-toggle="dropdown" type="button" class="btn dropdown-toggle"> Chưa bán <span class="caret"></span> </button>
+                        <button th:if="${status == 'WAITING_CONFIRM'}" data-toggle="dropdown" type="button" class="btn dropdown-toggle"> Chờ xác nhận <span class="caret"></span> </button>
                         <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="#">Tất cả</a></li>
-                          <li role="presentation"><a href="#">Đã bán</a></li>
-                          <li role="presentation"><a href="#">Chưa bán</a></li>
+                          <li role="presentation"><a th:href="@{/user/my-list-product?status=all}">Tất cả</a></li>
+                          <li role="presentation"><a th:href="@{/user/my-list-product?status=SOLD_OUT}">Đã bán</a></li>
+                          <li role="presentation"><a th:href="@{/user/my-list-product?status=STOCKING}">Chưa bán</a></li>
+                          <li role="presentation"><a th:href="@{/user/my-list-product?status=WAITING_CONFIRM}">Chờ xác nhận</a></li>
                         </ul>
-                      </div> -->
+                      </div>
                     </div>
                     <!-- /.fld -->
                   </div>
@@ -86,14 +90,23 @@
               <div class="col col-sm-6 col-md-6 text-right">
                 <div class="pagination-container">
                   <ul class="list-inline list-unstyled">
-                    <li class="prev"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                    <li><a href="#">1</a></li>
-                    <li class="active"><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li class="next"><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                  </ul>
-                  <!-- /.list-inline -->
+                    <li th:if="${current_page > 1}" class="prev"><a
+                            th:href="@{'/user/my-list-product?page=' + ${current_page - 1} + '&status=' + ${status}}"><i
+                                class="fa fa-angle-left"></i></a></li>
+                    <li th:unless="${current_page > 1}" class="prev"><a><i class="fa fa-angle-left"></i></a>
+                    </li>
+                    <th:block th:if="${total_page != 0}" th:each="i: ${#numbers.sequence(1, total_page)}">
+                        <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
+                        <li th:unless="${i == current_page}"><a
+                                th:href="@{'/user/my-list-product?page=' + ${i} + '&status=' + ${status}}">[[${i}]]</a>
+                        </li>
+                    </th:block>
+                    <li th:if="${total_page > current_page}" class="next"><a
+                            th:href="@{'/user/my-list-product?page=' + ${current_page + 1} + '&status=' + ${status}}"><i
+                                class="fa fa-angle-right"></i></a></li>
+                    <li th:unless="${total_page > current_page}" class="next"><a><i
+                                class="fa fa-angle-right"></i></a></li>
+                </ul><!-- /.list-inline -->
                 </div>
                 <!-- /.pagination-container -->
               </div>
@@ -105,6 +118,7 @@
             <div id="myTabContent" class="tab-content category-list">
               <div class="tab-pane active" id="list-container">
                 <div class="category-product">
+                  <h4 th:unless="${productResponseList.size() > 0}" style="text-align: center;">Không tồn tại bài đăng !!!</h4>
                   <th:block th:each="product : ${productResponseList}">
                     <div class="category-product-inner wow fadeInUp animated" style="visibility: visible;">
                       <div class="products">
@@ -112,16 +126,20 @@
                           <div class="row product-list-row">
                             <div class="col col-sm-4 col-lg-4">
                               <div>
-                                <div> <img th:src="${product.mainImage}" alt="" width="200px" style="margin-left: 50%;
-                                  transform: translate(-50%, 0);"> </div>
+                                <div> <img th:src="${product.mainImage}" alt="" style="margin-left: 50%;
+                                  transform: translate(-50%, 0); object-fit: contain; width: 150px; height: 150px;">
+                                </div>
                               </div>
                               <!-- /.product-image -->
                             </div>
                             <!-- /.col -->
                             <div class="col col-sm-8 col-lg-8">
                               <div class="product-info">
-                                <h3 class="name"><a th:href="@{'/user/product/detail/' + ${product.id}}">[[${product.name}]]</a></h3>
-                                <div class="product-price"> <span class="price">  [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ </span></div>
+                                <h3 class="name"><a
+                                    th:href="@{'/user/product/detail/' + ${product.id}}">[[${product.name}]]</a></h3>
+                                <div class="product-price"> <span class="price">
+                                    [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ </span>
+                                </div>
                                 <!-- /.product-price -->
                                 <div class="cart clearfix animate-effect">
                                   <div class="action">
@@ -149,26 +167,6 @@
               <!-- /.tab-pane #list-container -->
             </div>
             <!-- /.tab-content -->
-            <div class="clearfix filters-container">
-              <div class="text-right">
-                <div class="pagination-container">
-                  <ul class="list-inline list-unstyled">
-                    <li class="prev"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                    <li><a href="#">1</a></li>
-                    <li class="active"><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li class="next"><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                  </ul>
-                  <!-- /.list-inline -->
-                </div>
-                <!-- /.pagination-container -->
-              </div>
-              <!-- /.text-right -->
-
-            </div>
-            <!-- /.filters-container -->
-
           </div>
           <!-- /.search-result-container -->
 

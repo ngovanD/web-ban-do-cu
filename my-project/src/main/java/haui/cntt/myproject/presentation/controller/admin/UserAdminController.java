@@ -13,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @Controller
 @RequestMapping("/admin/user")
 public class UserAdminController {
@@ -37,7 +35,7 @@ public class UserAdminController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(Model model, @PathVariable(value = "id") long userId) throws IOException {
+    public ResponseEntity<String> delete(Model model, @PathVariable(value = "id") long userId){
         String uploadDir = UPLOAD_DIR_USER + userId;
         FileUploadUtil.deleteDir(uploadDir);
         userService.deleteUser(userId);

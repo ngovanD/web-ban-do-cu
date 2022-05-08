@@ -20,7 +20,7 @@ public class ProductMapper {
     public static ProductResponse convertToProductResponse(Product product) {
         String fileName = product.getImageProducts()
                 .stream()
-                .filter(i -> i.isMainImage() == true)
+                .filter(i -> i.isMainImage())
                 .findFirst()
                 .orElse(ImageProduct.builder().fileName("not_found.png").build())
                 .getFileName();

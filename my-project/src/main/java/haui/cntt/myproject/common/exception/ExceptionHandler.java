@@ -11,6 +11,7 @@ public class ExceptionHandler {
         if(e instanceof BadRequestException)
         {
             return ResponseEntity.badRequest().body(e.getMessage());
+            //return "error/400";
         }
         else if(e instanceof UnauthorizedException)
         {

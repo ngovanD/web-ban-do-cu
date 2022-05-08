@@ -9,12 +9,12 @@
     </th:block>
     <div class="form-group">
         <label class="info-title">Tiêu đề - Tên sản phẩm</label>
-        <input type="text" class="form-control unicase-form-control text-input" placeholder="Tiêu đề hiển thị" required id="name_">
+        <input type="text" class="form-control unicase-form-control text-input" placeholder="Tiêu đề hiển thị" required id="name_" name="name_">
     </div>
     <div class="form-group">
         <label class="info-title">Giá</label>
         <input type="text" class="form-control unicase-form-control text-input" placeholder="Đơn vị VNĐ" required
-            id="price_">
+            id="price_" name="price_">
     </div>
     <div class="form-group">
         <label class="info-title">Tình trạng</label>
@@ -38,17 +38,17 @@
         <label class="info-title">Địa chỉ:</label>
         <div>
             <div class="col-sm-4">
-                <select id="province" class="form-control" onchange="loadDistrict()">
+                <select id="province" class="form-control" onchange="loadDistrict()" name="select_province">
                     <option hidden value="0">---Chọn tỉnh, thành phố---</option>
                 </select>
             </div>
             <div class="col-sm-4">
-                <select id="district" class="form-control" onchange="loadCommune()">
+                <select id="district" class="form-control" onchange="loadCommune()" name="select_district">
                     <option hidden value="0">---Chọn quận, huyện---</option>
                 </select>
             </div>
             <div class="col-sm-4">
-                <select id="commune" class="form-control">
+                <select id="commune" class="form-control" name="select_commune">
                     <option hidden value="0">---Chọn xã, phường, trị trấn---</option>
                 </select>
             </div>
@@ -56,7 +56,7 @@
     </div>
     <div class="form-group">
         <label class="info-title">Địa chỉ cụ thể</label>
-        <input type="text" class="form-control unicase-form-control text-input" required id="detail_" placeholder="Số nhà, tên đường, ...">
+        <input type="text" class="form-control unicase-form-control text-input" required id="detail_" placeholder="Số nhà, tên đường, ..." name="detail_">
     </div>
 
     <a class=" btn-upper btn btn-primary checkout-page-button" onclick="createProduct()">Đăng tin</a>

@@ -17,6 +17,5 @@ public class ProductRequest {
     private String description;
     private List<ProductPropertyRequest> productPropertyRequestList;
     private AddressRequest addressRequest;
-
     private long categoryId;
 }

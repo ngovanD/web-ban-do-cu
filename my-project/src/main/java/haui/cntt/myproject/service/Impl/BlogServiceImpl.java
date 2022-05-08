@@ -4,6 +4,7 @@ import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.persistance.entity.Blog;
 import haui.cntt.myproject.persistance.repository.BlogRepository;
+import haui.cntt.myproject.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,14 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class BlogServiceImpl {
+public class BlogServiceImpl implements BlogService {
     @Autowired
     private BlogRepository blogRepository;
-
     static final String UPLOAD_DIR_BLOG = "src/main/resources/static/blog/0/";
 
     public Page<Blog> getAllActive(int page) {
@@ -48,10 +47,8 @@ public class BlogServiceImpl {
         foundBlog.setTitle(blog.getTitle());
         foundBlog.setContent(blog.getContent());
 
-        if(!multipartFile.isEmpty())
-        {
+        if (!multipartFile.isEmpty()) {
             FileUploadUtil.deleteFile(UPLOAD_DIR_BLOG, foundBlog.getImage());
-
             String originalFilename = multipartFile.getOriginalFilename();
             String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileName = "blog-" + System.currentTimeMillis() + typeOfFile;
@@ -73,7 +70,7 @@ public class BlogServiceImpl {
     }
 
     @Transactional
-    public void updateStatusHiddenFlag(long id) throws Throwable {
+    public void updateStatusHiddenFlag(long id) throws Throwable{
         Blog foundBlog = blogRepository.findById(id).orElseThrow(
                 () -> {
                     throw new BadRequestException("Không tìm thấy blog !!!");
@@ -87,7 +84,7 @@ public class BlogServiceImpl {
         return blogRepository.findAll();
     }
 
-    public Blog getDetail(long blogId) throws Throwable{
+    public Blog getDetail(long blogId) throws Throwable {
         return blogRepository.findById(blogId).orElseThrow(() -> {
             throw new BadRequestException("Blog không tồn tại !!!");
         });
