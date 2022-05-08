@@ -45,14 +45,14 @@
                                             <!-- guest-login -->
                                             <div class="col-md-8 col-sm-8 already-registered-login">
                                                 <h4 class="checkout-subtitle">Thông tin giao hàng</h4>
-                                                <form>
+                                                <form id="formDeliveryAddress">
                                                     <div class="form-group">
                                                         <label class="info-title" for="exampleInputEmail1">Tên người
                                                             nhận
                                                             <span>*</span></label>
                                                         <input type="text"
                                                             class="form-control unicase-form-control text-input"
-                                                            id="full_name" placeholder="">
+                                                            id="full_name" placeholder="" name="full_name">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="info-title" for="exampleInputPassword1">Số điện
@@ -60,7 +60,7 @@
                                                             <span>*</span></label>
                                                         <input type="text"
                                                             class="form-control unicase-form-control text-input"
-                                                            id="cellphone" placeholder="">
+                                                            id="cellphone" placeholder="" name="cellphone_">
                                                     </div>
                                                     <div class="form-group" style="margin-bottom: 0px">
                                                         <label class="info-title">Địa chỉ
@@ -69,19 +69,19 @@
                                                     <div class="form-group">
                                                         <div class="col-sm-4">
                                                             <select id="province" class="form-control"
-                                                                onchange="loadDistrict()">
+                                                                onchange="loadDistrict()" name="select_province">
                                                                 <option hidden value="0">---Chọn tỉnh, thành phố---
                                                                 </option>
                                                             </select>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <select id="district" class="form-control"
-                                                                onchange="loadCommune()">
+                                                                onchange="loadCommune()" name="select_district">
                                                                 <option hidden value="0">---Chọn quận, huyện---</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-sm-4">
-                                                            <select id="commune" class="form-control">
+                                                            <select id="commune" class="form-control" name="select_commune">
                                                                 <option hidden value="0">---Chọn xã, phường, trị trấn---
                                                                 </option>
                                                             </select>
@@ -92,14 +92,14 @@
                                                             <span>*</span></label>
                                                         <input type="text"
                                                             class="form-control unicase-form-control text-input"
-                                                            required id="detail_">
+                                                            required id="detail_" name="detail_">
                                                     </div>
                                                 </form>
                                             </div>
                                             <!-- guest-login -->
 
                                             <!-- already-registered-login -->
-                                            <div class="col-md-4 col-sm-4 already-registered-login">
+                                            <div class="col-md-4 col-sm-4">
                                                 <h4 class="checkout-subtitle">Thông tin sản phẩm</h4>
                                                 <div id="myTabContent" class="tab-content category-list">
                                                     <div class="tab-pane active" id="list-container">
@@ -157,7 +157,7 @@
                                                 <br>
                                                 <h4 class="checkout-subtitle">Sản phẩm:  [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
                                                 </h4>
-                                                <h4 class="checkout-subtitle">Phí giao hàng: 39.000 VNĐ</h4>
+                                                <h4 class="checkout-subtitle">Phí giao hàng: 39000 VNĐ</h4>
                                                 <h4 class="checkout-subtitle">Tổng tiền thanh toán:
                                                     [[${#numbers.formatDecimal(productResponse.price + 39000, 0, 'COMMA', 0, 'POINT')}]] VNĐ</h4>
                                                 <br>
@@ -177,7 +177,7 @@
                                                     <input id="ZALOPAY" type="radio" name="methodPay" value="ZALOPAY">
                                                     <label class="radio-button" for="ZALOPAY">Zalopay</label>
                                                 </div>
-                                                <a class="btn-upper btn btn-primary" style="text-decoration: none;" onclick="checkout()">Đặt hàng</a>
+                                                <a class="btn-upper btn btn-primary" style="text-decoration: none; margin-top: 10px;" onclick="checkout()">Đặt hàng</a>
                                             </div>
                                             <!-- already-registered-login -->
 
@@ -200,6 +200,10 @@
     <div th:replace="fragment::footer-user"></div>
 
     <div th:replace="fragment::script-custom2"></div>
+    <!-- <div th:replace="fragment::script-custom"></div> -->
+    <!-- jquery-validation -->
+    <script th:src="@{/assets/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -209,9 +213,19 @@
 
         $(document).ready(function () {
             loadProvince();
+            $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                return arg !== value;
+            }, "Value must not equal arg.");
+            $.validator.addMethod("checkInvalid", function (value, element) {
+                return this.optional(element) || /((09|03|07|08|05)+([0-9]{8})\b)/g.test(value);
+            });
         });
 
         function checkout() {
+            if (!$('#formDeliveryAddress').valid()) {
+                toastr.warning("Hãy điền đầy đủ thông tin.");
+                return;
+            }
 
             var feeShipping = 39000;
             var methodPay = document.querySelector('input[name="methodPay"]:checked').value;
@@ -251,12 +265,14 @@
                 data: JSON.stringify(data),
             })
                 .done(function (dataLink) {
-                    toastr.success("Đặt thành công !");
+                    
 
                     if(methodPay != "COD")
                     {
                         location.href = dataLink;
                     }
+                    toastr.success("Đặt thành công !");
+                    location.href = origin + '/user/order/get-all';
                 })
                 .fail(function (error) {
                     toastr.error(error.responseText);
@@ -329,6 +345,64 @@
                     toastr.error("Có lỗi xảy ra.");
                 });
         }
+
+        $(function () {
+                $('#formDeliveryAddress').validate({
+                    rules: {
+                        "full_name": {
+                            required: true,
+                        },
+                        "cellphone_": {
+                            required: true,
+                            checkInvalid: true,
+                        },
+                        "detail_": {
+                            required: true,
+                        },
+                        "select_province": {
+                            valueNotEquals: "0"
+                        },
+                        "select_district": {
+                            valueNotEquals: "0"
+                        },
+                        "select_commune": {
+                            valueNotEquals: "0"
+                        },
+                    },
+                    messages: {
+                        "full_name": {
+                            required: "Hãy nhập tên người nhận !",
+                        },
+                        "cellphone_": {
+                            required: "Hãy nhập số điện thoại !",
+                            checkInvalid: "Số điện thoại không hợp lệ !",
+                        },
+                        "detail_": {
+                            required: "Hãy nhập địa chỉ cụ thể !",
+                        },
+                        "select_province": {
+                            valueNotEquals: "Hãy chọn tỉnh thành phố!",
+                        },
+                        "select_district": {
+                            valueNotEquals: "Hãy chọn quận huyện !",
+                        },
+                        "select_commune": {
+                            valueNotEquals: "Hãy chọn xã phường !",
+                        },
+                    },
+                    errorElement: 'span',
+                    errorPlacement: function (error, element) {
+                        error.addClass('invalid-feedback');
+                        element.closest('.form-group').append(error);
+                    },
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).addClass('is-invalid');
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).removeClass('is-invalid');
+                    }
+                });
+            });
     </script>
 </body>
 

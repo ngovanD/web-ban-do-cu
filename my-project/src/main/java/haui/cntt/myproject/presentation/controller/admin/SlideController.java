@@ -5,6 +5,7 @@ import haui.cntt.myproject.presentation.request.SlideRequest;
 import haui.cntt.myproject.presentation.response.SlideResponse;
 import haui.cntt.myproject.service.Impl.SlideServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +23,13 @@ public class SlideController {
     private SlideServiceImpl slideService;
 
     @GetMapping("/get-all")
-    public String getAll(Model model) {
-        List<SlideResponse> slideResponseList = slideService.getAll()
-                .stream()
-                .map(SlideMapper::convertToSlideResponse)
-                .collect(Collectors.toList());
+    public String getAll(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+        Page<SlideResponse> slideResponseList = slideService.getAll(page - 1)
+                .map(SlideMapper::convertToSlideResponse);
 
-        model.addAttribute("slideResponseList", slideResponseList);
+        model.addAttribute("slideResponseList", slideResponseList.getContent());
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", slideResponseList.getTotalPages());
         return "admin_list_slide";
     }
 

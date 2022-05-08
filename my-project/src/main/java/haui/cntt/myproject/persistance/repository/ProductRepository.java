@@ -25,24 +25,24 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "from product inner join category child on product.category_id = child.id " +
             "inner join category parent on parent.id = child.category_parent_id " +
             "where (parent.id = 1) " +
-            "order by product.id desc limit :limit", nativeQuery = true)
+            "order by rand() limit :limit", nativeQuery = true)
     List<Product> getRandomDoDienTu(@Param(value = "limit")int limit);
 
     @Query(value = "select * " +
             "from product inner join category child on product.category_id = child.id " +
             "inner join category parent on parent.id = child.category_parent_id " +
             "where (parent.id = 4) " +
-            "order by product.id desc limit :limit", nativeQuery = true)
+            "order by rand() limit :limit", nativeQuery = true)
     List<Product> getRandomSachTruyen(@Param(value = "limit")int limit);
 
     @Query(value = "select * " +
             "from product inner join category child on product.category_id = child.id " +
             "inner join category parent on parent.id = child.category_parent_id " +
             "where (parent.id = 3) " +
-            "order by product.id desc limit :limit", nativeQuery = true)
+            "order by rand() limit :limit", nativeQuery = true)
     List<Product> getRandomQuanAo(@Param(value = "limit")int limit);
 
-    @Query(value = "select * from product where product.view > 10 limit :limit", nativeQuery = true)
+    @Query(value = "select * from product where product.view > 10 order by rand() limit :limit", nativeQuery = true)
     List<Product> getHotProduct(@Param(value = "limit") int limit);
 
     @Query(value = "select * " +
@@ -86,6 +86,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "select * " +
             "from product "+
             "where (category_id = :categoryId) and id != :productId " +
-            "order by product.id desc limit :limit", nativeQuery = true)
+            "order by rand() limit :limit", nativeQuery = true)
     List<Product> getRecommendList(@Param(value = "categoryId")long categoryId, @Param(value = "productId")long productId, @Param(value = "limit") int limit);
 }

@@ -6,6 +6,10 @@ import haui.cntt.myproject.persistance.entity.Slide;
 import haui.cntt.myproject.persistance.repository.SlideRepository;
 import haui.cntt.myproject.service.SlideService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -79,8 +83,9 @@ public class SlideServiceImpl implements SlideService {
         slideRepository.save(foundSlide);
     }
 
-    public List<Slide> getAll() {
-        return slideRepository.findAll();
+    public Page<Slide> getAll(int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        return slideRepository.findAll(pageable);
     }
 
     public Slide getDetail(long slideId) throws Throwable {

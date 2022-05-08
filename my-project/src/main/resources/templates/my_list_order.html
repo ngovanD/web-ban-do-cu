@@ -24,7 +24,7 @@
                 <div class="breadcrumb-inner">
                     <ul class="list-inline list-unstyled">
                         <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
-                        <li class="active">Danh sách đơn hàng</li>
+                        <li class="active">Danh sách đơn mua</li>
                     </ul>
                 </div><!-- /.breadcrumb-inner -->
             </div><!-- /.container -->
@@ -83,7 +83,7 @@
                                         <tr>
                                             <td class="cart-product-name-info">
                                                 <a
-                                                    th:href="@{'/user/order/' + ${order.id}}">[[${order.productResponse.name}]]</a>
+                                                    th:href="@{'/product/' + ${order.productResponse.slug}}">[[${order.productResponse.name}]]</a>
                                             </td>
                                             <td class="cart-product-sub-total">
                                                 <span class="cart-sub-total-price" style="font-size: 14px;">

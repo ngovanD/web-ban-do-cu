@@ -149,4 +149,11 @@ public class OrderController {
         model.addAttribute("to", to);
         return "my_list_order_sale";
     }
+
+    @GetMapping("/sale/{id}")
+    public String getDetailOrderSale(Model model, @PathVariable(value = "id") long orderId) throws Throwable {
+        OrderResponse orderResponse = OrderMapper.convertToOrderResponse(orderService.getDetail(orderId));
+        model.addAttribute("orderResponse", orderResponse);
+        return "my_order_sale_detail";
+    }
 }

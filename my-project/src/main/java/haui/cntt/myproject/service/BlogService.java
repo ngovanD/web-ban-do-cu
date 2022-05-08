@@ -1,6 +1,7 @@
 package haui.cntt.myproject.service;
 
 import haui.cntt.myproject.persistance.entity.Blog;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,7 @@ public interface BlogService {
 
     void updateStatusHiddenFlag(long id) throws Throwable;
 
-    List<Blog> getAll();
+    Page<Blog> getAll(int page);
 
     Blog getDetail(long blogId) throws Throwable;
 

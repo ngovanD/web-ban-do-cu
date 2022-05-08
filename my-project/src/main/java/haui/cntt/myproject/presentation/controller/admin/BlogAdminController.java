@@ -5,6 +5,7 @@ import haui.cntt.myproject.presentation.request.BlogRequest;
 import haui.cntt.myproject.presentation.response.BlogResponse;
 import haui.cntt.myproject.service.Impl.BlogServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +23,13 @@ public class BlogAdminController {
     private BlogServiceImpl blogService;
 
     @GetMapping("/get-all")
-    public String getAll(Model model) {
-        List<BlogResponse> blogResponseList = blogService.getAll()
-                .stream()
-                .map(BlogMapper::convertToBlogResponse)
-                .collect(Collectors.toList());
+    public String getAll(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+        Page<BlogResponse> blogResponseList = blogService.getAll(page - 1)
+                .map(BlogMapper::convertToBlogResponse);
 
-        model.addAttribute("blogResponseList", blogResponseList);
+        model.addAttribute("blogResponseList", blogResponseList.getContent());
+        model.addAttribute("current_page", page);
+        model.addAttribute("total_page", blogResponseList.getTotalPages());
         return "admin_list_blog";
     }
 

@@ -40,18 +40,21 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
                 }
         );
 
-        if (!foundDeliveryAddress.getOrder().getStatus().equals(OrderStatusEnum.WAITING_CONFIRM)) {
+        if (foundDeliveryAddress.getOrder().getStatus().equals(OrderStatusEnum.WAITING_CONFIRM)
+            || foundDeliveryAddress.getOrder().getStatus().equals(OrderStatusEnum.PAID)) {
+            foundDeliveryAddress.setCodeProvince(convertToDeliveryAddress.getCodeProvince());
+            foundDeliveryAddress.setProvince(convertToDeliveryAddress.getProvince());
+            foundDeliveryAddress.setCodeDistrict(convertToDeliveryAddress.getCodeDistrict());
+            foundDeliveryAddress.setDistrict(convertToDeliveryAddress.getDistrict());
+            foundDeliveryAddress.setCodeCommune(convertToDeliveryAddress.getCodeCommune());
+            foundDeliveryAddress.setCommune(convertToDeliveryAddress.getCommune());
+            foundDeliveryAddress.setDetail(convertToDeliveryAddress.getDetail());
+            foundDeliveryAddress.setCellphone(convertToDeliveryAddress.getCellphone());
+            foundDeliveryAddress.setFullName(convertToDeliveryAddress.getFullName());
+            deliveryAddressRepository.save(foundDeliveryAddress);
+        }
+        else {
             throw new BadRequestException("Không thể đổi địa chỉ lúc này !!!");
         }
-
-        foundDeliveryAddress.setCodeProvince(convertToDeliveryAddress.getCodeProvince());
-        foundDeliveryAddress.setProvince(convertToDeliveryAddress.getProvince());
-        foundDeliveryAddress.setCodeDistrict(convertToDeliveryAddress.getCodeDistrict());
-        foundDeliveryAddress.setDistrict(convertToDeliveryAddress.getDistrict());
-        foundDeliveryAddress.setCodeCommune(convertToDeliveryAddress.getCodeCommune());
-        foundDeliveryAddress.setCommune(convertToDeliveryAddress.getCommune());
-        foundDeliveryAddress.setCellphone(convertToDeliveryAddress.getCellphone());
-        foundDeliveryAddress.setFullName(convertToDeliveryAddress.getFullName());
-        deliveryAddressRepository.save(foundDeliveryAddress);
     }
 }

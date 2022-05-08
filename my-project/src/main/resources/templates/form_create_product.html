@@ -435,11 +435,11 @@
             var currentStatus = document.getElementById("currentStatus_").value;
             var description = document.getElementById("description_").value;
 
-            var province = $("#province option:selected").text();
+            var province = $("#province option:selected").text().trim();
             var codeProvince = $("#province option:selected").val();
-            var district = $("#district option:selected").text();
+            var district = $("#district option:selected").text().trim();
             var codeDistrict = $("#district option:selected").val();
-            var commune = $("#commune option:selected").text();
+            var commune = $("#commune option:selected").text().trim();
             var codeCommune = $("#commune option:selected").val();
             var detail = document.getElementById("detail_").value;
 
