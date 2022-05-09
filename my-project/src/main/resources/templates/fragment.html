@@ -237,6 +237,22 @@ một số cái cần chú ý
                         }
                     }
                 })
+
+                var active = window.location.pathname.split("/")[2];
+                if(active == 'category' || active == 'property')
+                {
+                    document.getElementById("category_0").classList.add('active');
+                    document.getElementById("category_").classList.add('menu-open');
+                    if(active == 'category'){
+                        document.getElementById("category_1").classList.add('active');
+                    }
+                    else{
+                        document.getElementById("category_2").classList.add('active');
+                    }
+                }
+                else{
+                    document.getElementById(active+"_").classList.add('active');
+                }
             });
 
             function deleteMethod(e) {
@@ -598,7 +614,7 @@ một số cái cần chú ý
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="info">
-                        <a href="#" id="fullName_admin" class="d-block">Alexander Pierce</a>
+                        <a href="#" id="fullName_admin" class="d-block">Xin chào, Ngô Văn Đang</a>
                     </div>
                     <div class="info">
                         <a th:href="@{/logout}" class="d-block" title="Logout">
@@ -613,7 +629,7 @@ một số cái cần chú ý
                         <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a th:href="@{/admin/home}" class="nav-link">
+                            <a th:href="@{/admin/home}" class="nav-link" id="home_">
                                 <i class="nav-icon fa-solid fa-arrow-trend-up"></i>
                                 <p>
                                     Thống kê
@@ -621,7 +637,7 @@ một số cái cần chú ý
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a th:href="@{/admin/user/get-all}" class="nav-link">
+                            <a th:href="@{/admin/user/get-all}" class="nav-link" id="user_">
                                 <i class="nav-icon fa-solid fa-user"></i>
                                 <p>
                                     Quản lý user
@@ -629,15 +645,15 @@ một số cái cần chú ý
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a th:href="@{/admin/order/get-all}" class="nav-link">
+                            <a th:href="@{/admin/order/get-all}" class="nav-link" id="order_">
                                 <i class="nav-icon fa-solid fa-cart-shopping"></i>
                                 <p>
                                     Quản đơn hàng
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link">
+                        <li class="nav-item" id="category_">
+                            <a class="nav-link" id="category_0">
                                 <i class="nav-icon fa-solid fa-list-ul"></i>
                                 <p>
                                     Quản lý loại sản phẩm
@@ -646,13 +662,13 @@ một số cái cần chú ý
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a th:href="@{/admin/category/get-all}" class="nav-link">
+                                    <a th:href="@{/admin/category/get-all}" class="nav-link" id="category_1">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Danh sách danh mục</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a th:href="@{/admin/property/get-all-property}" class="nav-link">
+                                    <a th:href="@{/admin/property/get-all-property}" class="nav-link" id="category_2">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Thuộc tính loại sản phẩm</p>
                                     </a>
@@ -661,7 +677,7 @@ một số cái cần chú ý
                         </li>
 
                         <li class="nav-item">
-                            <a th:href="@{/admin/slide/get-all}" class="nav-link">
+                            <a th:href="@{/admin/slide/get-all}" class="nav-link" id="slide_">
                                 <i class="nav-icon fa-solid fa-pager"></i>
                                 <p>
                                     Quản lý slide
@@ -670,7 +686,7 @@ một số cái cần chú ý
                         </li>
 
                         <li class="nav-item">
-                            <a th:href="@{/admin/blog/get-all}" class="nav-link">
+                            <a th:href="@{/admin/blog/get-all}" class="nav-link" id="blog_">
                                 <i class="nav-icon fa-brands fa-blogger"></i>
                                 <p>
                                     Quản lý blog

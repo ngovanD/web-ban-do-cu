@@ -35,7 +35,10 @@ public class CategoryMapper {
     public static CategoryResponse convertToCategoryResponse(Category category) {
         String apiImage = MvcUriComponentsBuilder.fromMethodName(ImageController.class, "readDetailFile"
                 , category.getClass().getSimpleName().toLowerCase(), category.getId().toString(), category.getImage()).toUriString();
-
+        if (category.getImage() == null || category.getImage().equals("non_image.png")) {
+            apiImage = MvcUriComponentsBuilder.fromMethodName(ImageController.class, "readDetailFile"
+                    , category.getClass().getSimpleName().toLowerCase(), "0", "non_image.png").toUriString();
+        }
         if (category.getCategoryParent() != null) {
             return CategoryResponse.builder()
                     .id(category.getId())

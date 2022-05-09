@@ -127,6 +127,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     // chạy khởi tạo loại sản phẩm
     public void createTest(Category category) {
+        category.setImage("non_image.png");
         categoryRepository.save(category);
     }
 
@@ -144,6 +145,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category categoryParent = categoryRepository.findByName(nameCategoryParent);
         category.setCategoryParent(categoryParent);
         category.setProperties(propertyList);
+        category.setImage("non_image.png");
         categoryRepository.save(category);
     }
 
