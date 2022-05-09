@@ -229,6 +229,15 @@
         var listFile = [];
 
         function addImage(element) {
+            if (listFile.length >= 10) {
+                toastr.warning("Thêm được tối đa 10 ảnh.");
+                return;
+            }
+            var file = element.files[0];
+            if (((file.size / 1024) / 1024).toFixed(4) > 10) {
+                toastr.warning("Chỉ có thể thêm ảnh dưới 10MB.");
+                return;
+            }
             var container = document.getElementById("container-image_");
             var item = document.createElement('div');
             item.setAttribute("class", "item-image_")
@@ -243,17 +252,11 @@
             thumbnail.style.marginLeft = "50%";
             thumbnail.style.transform = "translate(-50%)";
 
-            file = element.files[0];
             var fileAndIndex = {
                 "parentIndex": index,
                 "file": file
             };
-            if (listFile.length > 10) {
-                toastr.warning("Thêm được tối đa 10 ảnh.");
-            }
-            else {
-                listFile.push(fileAndIndex);
-            }
+            listFile.push(fileAndIndex);
 
 
             reader = new FileReader();

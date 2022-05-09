@@ -123,7 +123,9 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="price-box">
-                                                    <span class="price"> [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                    <span class="price">
+                                                        [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0,
+                                                        'POINT')}]] VNĐ</span>
                                                 </div>
                                             </div>
                                         </div><!-- /.row -->
@@ -175,7 +177,8 @@
                                                 </div>
                                             </div>
                                             <div id="form-content_">
-                                                <form class="register-form outer-top-xs" role="form"
+                                                <form th:if="${productResponse.status == 'Đang bán'}"
+                                                    class="register-form outer-top-xs" role="form"
                                                     id="formDetailProduct">
                                                     <th:block
                                                         th:each="property : ${productResponse.propertyResponseList}">
@@ -193,20 +196,21 @@
                                                         <label class="info-title">Tiêu đề - Tên sản phẩm</label>
                                                         <input type="text"
                                                             class="form-control unicase-form-control text-input"
-                                                            required id="name_" th:value="${productResponse.name}">
+                                                            required id="name_" th:value="${productResponse.name}"
+                                                            name="name_">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="info-title">Giá</label>
                                                         <input type="text"
                                                             class="form-control unicase-form-control text-input"
-                                                            placeholder="Đơn vị VNĐ" required id="price_"
-                                                            th:value="${productResponse.price}">
+                                                            placeholder="Đơn vị VNĐ" required id="price_" th:value="${#numbers.formatDecimal(productResponse.price, 0,
+                                                                'COMMA', 0, 'POINT')}" name="price_">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="info-title">Tình trạng</label>
                                                         <select id="currentStatus_"
                                                             class="form-control unicase-form-control text-input"
-                                                            required>
+                                                            required name="select_status">
                                                             <option hidden value="0">
                                                                 [[${productResponse.currentStatus}]]
                                                             </option>
@@ -219,7 +223,7 @@
                                                         <label class="info-title">Thông tin chi tiết</label>
                                                         <textarea type=""
                                                             class="form-control unicase-form-control text-input"
-                                                            style="height: 230px;" id="description_"
+                                                            style="height: 145px;" id="description_"
                                                             placeholder="
                                                             - Tình trạng sản phẩm
                                                             - Thời gian sử dụng
@@ -232,7 +236,7 @@
                                                         <div>
                                                             <div class="col-sm-4">
                                                                 <select id="province" class="form-control"
-                                                                    onchange="loadDistrict()">
+                                                                    onchange="loadDistrict()" name="select_province">
                                                                     <option hidden
                                                                         th:value="${productResponse.addressResponse.codeProvince}">
                                                                         [[${productResponse.addressResponse.province}]]
@@ -241,7 +245,7 @@
                                                             </div>
                                                             <div class="col-sm-4">
                                                                 <select id="district" class="form-control"
-                                                                    onchange="loadCommune()">
+                                                                    onchange="loadCommune()" name="select_district">
                                                                     <option hidden
                                                                         th:value="${productResponse.addressResponse.codeDistrict}">
                                                                         [[${productResponse.addressResponse.district}]]
@@ -249,7 +253,8 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-sm-4">
-                                                                <select id="commune" class="form-control">
+                                                                <select id="commune" class="form-control"
+                                                                    name="select_commune">
                                                                     <option hidden
                                                                         th:value="${productResponse.addressResponse.codeCommune}">
                                                                         [[${productResponse.addressResponse.commune}]]
@@ -263,12 +268,102 @@
                                                         <input type="text"
                                                             class="form-control unicase-form-control text-input"
                                                             required id="detail_"
-                                                            th:value="${productResponse.addressResponse.detail}">
+                                                            th:value="${productResponse.addressResponse.detail}"
+                                                            name="detail_">
                                                     </div>
 
-                                                    <a th:if="${productResponse.status == 'Đang bán'}"
-                                                        class=" btn-upper btn btn-primary checkout-page-button"
+                                                    <a class=" btn-upper btn btn-primary checkout-page-button"
                                                         onclick="editProduct()">Lưu</a>
+                                                </form>
+                                                <form th:unless="${productResponse.status == 'Đang bán'}"
+                                                    class="register-form outer-top-xs" role="form">
+                                                    <th:block
+                                                        th:each="property : ${productResponse.propertyResponseList}">
+                                                        <div class="form-group">
+                                                            <label class="info-title"
+                                                                th:text="${property.propertyName}">Lỗi</label>
+                                                            <input type="text"
+                                                                class="form-control unicase-form-control text-input"
+                                                                th:name="property" th:id="${property.propertyId}"
+                                                                th:value="${property.value}"
+                                                                th:placeholder="${property.note}" disabled>
+                                                        </div>
+                                                    </th:block>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Tiêu đề - Tên sản phẩm</label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            disabled th:value="${productResponse.name}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Giá</label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            placeholder="Đơn vị VNĐ" disabled th:value="${#numbers.formatDecimal(productResponse.price, 0,
+                                                                'COMMA', 0, 'POINT')}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Tình trạng</label>
+                                                        <select class="form-control unicase-form-control text-input"
+                                                            disabled>
+                                                            <option hidden value="0">
+                                                                [[${productResponse.currentStatus}]]
+                                                            </option>
+                                                            <option>Mới</option>
+                                                            <option>Đã qua sử dụng (chưa sửa chữa)</option>
+                                                            <option>Đã qua sử dụng (đã sửa chữa)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Thông tin chi tiết</label>
+                                                        <textarea disabled type=""
+                                                            class="form-control unicase-form-control text-input"
+                                                            style="height: 145px;"
+                                                            placeholder="
+                                                            - Tình trạng sản phẩm
+                                                            - Thời gian sử dụng
+                                                            - Bảo hành nếu có
+                                                            - Sửa chữa, nâng cấp, phụ kiện đi kèm
+                                                            - Địa chỉ giao nhận, đổi trả">[[${productResponse.description}]]</textarea>
+                                                    </div>
+                                                    <div class="form-group" style="margin-bottom: 50px;">
+                                                        <label class="info-title">Địa chỉ:</label>
+                                                        <div>
+                                                            <div class="col-sm-4">
+                                                                <select class="form-control" onchange="loadDistrict()"
+                                                                    disabled>
+                                                                    <option hidden
+                                                                        th:value="${productResponse.addressResponse.codeProvince}">
+                                                                        [[${productResponse.addressResponse.province}]]
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <select class="form-control" onchange="loadCommune()"
+                                                                    disabled>
+                                                                    <option hidden
+                                                                        th:value="${productResponse.addressResponse.codeDistrict}">
+                                                                        [[${productResponse.addressResponse.district}]]
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <select class="form-control" disabled>
+                                                                    <option hidden
+                                                                        th:value="${productResponse.addressResponse.codeCommune}">
+                                                                        [[${productResponse.addressResponse.commune}]]
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Địa chỉ cụ thể</label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            th:value="${productResponse.addressResponse.detail}"
+                                                            disabled>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -314,7 +409,9 @@
                                                                         </td>
                                                                         <td>
                                                                             <p th:data-id="${imageProduct.id}"
-                                                                                onclick="deleteImage(this)"><i class="fa-solid fa-trash-can"></i></p>
+                                                                                onclick="deleteImage(this)"><i
+                                                                                    class="fa-solid fa-trash-can"></i>
+                                                                            </p>
                                                                         </td>
                                                                     </tr>
                                                                 </th:block>
@@ -393,12 +490,102 @@
 
         /*<![CDATA[*/
         var productId = /*[[${ productResponse.id }]]*/ '0';
+        var imageSize = /*[[${ productResponse.apiGetImageList.size() }]]*/ 0;
         /*]]>*/
 
         $(document).ready(function () {
             loadAddressResponse();
             getInfoDelivery2();
+            $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                return arg !== value;
+            }, "Value must not equal arg.");
+
+            $('#price_').on('keyup', function () {
+                updateTextView($(this));
+            });
         });
+
+        function updateTextView(_obj) {
+            var num = getNumber(_obj.val());
+            if (num == 0) {
+                _obj.val('');
+            } else {
+                _obj.val(num.toLocaleString());
+            }
+        }
+        function getNumber(_str) {
+            var arr = _str.split('');
+            var out = new Array();
+            for (var cnt = 0; cnt < arr.length; cnt++) {
+                if (isNaN(arr[cnt]) == false) {
+                    out.push(arr[cnt]);
+                }
+            }
+            return Number(out.join(''));
+        }
+
+        $(function () {
+            $('#formDetailProduct').validate({
+                rules: {
+                    "name_": {
+                        required: true,
+                    },
+                    "price_": {
+                        required: true,
+                    },
+                    "detail_": {
+                        required: true,
+                    },
+                    "property": {
+                        required: true,
+                    },
+                    "select_province": {
+                        valueNotEquals: "0"
+                    },
+                    "select_district": {
+                        valueNotEquals: "0"
+                    },
+                    "select_commune": {
+                        valueNotEquals: "0"
+                    },
+                },
+                messages: {
+                    "name_": {
+                        required: "Hãy nhập tiêu đề cho bài đăng !",
+                    },
+                    "price_": {
+                        required: "Hãy nhập giá sản phẩm !",
+                    },
+                    "detail_": {
+                        required: "Hãy nhập địa chỉ cụ thể !",
+                    },
+                    "property": {
+                        required: "Hãy điền thông tin sản phẩm !",
+                    },
+                    "select_province": {
+                        valueNotEquals: "Hãy chọn tỉnh thành phố!",
+                    },
+                    "select_district": {
+                        valueNotEquals: "Hãy chọn quận huyện !",
+                    },
+                    "select_commune": {
+                        valueNotEquals: "Hãy chọn xã phường !",
+                    },
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+
 
         // Get the modal
         var modal = document.getElementById('id01');
@@ -491,7 +678,7 @@
             });
 
             var name = document.getElementById("name_").value;
-            var price = document.getElementById("price_").value;
+            var price = getNumber(document.getElementById("price_").value);
             var currentStatus = document.getElementById("currentStatus_").value;
             var description = document.getElementById("description_").value;
 
@@ -673,6 +860,14 @@
         }
 
         function addImage(e) {
+            if (imageSize >= 10) {
+                toastr.warning("Sản phẩm chỉ có thể có tối đa 10 ảnh.")
+                return;
+            }
+            if ((($(e)[0].files[0].size / 1024) / 1024).toFixed(4) > 10) {
+                toastr.warning("Chỉ có thể thêm ảnh dưới 10MB.");
+                return;
+            }
             var data = new FormData();
             data.append('image', $(e)[0].files[0]);
 
@@ -706,18 +901,20 @@
         }
 
         function deleteProduct() {
-            $.ajax({
-                method: 'DELETE',
-                url: origin + "/user/product/delete/" + productId,
-            })
-                .done(function (data) {
-                    toastr.success("Xóa thành công.");
-
-                    location.href = origin + "/user/my-list-product";
+            if (confirm('Bạn chắc chắn muốn xóa?')) {
+                $.ajax({
+                    method: 'DELETE',
+                    url: origin + "/user/product/delete/" + productId,
                 })
-                .fail(function () {
-                    toastr.error("Có lỗi xảy ra.");
-                });
+                    .done(function (data) {
+                        toastr.success("Xóa thành công.");
+
+                        location.href = origin + "/user/my-list-product";
+                    })
+                    .fail(function () {
+                        toastr.error("Có lỗi xảy ra.");
+                    });
+            }
         }
     </script>
 </body>

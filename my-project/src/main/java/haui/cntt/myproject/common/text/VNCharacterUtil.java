@@ -3,7 +3,7 @@ package haui.cntt.myproject.common.text;
 import java.util.Arrays;
 
 public class VNCharacterUtil {
-    private VNCharacterUtil(){
+    private VNCharacterUtil() {
         super();
     }
 

@@ -77,17 +77,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
         http.cors().and().csrf().disable();
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/login", "/home", "/generate-otp" , "/verify-otp"
-                            , "/check-username-exist", "/check-email-exist", "/check-cellphone-exist"
-                            , "/favicon.ico", "/register", "/get-menu", "/forget-password", "/send-new_password-by-email"
-                            , "/product/detail/*", "/random-list-product", "/product/**", "/category/**", "/slide/**"
-                            , "/blog/**", "/blog-detail/**"
-                            , "/blog-detail", "/blog", "/faq", "/search", "/term-and-condition"
-                            , "/assets/**", "/assets2/**")
-                        .permitAll() // cho phép tất cả người dùng truy cập các api /basic
-                    .antMatchers("/user/**").hasAnyAuthority(RoleEnum.ROLE_USER.toString()) // cho phép người dùng có role là user truy cập các api /user
-                    .antMatchers("/admin/**").hasAnyAuthority(RoleEnum.ROLE_ADMIN.toString()) // cho phép người dùng có role là admin truy cập các api /admin
-                    .anyRequest().authenticated(); // các api khác cần xác thực mới được truy cập
+                .antMatchers("/", "/login", "/home", "/generate-otp", "/verify-otp"
+                        , "/check-username-exist", "/check-email-exist", "/check-cellphone-exist"
+                        , "/favicon.ico", "/register", "/get-menu", "/forget-password", "/send-new_password-by-email"
+                        , "/product/detail/*", "/random-list-product", "/product/**", "/category/**", "/slide/**"
+                        , "/blog/**", "/blog-detail/**"
+                        , "/blog-detail", "/blog", "/faq", "/search", "/term-and-condition"
+                        , "/assets/**", "/assets2/**")
+                .permitAll() // cho phép tất cả người dùng truy cập các api /basic
+                .antMatchers("/user/**").hasAnyAuthority(RoleEnum.ROLE_USER.toString()) // cho phép người dùng có role là user truy cập các api /user
+                .antMatchers("/admin/**").hasAnyAuthority(RoleEnum.ROLE_ADMIN.toString()) // cho phép người dùng có role là admin truy cập các api /admin
+                .anyRequest().authenticated(); // các api khác cần xác thực mới được truy cập
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login")

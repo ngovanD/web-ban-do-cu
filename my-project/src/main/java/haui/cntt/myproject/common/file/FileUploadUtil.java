@@ -13,7 +13,9 @@ import java.nio.file.*;
 
 @Slf4j
 public class FileUploadUtil {
-    private FileUploadUtil(){super();}
+    private FileUploadUtil() {
+        super();
+    }
 
     public static void saveFile(String uploadDir, String fileName,
                                 MultipartFile multipartFile) throws IOException {
@@ -38,9 +40,8 @@ public class FileUploadUtil {
     public static void deleteDir(String uploadDir) {
         File index = new File(uploadDir);
         String[] entries = index.list();
-        if(entries != null)
-        {
-            for(String s: entries){
+        if (entries != null) {
+            for (String s : entries) {
                 File currentFile = new File(index.getPath(), s);
                 //Files.delete(currentFile.toPath());
                 currentFile.delete();
@@ -56,17 +57,14 @@ public class FileUploadUtil {
         UrlResource resource = new UrlResource(file.toUri());
         log.info(resource.toString());
         if (resource.exists() || resource.isReadable()) {
-            try(InputStream image = resource.getInputStream())
-            {
+            try (InputStream image = resource.getInputStream()) {
                 return StreamUtils.copyToByteArray(image);
-            }
-            catch (FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 throw new FileNotFoundException("File Not Found.");
             } catch (IOException e) {
                 throw new IOException("An I/O Error Occurred");
             }
-        }
-        else {
+        } else {
             throw new IOException("Could not read file: " + pathOrFileName);
         }
     }

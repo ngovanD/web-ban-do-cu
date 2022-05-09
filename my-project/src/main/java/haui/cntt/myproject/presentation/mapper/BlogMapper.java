@@ -6,6 +6,8 @@ import haui.cntt.myproject.presentation.request.BlogRequest;
 import haui.cntt.myproject.presentation.response.BlogResponse;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.time.format.DateTimeFormatter;
+
 public class BlogMapper {
     private BlogMapper() {
         super();
@@ -18,7 +20,7 @@ public class BlogMapper {
                 .id(blog.getId())
                 .title(blog.getTitle())
                 .content(blog.getContent())
-                .dateTime(blog.getCreatedDate().toString())
+                .dateTime(blog.getCreatedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm")))
                 .apiGetImage(apiImage)
                 .status(blog.getHiddenFlag())
                 .build();
