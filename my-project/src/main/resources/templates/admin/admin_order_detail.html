@@ -93,7 +93,7 @@
                                             <label class="info-title">Người mua
                                             </label>
                                             <input type="text" class="form-control unicase-form-control text-input"
-                                                id="full_name" placeholder=""
+                                                placeholder=""
                                                 th:value="${orderResponse.deliveryAddressResponse.fullName}" disabled>
                                         </div>
                                         <div class="form-group">
@@ -101,14 +101,14 @@
                                                 thoại
                                             </label>
                                             <input type="text" class="form-control unicase-form-control text-input"
-                                                id="cellphone" placeholder=""
+                                                placeholder=""
                                                 th:value="${orderResponse.deliveryAddressResponse.cellphone}" disabled>
                                         </div>
                                         <div class="form-group" style="margin-top: 15px">
                                             <label class="info-title">Địa chỉ giao
                                             </label>
                                             <input type="text" class="form-control unicase-form-control text-input"
-                                                required id="detail_" th:value="${orderResponse.deliveryAddressResponse.detail} 
+                                                required th:value="${orderResponse.deliveryAddressResponse.detail}
                                                             + ', ' + ${orderResponse.deliveryAddressResponse.commune} 
                                                             + ', ' + ${orderResponse.deliveryAddressResponse.district} 
                                                             + ', ' + ${orderResponse.deliveryAddressResponse.province}"
