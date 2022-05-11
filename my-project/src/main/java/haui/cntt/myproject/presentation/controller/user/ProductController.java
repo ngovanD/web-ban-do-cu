@@ -38,7 +38,7 @@ public class ProductController {
 
     @GetMapping("/create-product")
     public String getPageCreateProduct() {
-        return "form_create_product";
+        return "user/form_create_product";
     }
 
     @GetMapping("/get-form/{id}")
@@ -50,7 +50,7 @@ public class ProductController {
 
         ProductRequest productRequest = ProductRequest.builder().productPropertyRequestList(propertyRequestList).build();
         model.addAttribute("productRequest", productRequest);
-        return "form_create_product_detail";
+        return "user/form_create_product_detail";
     }
 
     @PostMapping("/create")
@@ -70,7 +70,7 @@ public class ProductController {
     public String getDetailProduct(Model model, @PathVariable(value = "id") long productId) throws Throwable {
         ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getDetailProduct(productId));
         model.addAttribute("productResponse", productResponse);
-        return "my_product_detail";
+        return "user/my_product_detail";
     }
 
     @PostMapping("/edit/{id}")

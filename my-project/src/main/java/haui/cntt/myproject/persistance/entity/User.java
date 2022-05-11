@@ -49,4 +49,11 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private Collection<Order> orderedList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_rooms", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "room_id"))
+    private Collection<RoomChat> roomChats;
+
+    @OneToMany(mappedBy = "userSend")
+    private Collection<Message> messages;
 }

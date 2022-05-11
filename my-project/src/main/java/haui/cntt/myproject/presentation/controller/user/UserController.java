@@ -34,7 +34,7 @@ public class UserController {
     public String getInfo(Model model) throws Throwable {
         UserResponse userResponse = UserMapper.convertToUserResponse(userService.getCurrentUser());
         model.addAttribute("userResponse", userResponse);
-        return "info_user";
+        return "user/info_user";
     }
 
     @PostMapping("/edit")
@@ -65,7 +65,7 @@ public class UserController {
     public String getPageChangePassword(Model model) throws Throwable {
         UserResponse userResponse = UserMapper.convertToUserResponse(userService.getCurrentUser());
         model.addAttribute("userResponse", userResponse);
-        return "form_change_password";
+        return "user/form_change_password";
     }
 
     @PostMapping("/check-password")
@@ -95,7 +95,7 @@ public class UserController {
         model.addAttribute("current_page", page);
         model.addAttribute("total_page", productResponseList.getTotalPages());
         model.addAttribute("status", status);
-        return "my_list_product";
+        return "user/my_list_product";
     }
 
     @PostMapping("/add-wishlist/{id}")
@@ -112,7 +112,7 @@ public class UserController {
         model.addAttribute("productResponseList", productResponseList);
         model.addAttribute("current_page", page);
         model.addAttribute("total_page", productResponseList.getTotalPages());
-        return "wishlist";
+        return "user/wishlist";
     }
 
     @PostMapping("/remove-wishlist/{id}")

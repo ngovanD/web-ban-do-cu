@@ -55,7 +55,7 @@ public class AdminController {
         model.addAttribute("to", to);
         model.addAttribute("months", months);
         model.addAttribute("orders", orders);
-        return "admin_home";
+        return "admin/admin_home";
     }
 
     @GetMapping("/get-info/get-name")
@@ -65,6 +65,6 @@ public class AdminController {
 
     @GetMapping("/change-password")
     public String changePassword() {
-        return "admin_change_password";
+        return "admin/admin_change_password";
     }
 }

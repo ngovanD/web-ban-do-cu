@@ -55,7 +55,7 @@ public class FileUploadUtil {
         Path storageFolder = Paths.get("src/main/resources/static");
         Path file = storageFolder.resolve(pathOrFileName);
         UrlResource resource = new UrlResource(file.toUri());
-        log.info(resource.toString());
+        //log.info(resource.toString());
         if (resource.exists() || resource.isReadable()) {
             try (InputStream image = resource.getInputStream()) {
                 return StreamUtils.copyToByteArray(image);

@@ -419,7 +419,7 @@
                                             </li>
                                         </th:block>
                                         <li th:if="${total_page > current_page}" class="next"><a
-                                                th:href="@{'/search?keyword' + ${keyword} + '&category_slug=' + ${category_slug} + '&page=' + ${current_page + 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort}} + '&status=' + ${status}}"><i
+                                                th:href="@{'/search?keyword' + ${keyword} + '&category_slug=' + ${category_slug} + '&page=' + ${current_page + 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
                                                     class="fa fa-angle-right"></i></a></li>
                                         <li th:unless="${total_page > current_page}" class="next"><a><i
                                                     class="fa fa-angle-right"></i></a></li>

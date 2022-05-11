@@ -30,13 +30,13 @@ public class BlogAdminController {
         model.addAttribute("blogResponseList", blogResponseList.getContent());
         model.addAttribute("current_page", page);
         model.addAttribute("total_page", blogResponseList.getTotalPages());
-        return "admin_list_blog";
+        return "admin/admin_list_blog";
     }
 
     @GetMapping("/create")
     public String getCreatePage(Model model) {
         model.addAttribute("blogRequest", new BlogRequest());
-        return "admin_create_blog";
+        return "admin/admin_create_blog";
     }
 
     @PostMapping("/create")
@@ -60,7 +60,7 @@ public class BlogAdminController {
     public String getEditPage(Model model, @PathVariable(value = "id") long blogId) throws Throwable {
         model.addAttribute("blogRequest", new BlogRequest());
         model.addAttribute("blogResponse", BlogMapper.convertToBlogResponse(blogService.getDetail(blogId)));
-        return "admin_edit_blog";
+        return "admin/admin_edit_blog";
     }
 
     @PostMapping("/edit/{id}")

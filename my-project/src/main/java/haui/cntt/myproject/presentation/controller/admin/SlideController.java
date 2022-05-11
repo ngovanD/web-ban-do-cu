@@ -30,13 +30,13 @@ public class SlideController {
         model.addAttribute("slideResponseList", slideResponseList.getContent());
         model.addAttribute("current_page", page);
         model.addAttribute("total_page", slideResponseList.getTotalPages());
-        return "admin_list_slide";
+        return "admin/admin_list_slide";
     }
 
     @GetMapping("/create")
     public String getCreatePage(Model model) {
         model.addAttribute("slideRequest", new SlideRequest());
-        return "admin_create_slide";
+        return "admin/admin_create_slide";
     }
 
     @PostMapping("/create")
@@ -51,7 +51,7 @@ public class SlideController {
     public String getEditPage(Model model, @PathVariable(value = "id") long slideId) throws Throwable {
         model.addAttribute("slideRequest", new SlideRequest());
         model.addAttribute("slideResponse", SlideMapper.convertToSlideResponse(slideService.getDetail(slideId)));
-        return "admin_edit_slide";
+        return "admin/admin_edit_slide";
     }
 
     @PostMapping("/edit/{id}")

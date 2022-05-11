@@ -82,6 +82,7 @@ một số cái cần chú ý
             #toast-container>.toast-error {
                 font-size: 13px !important;
             }
+
             #toast-container>.toast-warning {
                 font-size: 13px !important;
             }
@@ -239,19 +240,18 @@ một số cái cần chú ý
                 })
 
                 var active = window.location.pathname.split("/")[2];
-                if(active == 'category' || active == 'property')
-                {
+                if (active == 'category' || active == 'property') {
                     document.getElementById("category_0").classList.add('active');
                     document.getElementById("category_").classList.add('menu-open');
-                    if(active == 'category'){
+                    if (active == 'category') {
                         document.getElementById("category_1").classList.add('active');
                     }
-                    else{
+                    else {
                         document.getElementById("category_2").classList.add('active');
                     }
                 }
-                else{
-                    document.getElementById(active+"_").classList.add('active');
+                else {
+                    document.getElementById(active + "_").classList.add('active');
                 }
             });
 
@@ -369,6 +369,9 @@ một số cái cần chú ý
                                         <a th:href="@{/user/order/get-all-sale}"
                                             style="color: black;padding: 12px 16px;text-decoration: none;display: block;">
                                             <i class="fa-solid fa-money-bill-transfer"></i> Đơn bán</a>
+                                        <a th:href="@{/user/room-chat/room}"
+                                            style="color: black;padding: 12px 16px;text-decoration: none;display: block;">
+                                            <i class="fa-solid fa-money-bill-transfer"></i> Chat</a>
                                         <a href="javascript: logoutForm.submit();"
                                             style="color: black;padding: 12px 16px;text-decoration: none;display: block;">
                                             <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</a>

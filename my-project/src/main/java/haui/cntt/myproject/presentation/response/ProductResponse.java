@@ -27,4 +27,5 @@ public class ProductResponse {
     private String tag;
     private String sellerName;
     private String sellerPhone;
+    private long userId;
 }

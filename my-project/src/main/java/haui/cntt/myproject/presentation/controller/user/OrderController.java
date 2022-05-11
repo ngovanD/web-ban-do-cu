@@ -38,7 +38,7 @@ public class OrderController {
         ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getDetailProduct(productId));
         model.addAttribute("productResponse", productResponse);
         model.addAttribute("orderRequest", new OrderRequest());
-        return "checkout";
+        return "user/checkout";
     }
 
     @PostMapping("/create")
@@ -79,14 +79,14 @@ public class OrderController {
         model.addAttribute("current_page", page);
         model.addAttribute("total_page", orderResponseList.getTotalPages());
         model.addAttribute("status", status);
-        return "my_list_order";
+        return "user/my_list_order";
     }
 
     @GetMapping("/{id}")
     public String getDetail(Model model, @PathVariable(value = "id") long orderId) throws Throwable {
         OrderResponse orderResponse = OrderMapper.convertToOrderResponse(orderService.getDetail(orderId));
         model.addAttribute("orderResponse", orderResponse);
-        return "my_order_detail";
+        return "user/my_order_detail";
     }
 
     @GetMapping("/completed/{id}")
@@ -147,13 +147,13 @@ public class OrderController {
         model.addAttribute("status", status);
         model.addAttribute("from", from);
         model.addAttribute("to", to);
-        return "my_list_order_sale";
+        return "user/my_list_order_sale";
     }
 
     @GetMapping("/sale/{id}")
     public String getDetailOrderSale(Model model, @PathVariable(value = "id") long orderId) throws Throwable {
         OrderResponse orderResponse = OrderMapper.convertToOrderResponse(orderService.getDetail(orderId));
         model.addAttribute("orderResponse", orderResponse);
-        return "my_order_sale_detail";
+        return "user/my_order_sale_detail";
     }
 }

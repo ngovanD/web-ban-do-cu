@@ -31,7 +31,7 @@ public class UserAdminController {
         model.addAttribute("current_page", page);
         model.addAttribute("total_page", userResponsePage.getTotalPages());
         model.addAttribute("keyword", keyword);
-        return "admin_list_user";
+        return "admin/admin_list_user";
     }
 
     @DeleteMapping("/delete/{id}")
@@ -46,7 +46,7 @@ public class UserAdminController {
     public String view(Model model, @PathVariable(value = "id") long userId) throws Throwable {
         UserResponse userResponse = UserMapper.convertToUserResponse(userService.getUserById(userId));
         model.addAttribute("userResponse", userResponse);
-        return "admin_user_detail";
+        return "admin/admin_user_detail";
     }
 
     @GetMapping("/edit/{id}")
@@ -54,7 +54,7 @@ public class UserAdminController {
         UserResponse userResponse = UserMapper.convertToUserResponse(userService.getUserById(userId));
         model.addAttribute("userResponse", userResponse);
         model.addAttribute("userRequest", new UserRequest());
-        return "admin_user_edit";
+        return "admin/admin_user_edit";
     }
 
     @PostMapping("/edit/{id}")

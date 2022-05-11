@@ -74,6 +74,7 @@ public class ProductMapper {
                 .tag(tag)
                 .sellerName(product.getUser().getFullName())
                 .sellerPhone(product.getUser().getCellphone())
+                .userId(product.getUser().getId())
                 .build();
     }
 

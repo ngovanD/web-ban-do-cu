@@ -43,7 +43,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 text-md-right">
-                            <a th:href="@{/login}" class="text-center">Về trang đăng nhập <i class="fa-solid fa-arrow-right"></i></a>
+                            <a th:href="@{/login}" class="text-center">Về trang đăng nhập <i
+                                    class="fa-solid fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </form>
@@ -146,7 +147,7 @@
 
                 $.ajax({
                     method: "POST",
-                    url: origin+ "/generate-otp",
+                    url: origin + "/generate-otp",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(data),
                 })
@@ -158,7 +159,6 @@
                         toastr.error(error.responseText);
                     })
             }
-
         }
     </script>
 </body>

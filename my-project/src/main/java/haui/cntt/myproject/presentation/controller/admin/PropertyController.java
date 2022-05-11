@@ -49,7 +49,7 @@ public class PropertyController {
         model.addAttribute("propertyResponseList", propertyResponseList.getContent());
         model.addAttribute("current_page", page);
         model.addAttribute("total_page", propertyResponseList.getTotalPages());
-        return "admin_list_property";
+        return "admin/admin_list_property";
     }
 
     @DeleteMapping("/delete/{id}")

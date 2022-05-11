@@ -39,14 +39,14 @@ public class OrderAdminController {
         model.addAttribute("from", from);
         model.addAttribute("to", to);
         model.addAttribute("status", status);
-        return "admin_list_order";
+        return "admin/admin_list_order";
     }
 
     @GetMapping("/view/{id}")
     public String info(Model model, @PathVariable(value = "id") long orderId) throws Throwable {
         OrderResponse orderResponse = OrderMapper.convertToOrderResponse(orderService.getDetail(orderId));
         model.addAttribute("orderResponse", orderResponse);
-        return "admin_order_detail";
+        return "admin/admin_order_detail";
     }
 
     @GetMapping("/confirm-refund/{id}")

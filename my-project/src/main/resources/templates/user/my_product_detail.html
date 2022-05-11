@@ -331,7 +331,7 @@
                                                         <div>
                                                             <div class="col-sm-4">
                                                                 <select class="form-control" onchange="loadDistrict()"
-                                                                    disabled>
+                                                                    disabled  id="province">
                                                                     <option hidden
                                                                         th:value="${productResponse.addressResponse.codeProvince}">
                                                                         [[${productResponse.addressResponse.province}]]
@@ -340,7 +340,7 @@
                                                             </div>
                                                             <div class="col-sm-4">
                                                                 <select class="form-control" onchange="loadCommune()"
-                                                                    disabled>
+                                                                    disabled id="district">
                                                                     <option hidden
                                                                         th:value="${productResponse.addressResponse.codeDistrict}">
                                                                         [[${productResponse.addressResponse.district}]]
@@ -348,7 +348,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-sm-4">
-                                                                <select class="form-control" disabled>
+                                                                <select class="form-control" disabled id="commune">
                                                                     <option hidden
                                                                         th:value="${productResponse.addressResponse.codeCommune}">
                                                                         [[${productResponse.addressResponse.commune}]]
@@ -729,6 +729,7 @@
             $.ajax({
                 method: 'GET',
                 url: "https://provinces.open-api.vn/api/?depth=1",
+                async: false,
             })
                 .done(function (data) {
                     var listProvince = document.getElementById("province");

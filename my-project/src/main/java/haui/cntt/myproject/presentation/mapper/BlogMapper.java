@@ -20,7 +20,7 @@ public class BlogMapper {
                 .id(blog.getId())
                 .title(blog.getTitle())
                 .content(blog.getContent())
-                .dateTime(blog.getCreatedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm")))
+                .dateTime(blog.getCreatedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")))
                 .apiGetImage(apiImage)
                 .status(blog.getHiddenFlag())
                 .build();

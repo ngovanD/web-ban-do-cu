@@ -55,7 +55,7 @@ public class OrderMapper {
                 .id(order.getId())
                 .status(status)
                 .deliveryAddressResponse(DeliveryAddressMapper.convertToDeliveryAddressResponse(order.getDeliveryAddress()))
-                .createTime(order.getCreatedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm")))
+                .createTime(order.getCreatedDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")))
                 .feeShipping(order.getFeeShipping())
                 .priceProduct(order.getPriceProduct())
                 .methodPayment(order.getMethodPayment())

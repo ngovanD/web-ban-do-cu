@@ -36,13 +36,13 @@ public class CategoryAdminController {
                 )
         );
         model.addAttribute("treeCategory", treeCategory);
-        return "admin_list_category";
+        return "admin/admin_list_category";
     }
 
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("categoryRequest", new CategoryRequest());
-        return "admin_new_category";
+        return "admin/admin_new_category";
     }
 
     @PostMapping("/create")
@@ -65,7 +65,7 @@ public class CategoryAdminController {
                 categoryService.getDetail(categoryId)
         );
         model.addAttribute("categoryResponse", categoryResponse);
-        return "admin_category_detail";
+        return "admin/admin_category_detail";
     }
 
     @GetMapping("/edit/{id}")
@@ -75,7 +75,7 @@ public class CategoryAdminController {
         );
         model.addAttribute("categoryResponse", categoryResponse);
         model.addAttribute("categoryRequest", new CategoryRequest());
-        return "admin_category_edit";
+        return "admin/admin_category_edit";
     }
 
     @PostMapping("/edit/{id}")
@@ -101,7 +101,7 @@ public class CategoryAdminController {
             FileUploadUtil.saveFile(uploadDir, newFileName, multipartFile);
         }
         model.addAttribute("categoryResponse", categoryResponse);
-        return "admin_category_detail";
+        return "admin/admin_category_detail";
     }
 
     @DeleteMapping("/delete/{id}")
