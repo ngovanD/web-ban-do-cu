@@ -1,21 +1,20 @@
 package haui.cntt.myproject.presentation.controller.basic;
 
 import haui.cntt.myproject.common.file.FileUploadUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Slf4j
+// @Slf4j
 @Controller
 public class ImageController {
     //get image's url
     @GetMapping("/{folder}/{id}/image/{fileName:.+}")
     public ResponseEntity<byte[]> readDetailFile(@PathVariable String folder, @PathVariable String id
             , @PathVariable String fileName) {
-        log.info("Mapped readDetailFile method GET");
+        //log.info("Mapped readDetailFile method GET");
         try {
             byte[] bytes = FileUploadUtil.readFileContent(folder + "/" + id + "/" + fileName);
             return ResponseEntity

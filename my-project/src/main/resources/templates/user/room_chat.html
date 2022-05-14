@@ -147,7 +147,6 @@
 
         .chat .chat-history .message:after {
             bottom: 100%;
-            left: 7%;
             border: solid transparent;
             content: " ";
             height: 0;
@@ -165,7 +164,7 @@
 
         .chat .chat-history .my-message:after {
             bottom: 100%;
-            left: 30px;
+            left: 23px;
             border: solid transparent;
             content: " ";
             height: 0;
@@ -184,7 +183,7 @@
 
         .chat .chat-history .other-message:after {
             border-bottom-color: #e8f1f3;
-            left: 70%
+            right: 13px
         }
 
         .chat .chat-message {
@@ -274,6 +273,10 @@
                 height: calc(100vh - 350px);
                 overflow-x: auto
             }
+        }
+
+        .message {
+            max-width: 85%;
         }
     </style>
 </head>
@@ -367,27 +370,6 @@
         </div>
     </div>
 
-    <!-- /.content-wrapper -->
-    <!-- <div id="main-content">
-        <div>
-            <button id="connect" type="submit">Connect</button>
-            <button id="disconnect" type="submit">Disconnect</button>
-
-            <div>
-                <label>Message</label>
-                <input type="text" placeholder="...">
-            </div>
-
-            </form>
-        </div>
-    </div>
-    <div>
-        <label>Message from someone: </label><span id="messageReply"></span>
-    </div> -->
-
-
-
-    <!-- /#top-banner-and-menu -->
     <div th:replace="fragment::footer-user"></div>
 
     <div th:replace="fragment::script-custom2"></div>
@@ -593,7 +575,6 @@
                 console.log('Web Socket is connected');
                 room = stompClient.subscribe('/room/topic/' + roomId, function (message) {
                     onMessageReceiver(message.body)
-
                 });
             });
         }
@@ -609,10 +590,15 @@
             li.classList.add("clearfix");
             var div = document.createElement('div');
             div.classList.add('message-data')
+            var span = document.createElement('span');
+            span.classList.add('message-data-time');
+            var timeNow = new Date();
+            span.innerText = timeNow.getHours() + ":" + timeNow.getMinutes();
             var divMessage = document.createElement('div');
             divMessage.classList.add('message')
             divMessage.innerText = text;
             divMessage.classList.add('my-message');
+            div.appendChild(span);
             li.appendChild(div);
             li.appendChild(divMessage);
             document.getElementById('list_message_').appendChild(li);
@@ -630,7 +616,7 @@
                 disconnect();
             })
             $("#send").click(function () {
-                if($("#message").val().length > 255){
+                if ($("#message").val().length > 255) {
                     toastr.warning("Không thể gửi quá 255 ký tự.");
                     return;
                 }
@@ -644,12 +630,17 @@
                 li.classList.add("clearfix");
                 var div = document.createElement('div');
                 div.classList.add('message-data')
+                var span = document.createElement('span');
+                span.classList.add('message-data-time');
+                var timeNow = new Date();
+                span.innerText = timeNow.getHours() + ":" + timeNow.getMinutes();
                 var divMessage = document.createElement('div');
-                divMessage.classList.add('message')
+                divMessage.classList.add('message');
                 divMessage.innerText = document.getElementById('message').value;
                 div.classList.add('text-right');
                 divMessage.classList.add('other-message');
                 divMessage.classList.add('float-right');
+                div.appendChild(span);
                 li.appendChild(div);
                 li.appendChild(divMessage);
                 document.getElementById('list_message_').appendChild(li);

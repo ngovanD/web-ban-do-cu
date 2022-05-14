@@ -25,7 +25,6 @@ public interface CategoryService {
 
     public Map<Category, List<Category>> getTreeCategory();
 
-    // chạy khởi tạo loại sản phẩm
     public void createTest(Category category);
 
     public void createTest2(Category category, String nameCategoryParent, List<String> properties);

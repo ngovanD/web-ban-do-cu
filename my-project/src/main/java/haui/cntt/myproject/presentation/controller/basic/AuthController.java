@@ -3,7 +3,6 @@ package haui.cntt.myproject.presentation.controller.basic;
 import haui.cntt.myproject.common.jwt.JwtTokenProvider;
 import haui.cntt.myproject.config.UserDetailServiceConfig;
 import haui.cntt.myproject.presentation.request.LoginRequest;
-import haui.cntt.myproject.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.LockedException;
@@ -30,8 +29,6 @@ public class AuthController {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserServiceImpl userService;
 
     @GetMapping("/login")
     public String login(Model model) {

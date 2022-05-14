@@ -7,10 +7,10 @@ import haui.cntt.myproject.presentation.request.ProductPropertyRequest;
 import haui.cntt.myproject.presentation.request.ProductRequest;
 import haui.cntt.myproject.presentation.response.DeliveryAddressResponse;
 import haui.cntt.myproject.presentation.response.ProductResponse;
-import haui.cntt.myproject.service.Impl.CategoryServiceImpl;
-import haui.cntt.myproject.service.Impl.DeliveryAddressServiceImpl;
-import haui.cntt.myproject.service.Impl.ImageProductServiceImpl;
-import haui.cntt.myproject.service.Impl.ProductServiceImpl;
+import haui.cntt.myproject.service.CategoryService;
+import haui.cntt.myproject.service.DeliveryAddressService;
+import haui.cntt.myproject.service.ImageProductService;
+import haui.cntt.myproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     @Autowired
-    private ProductServiceImpl productService;
+    private ProductService productService;
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
     @Autowired
-    private ImageProductServiceImpl imageProductService;
+    private ImageProductService imageProductService;
     @Autowired
-    private DeliveryAddressServiceImpl deliveryAddressService;
+    private DeliveryAddressService deliveryAddressService;
 
     static final String UPLOAD_DIR_IMAGE_PRODUCT = "src/main/resources/static/product/";
 

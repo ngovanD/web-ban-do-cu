@@ -1,6 +1,6 @@
 package haui.cntt.myproject.persistance.repository;
 
-import haui.cntt.myproject.common.enum_.RoleEnum;
+import haui.cntt.myproject.common.myEnum.RoleEnum;
 import haui.cntt.myproject.persistance.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

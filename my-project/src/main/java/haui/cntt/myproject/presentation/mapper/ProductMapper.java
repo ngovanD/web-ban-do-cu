@@ -1,6 +1,6 @@
 package haui.cntt.myproject.presentation.mapper;
 
-import haui.cntt.myproject.common.enum_.ProductStatusEnum;
+import haui.cntt.myproject.common.myEnum.ProductStatusEnum;
 import haui.cntt.myproject.persistance.entity.Category;
 import haui.cntt.myproject.persistance.entity.ImageProduct;
 import haui.cntt.myproject.persistance.entity.Product;

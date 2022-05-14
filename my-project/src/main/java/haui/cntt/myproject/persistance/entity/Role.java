@@ -1,7 +1,7 @@
 package haui.cntt.myproject.persistance.entity;
 
 import haui.cntt.myproject.base.BaseEntity;
-import haui.cntt.myproject.common.enum_.RoleEnum;
+import haui.cntt.myproject.common.myEnum.RoleEnum;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

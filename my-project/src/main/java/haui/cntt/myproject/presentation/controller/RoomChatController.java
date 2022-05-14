@@ -7,8 +7,8 @@ import haui.cntt.myproject.presentation.response.MessageListResponse;
 import haui.cntt.myproject.presentation.response.MessageResponse;
 import haui.cntt.myproject.presentation.response.RoomChatResponse;
 import haui.cntt.myproject.presentation.response.UserResponse;
-import haui.cntt.myproject.service.Impl.RoomChatServiceImpl;
-import haui.cntt.myproject.service.Impl.UserServiceImpl;
+import haui.cntt.myproject.service.RoomChatService;
+import haui.cntt.myproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/user/room-chat")
 public class RoomChatController {
     @Autowired
-    private RoomChatServiceImpl roomChatService;
+    private RoomChatService roomChatService;
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @GetMapping("/room")
     public String getRoom(Model model, @RequestParam(value = "id", required = false, defaultValue = "-1") long sendUserId) throws Throwable {
@@ -42,7 +42,7 @@ public class RoomChatController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity getListRoom() throws Throwable {
+    public ResponseEntity<?> getListRoom() throws Throwable {
         List<RoomChatResponse> roomChatResponses = roomChatService.findAllOfUser()
                 .stream()
                 .map(RoomChatMapper::convertToResponse)
@@ -60,7 +60,7 @@ public class RoomChatController {
 //    }
 
     @GetMapping("/get-room-by-room_id")
-    public ResponseEntity getRoomInfoByRoomId(@RequestParam(value = "id") long roomId) throws Throwable {
+    public ResponseEntity<?> getRoomInfoByRoomId(@RequestParam(value = "id") long roomId) throws Throwable {
         RoomChatResponse roomChatResponse = RoomChatMapper.convertToResponse(roomChatService.findById(roomId));
         UserResponse userResponse = UserMapper.convertToUserResponse(roomChatService.getReceiver(roomId));
         roomChatResponse.setReceiver(userResponse);
@@ -68,7 +68,7 @@ public class RoomChatController {
     }
 
     @GetMapping("/get-message/{id}")
-    public ResponseEntity getMessage(@PathVariable(value = "id") long roomId
+    public ResponseEntity<?> getMessage(@PathVariable(value = "id") long roomId
             , @RequestParam(value = "currentMessage", required = false, defaultValue = "0") long currentMessage
             , @RequestParam(value = "oldTotalMessage", required = false, defaultValue = "0") long oldTotalMessage) throws Throwable {
         List<MessageResponse> messageResponses = roomChatService.getMessage(roomId, currentMessage, oldTotalMessage)

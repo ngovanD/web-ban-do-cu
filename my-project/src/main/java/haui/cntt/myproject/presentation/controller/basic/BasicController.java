@@ -9,7 +9,7 @@ import haui.cntt.myproject.presentation.response.BlogResponse;
 import haui.cntt.myproject.presentation.response.CategoryResponse;
 import haui.cntt.myproject.presentation.response.ProductResponse;
 import haui.cntt.myproject.presentation.response.SlideResponse;
-import haui.cntt.myproject.service.Impl.*;
+import haui.cntt.myproject.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -27,19 +27,19 @@ import java.util.stream.Collectors;
 public class BasicController {
 
     @Autowired
-    private OtpServiceImpl otpService;
+    private OtpService otpService;
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
     @Autowired
-    private EmailServiceImpl emailService;
+    private EmailService emailService;
     @Autowired
-    private ProductServiceImpl productService;
+    private ProductService productService;
     @Autowired
-    private SlideServiceImpl slideService;
+    private SlideService slideService;
     @Autowired
-    private BlogServiceImpl blogService;
+    private BlogService blogService;
 
     @GetMapping("/home")
     public String home(Model model) {

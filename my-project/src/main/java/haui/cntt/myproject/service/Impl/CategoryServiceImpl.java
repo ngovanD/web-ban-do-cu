@@ -15,16 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
@@ -47,8 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id).orElseThrow(
                 () -> {
                     throw new BadRequestException("loại sản phẩm không tồn tại!!!");
-                }
-        );
+                });
     }
 
     @Transactional
@@ -56,7 +55,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-        String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + System.currentTimeMillis());
+        String newFileName = new Slugify()
+                .slugify(VNCharacterUtil.removeAccent(category.getName()) + System.currentTimeMillis());
         category.setImage(newFileName + typeOfFile);
 
         Category categoryParent = categoryRepository.findById(category.getCategoryParent().getId()).orElse(null);
@@ -77,15 +77,15 @@ public class CategoryServiceImpl implements CategoryService {
         Category foundCategory = categoryRepository.findById(category.getId()).orElseThrow(
                 () -> {
                     throw new BadRequestException("Loại sản phẩm không tồn tại!!!");
-                }
-        );
+                });
 
         foundCategory.setName(category.getName());
 
         if (originalFilename != null) {
             String typeOfFile = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-            String newFileName = new Slugify().slugify(VNCharacterUtil.removeAccent(category.getName()) + System.currentTimeMillis());
+            String newFileName = new Slugify()
+                    .slugify(VNCharacterUtil.removeAccent(category.getName()) + System.currentTimeMillis());
             category.setImage(newFileName + typeOfFile);
         }
 
@@ -97,8 +97,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category foundCategory = categoryRepository.findById(id).orElseThrow(
                 () -> {
                     throw new BadRequestException("Loại sản phẩm không tồn tại!!!");
-                }
-        );
+                });
         List<Category> listChild = getListCategoryChild(id);
         for (Category i : listChild) {
             delete(i.getId());
@@ -155,8 +154,8 @@ public class CategoryServiceImpl implements CategoryService {
         }).getProperties().stream().collect(Collectors.toList());
     }
 
-    public Page<Product> getProductByCategory(String slug, int page, int min, int max
-            , String sort, int codeProvince, String status) throws Throwable {
+    public Page<Product> getProductByCategory(String slug, int page, int min, int max, String sort, int codeProvince,
+            String status) throws Throwable {
         Pageable pageable = PageRequest.of(page, 12);
         if (sort.equals("price")) {
             return productRepository.filterProductAndSortByPrice(pageable, slug, min, max, codeProvince, status);

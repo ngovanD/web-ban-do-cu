@@ -3,7 +3,7 @@ package haui.cntt.myproject.presentation.controller.admin;
 import haui.cntt.myproject.presentation.mapper.PropertyMapper;
 import haui.cntt.myproject.presentation.request.PropertyRequest;
 import haui.cntt.myproject.presentation.response.PropertyResponse;
-import haui.cntt.myproject.service.Impl.PropertyServiceImpl;
+import haui.cntt.myproject.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class PropertyController {
 
     @Autowired
-    PropertyServiceImpl propertyService;
+    private PropertyService propertyService;
 
     @PostMapping("/create")
     public ResponseEntity<String> create(@RequestBody PropertyRequest propertyRequest) {

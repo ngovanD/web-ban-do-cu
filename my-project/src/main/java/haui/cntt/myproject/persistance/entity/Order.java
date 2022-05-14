@@ -1,7 +1,7 @@
 package haui.cntt.myproject.persistance.entity;
 
 import haui.cntt.myproject.base.BaseEntity;
-import haui.cntt.myproject.common.enum_.OrderStatusEnum;
+import haui.cntt.myproject.common.myEnum.OrderStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

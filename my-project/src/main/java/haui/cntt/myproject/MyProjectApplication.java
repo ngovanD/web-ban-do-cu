@@ -1,6 +1,6 @@
 package haui.cntt.myproject;
 
-import haui.cntt.myproject.common.enum_.RoleEnum;
+import haui.cntt.myproject.common.myEnum.RoleEnum;
 import haui.cntt.myproject.persistance.entity.Category;
 import haui.cntt.myproject.persistance.entity.Property;
 import haui.cntt.myproject.persistance.entity.Role;

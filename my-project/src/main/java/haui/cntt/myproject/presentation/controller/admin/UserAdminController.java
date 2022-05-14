@@ -4,7 +4,7 @@ import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.presentation.mapper.UserMapper;
 import haui.cntt.myproject.presentation.request.UserRequest;
 import haui.cntt.myproject.presentation.response.UserResponse;
-import haui.cntt.myproject.service.Impl.UserServiceImpl;
+import haui.cntt.myproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/admin/user")
 public class UserAdminController {
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
 
     static final String UPLOAD_DIR_USER = "src/main/resources/static/user/";
 

@@ -7,7 +7,7 @@ import haui.cntt.myproject.presentation.request.LoginRequest;
 import haui.cntt.myproject.presentation.request.UserRequest;
 import haui.cntt.myproject.presentation.response.ProductResponse;
 import haui.cntt.myproject.presentation.response.UserResponse;
-import haui.cntt.myproject.service.Impl.UserServiceImpl;
+import haui.cntt.myproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
     @Autowired
     private AuthenticationManager authenticationManager;
 

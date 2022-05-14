@@ -1,8 +1,9 @@
 package haui.cntt.myproject.service.Impl;
 
 import com.github.slugify.Slugify;
-import haui.cntt.myproject.common.enum_.RoleEnum;
+
 import haui.cntt.myproject.common.exception.BadRequestException;
+import haui.cntt.myproject.common.myEnum.RoleEnum;
 import haui.cntt.myproject.persistance.entity.Product;
 import haui.cntt.myproject.persistance.entity.Role;
 import haui.cntt.myproject.persistance.entity.User;
@@ -14,14 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;

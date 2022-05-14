@@ -2,8 +2,7 @@ package haui.cntt.myproject.presentation.controller.admin;
 
 import haui.cntt.myproject.presentation.mapper.OrderMapper;
 import haui.cntt.myproject.presentation.response.OrderResponse;
-import haui.cntt.myproject.service.Impl.OrderServiceImpl;
-import haui.cntt.myproject.service.Impl.ProductServiceImpl;
+import haui.cntt.myproject.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -19,9 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/admin/order")
 public class OrderAdminController {
     @Autowired
-    private OrderServiceImpl orderService;
-    @Autowired
-    private ProductServiceImpl productService;
+    private OrderService orderService;
 
     @GetMapping("/get-all")
     public String getAll(Model model

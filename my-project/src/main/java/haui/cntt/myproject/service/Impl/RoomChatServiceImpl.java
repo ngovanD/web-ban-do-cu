@@ -8,16 +8,17 @@ import haui.cntt.myproject.persistance.entity.User;
 import haui.cntt.myproject.persistance.repository.MessageRepository;
 import haui.cntt.myproject.persistance.repository.RoomChatRepository;
 import haui.cntt.myproject.persistance.repository.UserRepository;
+import haui.cntt.myproject.service.RoomChatService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-@Service
-public class RoomChatServiceImpl {
+@Component
+public class RoomChatServiceImpl implements RoomChatService{
     @Autowired
     private RoomChatRepository roomChatRepository;
     @Autowired

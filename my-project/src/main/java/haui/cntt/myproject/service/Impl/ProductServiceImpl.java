@@ -1,9 +1,9 @@
 package haui.cntt.myproject.service.Impl;
 
-import haui.cntt.myproject.common.enum_.OrderStatusEnum;
-import haui.cntt.myproject.common.enum_.ProductStatusEnum;
 import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
+import haui.cntt.myproject.common.myEnum.OrderStatusEnum;
+import haui.cntt.myproject.common.myEnum.ProductStatusEnum;
 import haui.cntt.myproject.common.text.VNCharacterUtil;
 import haui.cntt.myproject.persistance.entity.*;
 import haui.cntt.myproject.persistance.repository.*;
@@ -14,7 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;

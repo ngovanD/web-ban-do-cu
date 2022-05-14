@@ -1,7 +1,5 @@
 package haui.cntt.myproject.config.websocket;
 
-import haui.cntt.myproject.service.Impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

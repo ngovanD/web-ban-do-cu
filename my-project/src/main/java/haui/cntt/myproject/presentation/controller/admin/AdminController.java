@@ -1,8 +1,8 @@
 package haui.cntt.myproject.presentation.controller.admin;
 
-import haui.cntt.myproject.service.Impl.OrderServiceImpl;
-import haui.cntt.myproject.service.Impl.ProductServiceImpl;
-import haui.cntt.myproject.service.Impl.UserServiceImpl;
+import haui.cntt.myproject.service.OrderService;
+import haui.cntt.myproject.service.ProductService;
+import haui.cntt.myproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,11 +20,11 @@ import java.util.List;
 @RequestMapping("admin")
 public class AdminController {
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
     @Autowired
-    OrderServiceImpl orderService;
+    private OrderService orderService;
     @Autowired
-    ProductServiceImpl productService;
+    private ProductService productService;
 
     @GetMapping("/home")
     public String home(Model model

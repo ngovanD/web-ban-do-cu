@@ -7,9 +7,9 @@ import haui.cntt.myproject.presentation.request.DeliveryAddressRequest;
 import haui.cntt.myproject.presentation.request.OrderRequest;
 import haui.cntt.myproject.presentation.response.OrderResponse;
 import haui.cntt.myproject.presentation.response.ProductResponse;
-import haui.cntt.myproject.service.Impl.DeliveryAddressServiceImpl;
-import haui.cntt.myproject.service.Impl.OrderServiceImpl;
-import haui.cntt.myproject.service.Impl.ProductServiceImpl;
+import haui.cntt.myproject.service.DeliveryAddressService;
+import haui.cntt.myproject.service.OrderService;
+import haui.cntt.myproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.*;
@@ -27,11 +27,11 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/user/order")
 public class OrderController {
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
     @Autowired
-    private ProductServiceImpl productService;
+    private ProductService productService;
     @Autowired
-    private DeliveryAddressServiceImpl deliveryAddressService;
+    private DeliveryAddressService deliveryAddressService;
 
     @GetMapping("/create/{id}")
     public String getPageCreateOrder(Model model, @PathVariable(value = "id") long productId) throws Throwable {

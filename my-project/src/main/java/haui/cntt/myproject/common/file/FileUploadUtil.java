@@ -1,6 +1,5 @@
 package haui.cntt.myproject.common.file;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
 
-@Slf4j
+// @Slf4j
 public class FileUploadUtil {
     private FileUploadUtil() {
         super();

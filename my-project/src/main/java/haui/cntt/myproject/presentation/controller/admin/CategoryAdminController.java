@@ -4,7 +4,7 @@ import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.presentation.mapper.CategoryMapper;
 import haui.cntt.myproject.presentation.request.CategoryRequest;
 import haui.cntt.myproject.presentation.response.CategoryResponse;
-import haui.cntt.myproject.service.Impl.CategoryServiceImpl;
+import haui.cntt.myproject.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class CategoryAdminController {
 
     @Autowired
-    CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
 
     static final String UPLOAD_DIR_CATEGORY = "src/main/resources/static/category/";
 

@@ -7,14 +7,16 @@ import haui.cntt.myproject.persistance.entity.User;
 import haui.cntt.myproject.persistance.repository.MessageRepository;
 import haui.cntt.myproject.persistance.repository.RoomChatRepository;
 import haui.cntt.myproject.persistance.repository.UserRepository;
+import haui.cntt.myproject.service.MessageService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
-@Service
-public class MessageServiceImpl {
+@Component
+public class MessageServiceImpl implements MessageService{
     @Autowired
     private RoomChatRepository roomChatRepository;
     @Autowired

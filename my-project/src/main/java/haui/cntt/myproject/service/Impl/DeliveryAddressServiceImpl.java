@@ -1,18 +1,17 @@
 package haui.cntt.myproject.service.Impl;
 
-import haui.cntt.myproject.common.enum_.OrderStatusEnum;
 import haui.cntt.myproject.common.exception.BadRequestException;
+import haui.cntt.myproject.common.myEnum.OrderStatusEnum;
 import haui.cntt.myproject.persistance.entity.DeliveryAddress;
 import haui.cntt.myproject.persistance.entity.Order;
 import haui.cntt.myproject.persistance.repository.DeliveryAddressRepository;
 import haui.cntt.myproject.persistance.repository.OrderRepository;
 import haui.cntt.myproject.service.DeliveryAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 
-@Service
+@Component
 public class DeliveryAddressServiceImpl implements DeliveryAddressService {
     @Autowired
     private DeliveryAddressRepository deliveryAddressRepository;

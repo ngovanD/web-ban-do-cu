@@ -21,33 +21,25 @@ public interface UserService {
 
     Page<User> getAllUser(int page, int size, String keyword);
 
-
     void deleteUser(long userId);
 
     User getUserById(long userId) throws Throwable;
 
-
     void editUser(User user, boolean resetPassword) throws Throwable;
-
 
     String updateAvatar(long userId, String originalFilename) throws Throwable;
 
-
     void changeInfo(User convertToUser) throws Throwable;
 
-
     void changPassword(String password) throws Throwable;
-
 
     String changPasswordForUserForgetPassword(String email) throws Throwable;
 
     Page<Product> getMyListProduct(int page, String status) throws Throwable;
 
-
     void addWishlist(long productId) throws Throwable;
 
     Page<Product> getWishlist(int page) throws Throwable;
-
 
     void removeWishlist(long productId) throws Throwable;
 

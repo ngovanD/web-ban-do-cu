@@ -1,6 +1,5 @@
 package haui.cntt.myproject.config;
 
-import haui.cntt.myproject.common.enum_.RoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,8 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,8 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import haui.cntt.myproject.common.myEnum.RoleEnum;
+
 import java.util.Optional;
-import java.util.Properties;
 
 @Configuration
 @EnableWebSecurity
@@ -107,24 +105,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
             return Optional.of("anonymousUser");
         }
     }
+    // @Bean
+    // public JavaMailSender getJavaMailSender() {
+    //     JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+    //     mailSender.setHost("smtp.gmail.com");
+    //     mailSender.setPort(587);
 
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
+    //     mailSender.setUsername(EMAIL_NAME);
+    //     mailSender.setPassword(EMAIL_PASSWORD);
 
-        mailSender.setUsername(EMAIL_NAME);
-        mailSender.setPassword(EMAIL_PASSWORD);
+    //     Properties props = mailSender.getJavaMailProperties();
+    //     props.put("mail.transport.protocol", "smtp");
+    //     props.put("mail.smtp.auth", "true");
+    //     props.put("mail.smtp.starttls.enable", "true");
+    //     props.put("mail.debug", "true");
 
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
-
-        return mailSender;
-    }
+    //     return mailSender;
+    // }
 
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource() {

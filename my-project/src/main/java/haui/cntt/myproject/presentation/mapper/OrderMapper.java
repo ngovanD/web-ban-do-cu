@@ -1,6 +1,6 @@
 package haui.cntt.myproject.presentation.mapper;
 
-import haui.cntt.myproject.common.enum_.OrderStatusEnum;
+import haui.cntt.myproject.common.myEnum.OrderStatusEnum;
 import haui.cntt.myproject.persistance.entity.Order;
 import haui.cntt.myproject.persistance.entity.Product;
 import haui.cntt.myproject.presentation.request.OrderRequest;

@@ -19,7 +19,6 @@ import java.util.Collection;
 @SuperBuilder
 @Entity
 public class Category extends BaseEntity {
-
     @Column(unique = true)
     private String name;
 

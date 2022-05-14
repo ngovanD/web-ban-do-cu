@@ -2,9 +2,8 @@ package haui.cntt.myproject.persistance.entity;
 
 import com.github.slugify.Slugify;
 import haui.cntt.myproject.base.BaseEntity;
-import haui.cntt.myproject.common.enum_.ProductStatusEnum;
+import haui.cntt.myproject.common.myEnum.ProductStatusEnum;
 import haui.cntt.myproject.common.text.VNCharacterUtil;
-import jdk.nashorn.internal.runtime.options.Option;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

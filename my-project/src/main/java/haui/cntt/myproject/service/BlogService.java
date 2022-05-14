@@ -10,6 +10,8 @@ import java.util.List;
 
 @Service
 public interface BlogService {
+    Page<Blog> getAllActive(int page);
+    
     void create(Blog blog, MultipartFile multipartFile) throws IOException;
 
     void edit(long id, Blog blog, MultipartFile multipartFile) throws Throwable;

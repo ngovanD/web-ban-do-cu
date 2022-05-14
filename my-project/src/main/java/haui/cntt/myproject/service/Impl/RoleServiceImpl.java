@@ -4,9 +4,9 @@ import haui.cntt.myproject.persistance.entity.Role;
 import haui.cntt.myproject.persistance.repository.RoleRepository;
 import haui.cntt.myproject.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleRepository roleRepository;

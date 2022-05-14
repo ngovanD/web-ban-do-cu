@@ -1,4 +1,4 @@
-package haui.cntt.myproject.common.enum_;
+package haui.cntt.myproject.common.myEnum;
 
 public enum OrderStatusEnum {
     PENDING,

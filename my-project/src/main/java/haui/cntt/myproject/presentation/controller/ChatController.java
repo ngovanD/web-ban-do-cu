@@ -2,7 +2,7 @@ package haui.cntt.myproject.presentation.controller;
 
 import haui.cntt.myproject.presentation.mapper.MessageMapper;
 import haui.cntt.myproject.presentation.request.MessageRequest;
-import haui.cntt.myproject.service.Impl.MessageServiceImpl;
+import haui.cntt.myproject.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -16,7 +16,7 @@ public class ChatController {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired
-    private MessageServiceImpl messageService;
+    private MessageService messageService;
 
     @MessageMapping("/server")
     public void send(SimpMessageHeaderAccessor sha, @Payload MessageRequest messageRequest) throws Throwable {
