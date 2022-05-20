@@ -117,8 +117,8 @@
                                                             <!-- /.col -->
                                                             <div class="col col-xs-7">
                                                                 <div class="product-info">
-                                                                    <h3 class="name"><a
-                                                                            th:href="@{'/product/' + ${randomProductList[3*i].slug}}">[[${randomProductList[3*i].name}]]</a>
+                                                                    <h3 class="name" style="max-width: 130px;" th:title="${randomProductList[3*i].name}">
+                                                                        <a th:href="@{'/product/' + ${randomProductList[3*i].slug}}">[[${randomProductList[3*i].name}]]</a>
                                                                     </h3>
                                                                     <div class="product-price"> <span class="price">
                                                                             [[${#numbers.formatDecimal(randomProductList[3*i].price,
@@ -155,7 +155,7 @@
                                                             <!-- /.col -->
                                                             <div class="col col-xs-7">
                                                                 <div class="product-info">
-                                                                    <h3 class="name"><a
+                                                                    <h3 class="name" style="max-width: 130px;"  th:title="${randomProductList[3*i+1].name}"><a
                                                                             th:href="@{'/product/' + ${randomProductList[3*i+1].slug}}">[[${randomProductList[3*i+1].name}]]</a>
                                                                     </h3>
                                                                     <div class="product-price"> <span class="price">
@@ -192,7 +192,7 @@
                                                             <!-- /.col -->
                                                             <div class="col col-xs-7">
                                                                 <div class="product-info">
-                                                                    <h3 class="name"><a
+                                                                    <h3 class="name" style="max-width: 130px;"  th:title="${randomProductList[3*i+2].name}"><a
                                                                             th:href="@{'/product/' + ${randomProductList[3*i+2].slug}}">[[${randomProductList[3*i+2].name}]]</a>
                                                                     </h3>
                                                                     <div class="product-price"> <span class="price">
@@ -265,7 +265,7 @@
                                                         <!-- /.col -->
                                                         <div class="col col-xs-7">
                                                             <div class="product-info">
-                                                                <h3 class="name"><a
+                                                                <h3 class="name" style="max-width: 130px;"  th:title="${product.name}"><a
                                                                         th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
                                                                 </h3>
                                                                 <div class="product-price"> <span class="price">

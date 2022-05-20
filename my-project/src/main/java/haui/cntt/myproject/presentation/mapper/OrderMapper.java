@@ -60,6 +60,7 @@ public class OrderMapper {
                 .priceProduct(order.getPriceProduct())
                 .methodPayment(order.getMethodPayment())
                 .productResponse(ProductMapper.convertToProductResponse(order.getProduct()))
+                .createBy(order.getCreatedBy())
                 .build();
     }
 }

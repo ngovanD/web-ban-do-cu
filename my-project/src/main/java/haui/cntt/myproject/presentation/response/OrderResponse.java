@@ -16,4 +16,6 @@ public class OrderResponse {
     private DeliveryAddressResponse deliveryAddressResponse;
     private ProductResponse productResponse;
     private String createTime;
+
+    private String createBy;
 }

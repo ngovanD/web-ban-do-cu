@@ -1,6 +1,5 @@
 package haui.cntt.myproject.presentation.mapper;
 
-import haui.cntt.myproject.common.exception.BadRequestException;
 import haui.cntt.myproject.persistance.entity.RoomChat;
 import haui.cntt.myproject.presentation.response.RoomChatResponse;
 import haui.cntt.myproject.presentation.response.UserResponse;

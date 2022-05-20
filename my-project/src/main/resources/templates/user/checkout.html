@@ -62,7 +62,7 @@
                                                             class="form-control unicase-form-control text-input"
                                                             id="cellphone" placeholder="" name="cellphone_">
                                                     </div>
-                                                    <div class="form-group" style="margin-bottom: 0px">
+                                                    <div class="form-group">
                                                         <label class="info-title">Địa chỉ
                                                             <span>*</span></label>
                                                     </div>
@@ -87,7 +87,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group" style="margin-top: 15px">
+                                                    <div class="form-group" style="margin-top: 65px">
                                                         <label class="info-title">Địa chỉ cụ thể
                                                             <span>*</span></label>
                                                         <input type="text"
@@ -157,7 +157,7 @@
                                                 <br>
                                                 <h4 class="checkout-subtitle">Sản phẩm:  [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
                                                 </h4>
-                                                <h4 class="checkout-subtitle">Phí giao hàng: 39000 VNĐ</h4>
+                                                <h4 class="checkout-subtitle">Phí giao hàng: 39,000 VNĐ</h4>
                                                 <h4 class="checkout-subtitle">Tổng tiền thanh toán:
                                                     [[${#numbers.formatDecimal(productResponse.price + 39000, 0, 'COMMA', 0, 'POINT')}]] VNĐ</h4>
                                                 <br>
@@ -167,15 +167,15 @@
                                                     <input id="COD" type="radio" name="methodPay" value="COD"
                                                         checked="">
                                                     <label class="radio-button guest-check" for="COD">COD</label>
-                                                    <br>
-                                                    <input id="MOMO" type="radio" name="methodPay" value="MOMO">
-                                                    <label class="radio-button" for="MOMO">Momo</label>
+<!--                                                    <br>-->
+<!--                                                    <input id="MOMO" type="radio" name="methodPay" value="MOMO">-->
+<!--                                                    <label class="radio-button" for="MOMO">Momo</label>-->
                                                     <br>
                                                     <input id="VNPAY" type="radio" name="methodPay" value="VNPAY">
                                                     <label class="radio-button" for="VNPAY">Vnpay</label>
-                                                    <br>
-                                                    <input id="ZALOPAY" type="radio" name="methodPay" value="ZALOPAY">
-                                                    <label class="radio-button" for="ZALOPAY">Zalopay</label>
+<!--                                                    <br>-->
+<!--                                                    <input id="ZALOPAY" type="radio" name="methodPay" value="ZALOPAY">-->
+<!--                                                    <label class="radio-button" for="ZALOPAY">Zalopay</label>-->
                                                 </div>
                                                 <a class="btn-upper btn btn-primary" style="text-decoration: none; margin-top: 10px;" onclick="checkout()">Đặt hàng</a>
                                             </div>
@@ -271,8 +271,10 @@
                     {
                         location.href = dataLink;
                     }
-                    toastr.success("Đặt thành công !");
-                    location.href = origin + '/user/order/get-all';
+                    else{
+                        location.href = origin + '/user/order/get-all';
+                        toastr.success("Đặt thành công !");
+                    }
                 })
                 .fail(function (error) {
                     toastr.error(error.responseText);

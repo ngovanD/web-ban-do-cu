@@ -44,4 +44,6 @@ public interface UserService {
     void removeWishlist(long productId) throws Throwable;
 
     int getNewUser(String from, String to);
+
+    User getUserByUsername(String username) throws Throwable;
 }

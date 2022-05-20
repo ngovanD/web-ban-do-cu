@@ -1,6 +1,7 @@
 package haui.cntt.myproject.service.Impl;
 
 import haui.cntt.myproject.common.exception.BadRequestException;
+import haui.cntt.myproject.common.exception.BadRequestReturnPageException;
 import haui.cntt.myproject.common.file.FileUploadUtil;
 import haui.cntt.myproject.common.myEnum.OrderStatusEnum;
 import haui.cntt.myproject.common.myEnum.ProductStatusEnum;
@@ -101,14 +102,24 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(foundProduct);
     }
 
-    @Transactional
     public Product getDetailProduct(long productId) throws Throwable {
         Product foundProduct = productRepository.findById(productId).orElseThrow(() -> {
             throw new BadRequestException("Sản phẩm không tồn tại !!!");
         });
 
-        foundProduct.setView(foundProduct.getView() + 1);
-        return productRepository.save(foundProduct);
+        return foundProduct;
+    }
+
+    @Transactional
+    public Product getMyDetailProduct(long productId) throws Throwable {
+        Product foundProduct = productRepository.findById(productId).orElseThrow(() -> {
+            throw new BadRequestException("Sản phẩm không tồn tại !!!");
+        });
+        if (!foundProduct.getUser().getUsername()
+                .equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+            throw new BadRequestReturnPageException("Bạn không thể truy cập trang này !!!");
+        }
+        return foundProduct;
     }
 
     @Transactional
@@ -193,7 +204,7 @@ public class ProductServiceImpl implements ProductService {
         Set<Product> setProduct = new HashSet<>();
 
         for (String key : listKey) {
-            setProduct.addAll(productList.stream().filter(p -> p.getKeyword().contains(key)).collect(Collectors.toList()));
+            setProduct.addAll(productList.stream().filter(p -> p.getKeyword().contains(" "+key+" ")).collect(Collectors.toList()));
         }
         productList = new ArrayList<>(setProduct);
 
@@ -217,7 +228,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public void deliveryConfirmation(long productId) throws Throwable {
+    public Order deliveryConfirmation(long productId) throws Throwable {
         Product foundProduct = productRepository.findById(productId).orElseThrow(
                 () -> {
                     throw new BadRequestException("Không tìm thấy sản phẩm !!!");
@@ -232,7 +243,7 @@ public class ProductServiceImpl implements ProductService {
                 }
         );
         foundOrder.setStatus(OrderStatusEnum.DELIVERY);
-        orderRepository.save(foundOrder);
+        return orderRepository.save(foundOrder);
     }
 
     @Transactional

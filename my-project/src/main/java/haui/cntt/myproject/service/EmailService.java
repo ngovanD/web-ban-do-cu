@@ -3,7 +3,6 @@ package haui.cntt.myproject.service;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 
 @Service
 public interface EmailService {

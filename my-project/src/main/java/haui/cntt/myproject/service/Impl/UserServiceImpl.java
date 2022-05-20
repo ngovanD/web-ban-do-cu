@@ -245,7 +245,8 @@ public class UserServiceImpl implements UserService {
         List<Product> productList = foundUser.getWishlistProducts()
                 .stream()
                 .collect(Collectors.toList());
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        Collections.sort(productList, Comparator.comparingLong(Product::getId).reversed());
+        Pageable pageable = PageRequest.of(page, 10);
         final int start = (int) pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), productList.size());
         return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
@@ -270,5 +271,12 @@ public class UserServiceImpl implements UserService {
 
     public int getNewUser(String from, String to) {
         return userRepository.getNewUser(from, to);
+    }
+
+    @Override
+    public User getUserByUsername(String username) throws Throwable{
+        return userRepository.findByUsername(username).orElseThrow(
+                ()->{throw new BadRequestException("Không tìm thấy user !!!");}
+        );
     }
 }

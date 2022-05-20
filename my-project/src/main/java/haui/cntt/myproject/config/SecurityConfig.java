@@ -33,12 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
     @Autowired
     private FilterConfig filterConfig;
 
-    @Value("${spring.mail.username}")
-    private String EMAIL_NAME;
-
-    @Value("${spring.mail.password}")
-    private String EMAIL_PASSWORD;
-
     // mã hóa thay cho MD5 spring security cung cấp (BCryptPasswordEncoder)
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -209,7 +209,7 @@ public class BasicController {
     public ResponseEntity<String> forgetPassword(@RequestBody HashMap<String, String> map) throws Throwable {
         String email = map.get("email");
         String newPassword = userService.changPasswordForUserForgetPassword(email);
-        emailService.send(email, "Lấy lại mật khẩu - Chợ cũ", "Mật khẩu mới của bạn là: " + newPassword);
+        emailService.send(email, "Chợ cũ - Lấy lại mật khẩu", "Mật khẩu mới của bạn là: " + newPassword);
         return ResponseEntity.ok().body("Đổi mật khẩu và gửi mail thành công !!!");
     }
 

@@ -160,7 +160,6 @@
                                 <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
                                     <li class="active"><a data-toggle="tab" href="#info">Thông tin chi tiết</a></li>
                                     <li><a data-toggle="tab" href="#images">Ảnh</a></li>
-                                    <li><a data-toggle="tab" href="#setting">Địa chỉ người nhận</a></li>
                                 </ul><!-- /.nav-tabs #product-tabs -->
                             </div>
                             <div class="col-sm-9">
@@ -427,23 +426,6 @@
                                             </div><!-- /.product-add-review -->
                                         </div><!-- /.product-tab -->
                                     </div><!-- /.tab-pane -->
-                                    <div id="setting" class="tab-pane">
-                                        <div class="product-tag" id="deliveryAddress_">
-                                            <div class="form-group card-body" style="margin-bottom: 0px">
-                                                <label>Tên người nhận</label>
-                                                <input type="text" class="form-control" id="full_name_2" disabled>
-                                            </div>
-                                            <div class="form-group card-body" style="margin-bottom: 0px">
-                                                <label>Số điện thoại</label>
-                                                <input type="text" class="form-control" id="cellphone_2" disabled>
-                                            </div>
-                                            <div class="form-group card-body" style="margin-bottom: 0px">
-                                                <label>Địa chỉ</label>
-                                                <input type="text" class="form-control" id="address_2" disabled>
-                                            </div>
-                                        </div><!-- /.product-tab -->
-                                    </div><!-- /.tab-pane -->
-
                                 </div><!-- /.tab-content -->
                             </div><!-- /.col -->
                         </div>
@@ -469,7 +451,7 @@
                 <input type="text" class="form-control" id="address_" disabled>
             </div>
             <div class="card-body" style="background-color:#f1f1f1">
-                <a class="btn btn-success" onclick="confirmDelivery()">Chốt đơn</a>
+                <a class="btn btn-success" onclick="confirmDelivery()" id="btnChotDon">Chốt đơn</a>
                 <a class="btn btn-danger" onclick="cancelDelivery()">Từ chối</a>
                 <a type="button" onclick="document.getElementById('id01').style.display='none'"
                     class="btn btn-danger">Hủy</a>
@@ -598,6 +580,8 @@
         }
 
         function confirmDelivery() {
+            toastr.success("Vui lòng đợi !!! ");
+            document.getElementById('btnChotDon').classList.add('disabled');
             $.ajax({
                 method: 'POST',
                 url: origin + "/user/product/delivery-confirmation/" + productId,
@@ -639,21 +623,6 @@
                 })
                 .fail(function () {
                     toastr.error("Có lỗi xảy ra.");
-                });
-        }
-
-        function getInfoDelivery2() {
-            $.ajax({
-                method: 'GET',
-                url: origin + "/user/product/get-info-delivery/" + productId,
-            })
-                .done(function (data) {
-                    document.getElementById('full_name_2').value = data.fullName;
-                    document.getElementById('cellphone_2').value = data.cellphone;
-                    document.getElementById('address_2').value = data.detail + ", " + data.commune + ", " + data.district + ", " + data.province;
-                })
-                .fail(function () {
-                    document.getElementById('deliveryAddress_').innerHTML = '';
                 });
         }
 

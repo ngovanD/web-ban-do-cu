@@ -1,16 +1,13 @@
 package haui.cntt.myproject.presentation.controller.user;
 
-import haui.cntt.myproject.presentation.mapper.DeliveryAddressMapper;
-import haui.cntt.myproject.presentation.mapper.ProductMapper;
-import haui.cntt.myproject.presentation.mapper.PropertyMapper;
+import haui.cntt.myproject.presentation.mapper.*;
 import haui.cntt.myproject.presentation.request.ProductPropertyRequest;
 import haui.cntt.myproject.presentation.request.ProductRequest;
 import haui.cntt.myproject.presentation.response.DeliveryAddressResponse;
+import haui.cntt.myproject.presentation.response.OrderResponse;
 import haui.cntt.myproject.presentation.response.ProductResponse;
-import haui.cntt.myproject.service.CategoryService;
-import haui.cntt.myproject.service.DeliveryAddressService;
-import haui.cntt.myproject.service.ImageProductService;
-import haui.cntt.myproject.service.ProductService;
+import haui.cntt.myproject.presentation.response.UserResponse;
+import haui.cntt.myproject.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +30,10 @@ public class ProductController {
     private ImageProductService imageProductService;
     @Autowired
     private DeliveryAddressService deliveryAddressService;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private UserService userService;
 
     static final String UPLOAD_DIR_IMAGE_PRODUCT = "src/main/resources/static/product/";
 
@@ -68,7 +69,7 @@ public class ProductController {
 
     @GetMapping("/detail/{id}")
     public String getDetailProduct(Model model, @PathVariable(value = "id") long productId) throws Throwable {
-        ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getDetailProduct(productId));
+        ProductResponse productResponse = ProductMapper.convertToProductResponse(productService.getMyDetailProduct(productId));
         model.addAttribute("productResponse", productResponse);
         return "user/my_product_detail";
     }
@@ -125,7 +126,23 @@ public class ProductController {
     @PostMapping("/delivery-confirmation/{id}")
     public ResponseEntity<String> deliveryConfirmation(@PathVariable(value = "id") long productId) throws Throwable {
 
-        productService.deliveryConfirmation(productId);
+        OrderResponse orderResponse = OrderMapper.convertToOrderResponse(productService.deliveryConfirmation(productId));
+        String content = "<body><h4>Đơn hàng trên Chợ cũ của bạn đã được xác nhận và chờ giao. Cảm ơn bạn đã tin dùng Chợ cũ</h4>"
+                + "<table width='100%' border='1' cellspacing='0' cellpadding='10px'>"
+                + "<tr><th>Mã đơn hàng</th><td>" + orderResponse.getId()
+                + "</td></tr><tr><th>Ngày đặt</th><td>" + orderResponse.getCreateTime()
+                + "</td></tr><tr><th>Sản phẩm</th><td>" + orderResponse.getProductResponse().getName()
+                + "</td></tr><tr><th>Tổng tiền thanh toán</th><td>" + (orderResponse.getPriceProduct() + orderResponse.getFeeShipping())
+                + "</td></tr><tr><th>Phương thức thanh toán</th><td>" + orderResponse.getMethodPayment()
+                + "</td></tr><tr><th>Người nhận</th><td>" + orderResponse.getDeliveryAddressResponse().getFullName()
+                + "</td></tr><tr><th>Số điện thoại</th><td>" + orderResponse.getDeliveryAddressResponse().getCellphone()
+                + "</td></tr><tr><th>Địa chỉ</th><td>" + orderResponse.getDeliveryAddressResponse().getDetail()
+                    + ", " + orderResponse.getDeliveryAddressResponse().getCommune()
+                    + ", " + orderResponse.getDeliveryAddressResponse().getDistrict()
+                    + ", " + orderResponse.getDeliveryAddressResponse().getProvince() + "</td></tr>"
+                + "</table></body>";
+        UserResponse userResponse = UserMapper.convertToUserResponse(userService.getUserByUsername(orderResponse.getCreateBy()));
+        emailService.send(userResponse.getEmail(), "Chợ cũ - Đơn hàng của bạn đã được xác nhận", content);
         return ResponseEntity.ok().body("Xác nhận thành công !!!");
     }
 

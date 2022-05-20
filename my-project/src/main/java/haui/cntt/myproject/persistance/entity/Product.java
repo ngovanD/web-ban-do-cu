@@ -60,6 +60,10 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Collection<ProductProperty> productProperties;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.DETACH})
+    @JoinTable(name = "wishlist", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Collection<User> wishlistUsers;
+
     @PrePersist
     public void onPrePersist() {
         super.onPrePersist();
@@ -84,9 +88,9 @@ public class Product extends BaseEntity {
         if (propertyHang.isPresent()) {
             propertyKeyword = propertyHang.get().getValue();
         }
-        keyword = (VNCharacterUtil.removeAccent(name) + " "
+        keyword = (" " + (VNCharacterUtil.removeAccent(name) + " "
                 + VNCharacterUtil.removeAccent(description) + " "
-                + VNCharacterUtil.removeAccent(propertyKeyword))
+                + VNCharacterUtil.removeAccent(propertyKeyword)) + " ")
                 .toLowerCase();
     }
 }

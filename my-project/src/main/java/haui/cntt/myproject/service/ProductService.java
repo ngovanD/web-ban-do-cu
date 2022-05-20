@@ -1,5 +1,6 @@
 package haui.cntt.myproject.service;
 
+import haui.cntt.myproject.persistance.entity.Order;
 import haui.cntt.myproject.persistance.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public interface ProductService {
 
     Product getDetailProduct(long productId) throws Throwable;
 
+    Product getMyDetailProduct(long productId) throws Throwable;
+
     void edit(Product product) throws Throwable;
 
     void updateStatus(long productId) throws Throwable;
@@ -33,7 +36,7 @@ public interface ProductService {
     Page<Product> searchProduct(String keyword, int page, String slugCategory
             , int min, int max, String sort, int codeProvince, String status);
 
-    void deliveryConfirmation(long productId) throws Throwable;
+    Order deliveryConfirmation(long productId) throws Throwable;
 
     void cancelDelivery(long productId) throws Throwable;
 

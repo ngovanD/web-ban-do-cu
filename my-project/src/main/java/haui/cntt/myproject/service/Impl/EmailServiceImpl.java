@@ -1,6 +1,7 @@
 package haui.cntt.myproject.service.Impl;
 
 import haui.cntt.myproject.service.EmailService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Properties;
@@ -13,7 +14,11 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+	@Value("${spring.mail.username}")
+	private String EMAIL_NAME;
 
+	@Value("${spring.mail.password}")
+	private String EMAIL_PASSWORD;
     public void send(String to, String subject, String text) throws MessagingException {
         Properties mailServerProperties;
 		Session getMailSession;
@@ -36,14 +41,14 @@ public class EmailServiceImpl implements EmailService {
 	//    generateMailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress("cc@gmail.com")); //Địa chỉ cc gmail
 	 
 	 
-		mailMessage.setSubject("Lấy lại mật khẩu Chợ cũ", "UTF-8");
-        mailMessage.setContent(text, "text/plain; charset=UTF-8");
+		mailMessage.setSubject(subject, "UTF-8");
+        mailMessage.setContent(text, "text/html; charset=UTF-8");
 		// mailMessage.setText(text, "text/plain; charset=UTF-8");
 	 
 		// Step3: Send mail
 		javax.mail.Transport transport = getMailSession.getTransport("smtp");
 		// Thay your_gmail thành gmail của bạn, thay your_password thành mật khẩu gmail của bạn
-		transport.connect("smtp.gmail.com", "ngovan1d@gmail.com", "ngodang123456"); 
+		transport.connect("smtp.gmail.com", EMAIL_NAME, EMAIL_PASSWORD);
 		transport.sendMessage(mailMessage, mailMessage.getAllRecipients());
 		transport.close();
     }
