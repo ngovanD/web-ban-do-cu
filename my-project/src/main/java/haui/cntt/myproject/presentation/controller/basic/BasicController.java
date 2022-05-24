@@ -1,6 +1,7 @@
 package haui.cntt.myproject.presentation.controller.basic;
 
 import haui.cntt.myproject.common.otp.RandomOtpUtil;
+import haui.cntt.myproject.common.otp.SmsSender;
 import haui.cntt.myproject.presentation.mapper.*;
 import haui.cntt.myproject.presentation.request.LoginRequest;
 import haui.cntt.myproject.presentation.request.OtpRequest;
@@ -128,7 +129,7 @@ public class BasicController {
         String otp = RandomOtpUtil.createOtp();
         try {
             otpService.addOtp(otp, otpRequest.getCellphone());
-            // SmsSender.sendOtp(otpRequest.getCellphone(), otp);
+            SmsSender.sendOtp(otpRequest.getCellphone(), otp);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -95,7 +95,8 @@
                                             [[${item.id}]]
                                         </td>
                                         <td class="text-center">
-                                            [[${item.priceProduct + item.feeShipping}]]
+                                            [[${#numbers.formatDecimal(item.priceProduct + item.feeShipping, 0,
+                                            'COMMA', 0, 'POINT')}]]
                                         </td>
                                         <td class="text-center">
                                             [[${item.status}]]
